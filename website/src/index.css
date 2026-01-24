@@ -5,17 +5,22 @@
 /* Scan the component library source for Tailwind classes */
 @source "../../src/**/*.tsx";
 
+/* Enable class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* Typography */
   --font-display: 'Outfit', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* ===== Light Theme (Default) ===== */
 
   /* Surface colors */
   --color-surface: oklch(97% 0.003 80);
   --color-surface-raised: oklch(100% 0 0);
   --color-surface-sunken: oklch(94% 0.005 80);
 
-  /* Sidebar dark theme */
+  /* Sidebar */
   --color-sidebar: oklch(18% 0.02 260);
   --color-sidebar-hover: oklch(24% 0.025 260);
   --color-sidebar-active: oklch(30% 0.03 260);
@@ -85,6 +90,45 @@
   }
 }
 
+/* ===== Dark Theme ===== */
+.dark {
+  /* Surface colors - deep blue-gray */
+  --color-surface: oklch(16% 0.015 260);
+  --color-surface-raised: oklch(20% 0.02 260);
+  --color-surface-sunken: oklch(12% 0.01 260);
+
+  /* Sidebar - slightly lighter in dark mode for contrast */
+  --color-sidebar: oklch(12% 0.015 260);
+  --color-sidebar-hover: oklch(18% 0.02 260);
+  --color-sidebar-active: oklch(24% 0.025 260);
+
+  /* Border colors */
+  --color-border: oklch(28% 0.02 260);
+  --color-border-subtle: oklch(22% 0.015 260);
+
+  /* Ring color - brighter in dark */
+  --color-ring: oklch(65% 0.2 260);
+
+  /* Text colors - inverted */
+  --color-text: oklch(95% 0.005 80);
+  --color-text-secondary: oklch(75% 0.01 80);
+  --color-text-muted: oklch(55% 0.01 80);
+
+  /* Interactive colors - brighter in dark mode */
+  --color-primary: oklch(60% 0.2 260);
+  --color-primary-hover: oklch(65% 0.22 260);
+  --color-danger: oklch(60% 0.2 25);
+  --color-danger-hover: oklch(65% 0.22 25);
+  --color-success: oklch(60% 0.18 155);
+
+  /* Accent */
+  --color-accent: oklch(75% 0.18 160);
+
+  /* Shadows - more prominent in dark */
+  --shadow-card: 0 1px 3px oklch(0% 0 0 / 0.2), 0 4px 12px oklch(0% 0 0 / 0.3);
+  --shadow-card-hover: 0 2px 8px oklch(0% 0 0 / 0.3), 0 8px 24px oklch(0% 0 0 / 0.4);
+}
+
 /* Base styles */
 html {
   scroll-behavior: smooth;
@@ -94,9 +138,10 @@ body {
   font-family: var(--font-display);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Custom scrollbar */
+/* Custom scrollbar - light mode */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -115,7 +160,16 @@ body {
   background: oklch(70% 0.01 80);
 }
 
-/* Sidebar scrollbar - lighter for dark bg */
+/* Custom scrollbar - dark mode */
+.dark ::-webkit-scrollbar-thumb {
+  background: oklch(35% 0.02 260);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: oklch(45% 0.02 260);
+}
+
+/* Sidebar scrollbar */
 .sidebar-scroll::-webkit-scrollbar-thumb {
   background: oklch(35% 0.02 260);
 }
@@ -131,10 +185,27 @@ body {
   background-size: 24px 24px;
 }
 
+.dark .demo-pattern {
+  background-image:
+    radial-gradient(circle at 1px 1px, oklch(25% 0.02 260) 1px, transparent 0);
+}
+
 /* Subtle gradient mesh for hero areas */
 .gradient-mesh {
   background:
     radial-gradient(ellipse at 20% 0%, oklch(92% 0.08 260 / 0.15) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 100%, oklch(90% 0.06 160 / 0.1) 0%, transparent 50%),
-    oklch(97% 0.003 80);
+    var(--color-surface);
+}
+
+.dark .gradient-mesh {
+  background:
+    radial-gradient(ellipse at 20% 0%, oklch(30% 0.1 260 / 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, oklch(25% 0.08 160 / 0.2) 0%, transparent 50%),
+    var(--color-surface);
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
