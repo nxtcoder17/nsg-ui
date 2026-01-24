@@ -42,10 +42,11 @@ export const PopoverSection: Component = () => {
         <DemoCard title="Info Popover" description="Contextual help and information">
           <Popover
             trigger={
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" aria-label="Show helpful information">
                 <InfoIcon class="w-5 h-5" />
               </Button>
             }
+            triggerLabel="Show helpful information"
             title="Helpful Information"
             description="This is additional context that helps users understand a feature or action."
             arrow

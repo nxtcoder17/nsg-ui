@@ -45,7 +45,7 @@ export const Sidebar: Component<SidebarProps> = (props) => {
 
       {/* Navigation */}
       <nav class="flex-1 px-3 sidebar-scroll overflow-y-auto">
-        <div class="text-white/40 text-[11px] font-medium uppercase tracking-wider px-3 mb-2">
+        <div class="text-white/60 text-[11px] font-medium uppercase tracking-wider px-3 mb-2">
           Components
         </div>
         <div class="space-y-1">
@@ -72,7 +72,7 @@ export const Sidebar: Component<SidebarProps> = (props) => {
 
       {/* Footer */}
       <div class="px-6 py-6 border-t border-white/10">
-        <div class="flex items-center gap-2 text-white/40 text-xs">
+        <div class="flex items-center gap-2 text-white/60 text-xs">
           <span>Built with</span>
           <span class="text-white/60 font-medium">SolidJS</span>
         </div>

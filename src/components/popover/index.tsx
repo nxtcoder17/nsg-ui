@@ -7,6 +7,8 @@ export interface PopoverProps {
   show?: boolean
   onChange?: (show: boolean) => void
   trigger: JSX.Element
+  /** Accessible label for the trigger (required for icon-only triggers) */
+  triggerLabel?: string
   title?: string
   description?: string
   children?: JSX.Element
@@ -20,7 +22,7 @@ export interface PopoverProps {
 
 export function Popover(props: PopoverProps) {
   const [local, others] = splitProps(props, [
-    'show', 'onChange', 'trigger', 'title', 'description', 'children', 'arrow', 'placement', 'gutter'
+    'show', 'onChange', 'trigger', 'triggerLabel', 'title', 'description', 'children', 'arrow', 'placement', 'gutter'
   ])
 
   return (
@@ -31,7 +33,7 @@ export function Popover(props: PopoverProps) {
       gutter={local.gutter ?? 8}
       {...others}
     >
-      <KobaltePopover.Trigger as="div">{local.trigger}</KobaltePopover.Trigger>
+      <KobaltePopover.Trigger as="div" aria-label={local.triggerLabel}>{local.trigger}</KobaltePopover.Trigger>
 
       <KobaltePopover.Portal>
         <KobaltePopover.Content
