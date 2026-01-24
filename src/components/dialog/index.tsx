@@ -35,8 +35,8 @@ export const Dialog = (props: DialogProps) => {
 
   return (
     <KobalteDialog
-      open={local.show}
-      onOpenChange={local.onChange}
+      // open={local.show}
+      // onOpenChange={local.onChange}
       modal
       preventScroll
     >
@@ -83,19 +83,25 @@ export const Dialog = (props: DialogProps) => {
   )
 }
 
+Dialog.CloseButton = (props: ButtonOwnProps) => {
+  return <KobalteDialog.CloseButton as={Button} variant="outline" {...props}/>
+}
+
 Dialog.ExampleUsage = () => {
   return (
     <Dialog
-      trigger={<Button variant="danger">Delete Item</Button>}
-      title="Delete Item?"
-      description="This action cannot be undone."
+      trigger={<Button>Example Usage</Button>}
+      title="Welcome to nsg-ui"
+      description="A minimal, accessible component library for SolidJS."
     >
-      <div class="flex justify-end gap-2 p-4 border-t border-border">
-        <KobalteDialog.CloseButton as={Button} variant="ghost">
-          Cancel
-        </KobalteDialog.CloseButton>
-        <Button variant="danger">Delete</Button>
+      <div class="p-6 pt-0">
+        <p class="text-text-secondary mb-4">
+          This dialog demonstrates the basic usage with a title, description, and custom content.
+        </p>
+        <div class="flex justify-end">
+          <Button onClick={() => setShow(false)}>Close</Button>
+        </div>
       </div>
     </Dialog>
-  )
+  );
 }
