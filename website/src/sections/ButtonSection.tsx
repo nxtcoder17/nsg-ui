@@ -1,7 +1,21 @@
 import { Component, For } from 'solid-js'
 import { Button } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'
+import { DemoWithCode } from '../components/CodeBlock'
 import { ButtonIcon, PlusIcon } from '../icons'
+
+const variantsCode = `<Button variant="default">Default</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="danger">Danger</Button>
+<Button variant="link">Link</Button>`
+
+const sizesCode = `<Button size="sm">Small</Button>
+<Button size="md">Medium</Button>
+<Button size="lg">Large</Button>
+<Button size="icon">
+  <PlusIcon class="w-5 h-5" />
+</Button>`
 
 export const ButtonSection: Component = () => {
   return (
@@ -17,7 +31,7 @@ export const ButtonSection: Component = () => {
       </div>
 
       <div class="grid gap-6">
-        <DemoCard title="Variants" description="Different visual styles for different contexts">
+        <DemoWithCode title="Variants" description="Different visual styles for different contexts" code={variantsCode}>
           <div class="flex flex-wrap gap-3">
             <Button variant="default">Default</Button>
             <Button variant="outline">Outline</Button>
@@ -25,9 +39,9 @@ export const ButtonSection: Component = () => {
             <Button variant="danger">Danger</Button>
             <Button variant="link">Link</Button>
           </div>
-        </DemoCard>
+        </DemoWithCode>
 
-        <DemoCard title="Sizes" description="Small, medium, large, and icon sizes">
+        <DemoWithCode title="Sizes" description="Small, medium, large, and icon sizes" code={sizesCode}>
           <div class="flex flex-wrap items-center gap-3">
             <Button size="sm">Small</Button>
             <Button size="md">Medium</Button>
@@ -36,7 +50,7 @@ export const ButtonSection: Component = () => {
               <PlusIcon class="w-5 h-5" />
             </Button>
           </div>
-        </DemoCard>
+        </DemoWithCode>
 
         <DemoCard title="States" description="Disabled state reduces opacity and prevents interaction">
           <div class="flex flex-wrap gap-3">
@@ -51,7 +65,7 @@ export const ButtonSection: Component = () => {
             <For each={['default', 'outline', 'ghost', 'danger', 'link'] as const}>
               {(variant) => (
                 <div class="flex items-center gap-4">
-                  <span class="w-20 text-sm text-text-muted capitalize font-mono">{variant}</span>
+                  <span class={`w-20 text-sm capitalize font-mono ${variant === 'danger' ? 'text-danger-600' : 'text-primary-600'}`}>{variant}</span>
                   <Button variant={variant} size="sm">Small</Button>
                   <Button variant={variant} size="md">Medium</Button>
                   <Button variant={variant} size="lg">Large</Button>

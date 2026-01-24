@@ -8,44 +8,204 @@
 /* Enable class-based dark mode */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* ===========================================
+   COLOR SCALES - Available for inline styles
+   =========================================== */
+:root {
+  /* Neutral (warm tint, hue 50) */
+  --color-neutral-50: oklch(98% 0.005 50);
+  --color-neutral-100: oklch(96% 0.008 50);
+  --color-neutral-200: oklch(92% 0.01 50);
+  --color-neutral-300: oklch(86% 0.012 50);
+  --color-neutral-400: oklch(70% 0.015 50);
+  --color-neutral-500: oklch(55% 0.015 50);
+  --color-neutral-600: oklch(45% 0.015 50);
+  --color-neutral-700: oklch(35% 0.012 50);
+  --color-neutral-800: oklch(25% 0.01 50);
+  --color-neutral-900: oklch(18% 0.008 50);
+  --color-neutral-950: oklch(12% 0.005 50);
+
+  /* Primary (indigo, hue 260) */
+  --color-primary-50: oklch(97% 0.015 260);
+  --color-primary-100: oklch(94% 0.035 260);
+  --color-primary-200: oklch(88% 0.07 260);
+  --color-primary-300: oklch(78% 0.11 260);
+  --color-primary-400: oklch(65% 0.16 260);
+  --color-primary-500: oklch(52% 0.2 260);
+  --color-primary-600: oklch(45% 0.2 260);
+  --color-primary-700: oklch(38% 0.18 260);
+  --color-primary-800: oklch(30% 0.14 260);
+  --color-primary-900: oklch(24% 0.1 260);
+  --color-primary-950: oklch(18% 0.06 260);
+
+  /* Danger (red, hue 25) */
+  --color-danger-50: oklch(97% 0.015 25);
+  --color-danger-100: oklch(94% 0.04 25);
+  --color-danger-200: oklch(88% 0.08 25);
+  --color-danger-300: oklch(78% 0.12 25);
+  --color-danger-400: oklch(65% 0.17 25);
+  --color-danger-500: oklch(55% 0.2 25);
+  --color-danger-600: oklch(48% 0.2 25);
+  --color-danger-700: oklch(40% 0.17 25);
+  --color-danger-800: oklch(32% 0.13 25);
+  --color-danger-900: oklch(25% 0.09 25);
+  --color-danger-950: oklch(18% 0.05 25);
+
+  /* Success (green, hue 145) */
+  --color-success-50: oklch(97% 0.015 145);
+  --color-success-100: oklch(94% 0.04 145);
+  --color-success-200: oklch(88% 0.08 145);
+  --color-success-300: oklch(78% 0.12 145);
+  --color-success-400: oklch(68% 0.16 145);
+  --color-success-500: oklch(55% 0.17 145);
+  --color-success-600: oklch(48% 0.16 145);
+  --color-success-700: oklch(40% 0.14 145);
+  --color-success-800: oklch(32% 0.11 145);
+  --color-success-900: oklch(25% 0.08 145);
+  --color-success-950: oklch(18% 0.05 145);
+
+  /* Warning (amber, hue 75) */
+  --color-warning-50: oklch(98% 0.02 75);
+  --color-warning-100: oklch(95% 0.05 75);
+  --color-warning-200: oklch(90% 0.1 75);
+  --color-warning-300: oklch(85% 0.14 75);
+  --color-warning-400: oklch(78% 0.16 75);
+  --color-warning-500: oklch(70% 0.17 75);
+  --color-warning-600: oklch(60% 0.16 75);
+  --color-warning-700: oklch(50% 0.14 75);
+  --color-warning-800: oklch(40% 0.11 75);
+  --color-warning-900: oklch(30% 0.08 75);
+  --color-warning-950: oklch(20% 0.05 75);
+}
+
 @theme {
   /* Typography */
   --font-display: 'Outfit', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
-  /* ===== Light Theme (Default) ===== */
+  /* ===========================================
+     COLOR PALETTE - Following Refactoring UI
+     =========================================== */
+
+  /* -----------------------------------------
+     NEUTRAL / GRAY SCALE (warm tint, hue 50)
+     - 50-200: backgrounds, subtle fills
+     - 300-400: borders, dividers, disabled
+     - 500: placeholder text
+     - 600-700: secondary text
+     - 800-950: primary text, headings
+     ----------------------------------------- */
+  --color-neutral-50: oklch(98% 0.005 50);
+  --color-neutral-100: oklch(96% 0.008 50);
+  --color-neutral-200: oklch(92% 0.01 50);
+  --color-neutral-300: oklch(86% 0.012 50);
+  --color-neutral-400: oklch(70% 0.015 50);
+  --color-neutral-500: oklch(55% 0.015 50);
+  --color-neutral-600: oklch(45% 0.015 50);
+  --color-neutral-700: oklch(35% 0.012 50);
+  --color-neutral-800: oklch(25% 0.01 50);
+  --color-neutral-900: oklch(18% 0.008 50);
+  --color-neutral-950: oklch(12% 0.005 50);
+
+  /* -----------------------------------------
+     PRIMARY SCALE (indigo, hue 260)
+     - 50-200: alert backgrounds, tints
+     - 300-400: light accents, hover states
+     - 500: base button color
+     - 600-700: hover/active states
+     - 800-950: text on light backgrounds
+     ----------------------------------------- */
+  --color-primary-50: oklch(97% 0.015 260);
+  --color-primary-100: oklch(94% 0.035 260);
+  --color-primary-200: oklch(88% 0.07 260);
+  --color-primary-300: oklch(78% 0.11 260);
+  --color-primary-400: oklch(65% 0.16 260);
+  --color-primary-500: oklch(52% 0.2 260);
+  --color-primary-600: oklch(45% 0.2 260);
+  --color-primary-700: oklch(38% 0.18 260);
+  --color-primary-800: oklch(30% 0.14 260);
+  --color-primary-900: oklch(24% 0.1 260);
+  --color-primary-950: oklch(18% 0.06 260);
+
+  /* -----------------------------------------
+     DANGER SCALE (red, hue 25)
+     ----------------------------------------- */
+  --color-danger-50: oklch(97% 0.015 25);
+  --color-danger-100: oklch(94% 0.04 25);
+  --color-danger-200: oklch(88% 0.08 25);
+  --color-danger-300: oklch(78% 0.12 25);
+  --color-danger-400: oklch(65% 0.17 25);
+  --color-danger-500: oklch(55% 0.2 25);
+  --color-danger-600: oklch(48% 0.2 25);
+  --color-danger-700: oklch(40% 0.17 25);
+  --color-danger-800: oklch(32% 0.13 25);
+  --color-danger-900: oklch(25% 0.09 25);
+  --color-danger-950: oklch(18% 0.05 25);
+
+  /* -----------------------------------------
+     SUCCESS SCALE (green, hue 145)
+     ----------------------------------------- */
+  --color-success-50: oklch(97% 0.015 145);
+  --color-success-100: oklch(94% 0.04 145);
+  --color-success-200: oklch(88% 0.08 145);
+  --color-success-300: oklch(78% 0.12 145);
+  --color-success-400: oklch(68% 0.16 145);
+  --color-success-500: oklch(55% 0.17 145);
+  --color-success-600: oklch(48% 0.16 145);
+  --color-success-700: oklch(40% 0.14 145);
+  --color-success-800: oklch(32% 0.11 145);
+  --color-success-900: oklch(25% 0.08 145);
+  --color-success-950: oklch(18% 0.05 145);
+
+  /* -----------------------------------------
+     WARNING SCALE (amber, hue 75)
+     ----------------------------------------- */
+  --color-warning-50: oklch(98% 0.02 75);
+  --color-warning-100: oklch(95% 0.05 75);
+  --color-warning-200: oklch(90% 0.1 75);
+  --color-warning-300: oklch(85% 0.14 75);
+  --color-warning-400: oklch(78% 0.16 75);
+  --color-warning-500: oklch(70% 0.17 75);
+  --color-warning-600: oklch(60% 0.16 75);
+  --color-warning-700: oklch(50% 0.14 75);
+  --color-warning-800: oklch(40% 0.11 75);
+  --color-warning-900: oklch(30% 0.08 75);
+  --color-warning-950: oklch(20% 0.05 75);
+
+  /* ===========================================
+     SEMANTIC TOKENS - LIGHT MODE
+     =========================================== */
 
   /* Surface colors */
-  --color-surface: oklch(97% 0.003 80);
+  --color-surface: var(--color-neutral-50);
   --color-surface-raised: oklch(100% 0 0);
-  --color-surface-sunken: oklch(94% 0.005 80);
+  --color-surface-sunken: var(--color-neutral-100);
 
-  /* Sidebar */
-  --color-sidebar: oklch(18% 0.02 260);
-  --color-sidebar-hover: oklch(24% 0.025 260);
-  --color-sidebar-active: oklch(30% 0.03 260);
+  /* Sidebar (always dark for contrast) */
+  --color-sidebar: var(--color-primary-950);
+  --color-sidebar-hover: var(--color-primary-900);
+  --color-sidebar-active: var(--color-primary-800);
 
   /* Border colors */
-  --color-border: oklch(90% 0.006 80);
-  --color-border-subtle: oklch(93% 0.003 80);
+  --color-border: var(--color-neutral-200);
+  --color-border-subtle: var(--color-neutral-100);
 
-  /* Ring color */
-  --color-ring: oklch(55% 0.2 260);
+  /* Ring/focus color */
+  --color-ring: var(--color-primary-500);
 
-  /* Text colors */
-  --color-text: oklch(15% 0.01 80);
-  --color-text-secondary: oklch(40% 0.01 80);
-  --color-text-muted: oklch(55% 0.005 80);
+  /* Text colors - using neutral scale */
+  --color-text: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-muted: var(--color-neutral-500);
 
-  /* Interactive colors - deep indigo */
-  --color-primary: oklch(50% 0.2 260);
-  --color-primary-hover: oklch(45% 0.22 260);
-  --color-danger: oklch(55% 0.2 25);
-  --color-danger-hover: oklch(50% 0.22 25);
-  --color-success: oklch(55% 0.18 155);
-
-  /* Accent for highlights */
-  --color-accent: oklch(70% 0.18 160);
+  /* Interactive aliases */
+  --color-primary: var(--color-primary-500);
+  --color-primary-hover: var(--color-primary-600);
+  --color-danger: var(--color-danger-500);
+  --color-danger-hover: var(--color-danger-600);
+  --color-success: var(--color-success-500);
+  --color-warning: var(--color-warning-500);
+  --color-accent: var(--color-success-400);
 
   /* Border radius */
   --radius-sm: 6px;
@@ -90,43 +250,113 @@
   }
 }
 
-/* ===== Dark Theme ===== */
+/* ===========================================
+   DARK MODE OVERRIDES
+   - Desaturate colors by ~20% (lower chroma)
+   - Increase lightness for better visibility
+   - Use cool-tinted neutrals (indigo hue 260)
+   - Elevation = lighter surfaces
+   =========================================== */
 .dark {
-  /* Surface colors - deep blue-gray */
-  --color-surface: oklch(16% 0.015 260);
-  --color-surface-raised: oklch(20% 0.02 260);
-  --color-surface-sunken: oklch(12% 0.01 260);
+  /* Neutral scale - cool tint (indigo 260) for dark mode */
+  --color-neutral-50: oklch(18% 0.015 260);
+  --color-neutral-100: oklch(22% 0.018 260);
+  --color-neutral-200: oklch(26% 0.02 260);
+  --color-neutral-300: oklch(32% 0.022 260);
+  --color-neutral-400: oklch(45% 0.02 260);
+  --color-neutral-500: oklch(55% 0.018 260);
+  --color-neutral-600: oklch(70% 0.015 260);
+  --color-neutral-700: oklch(80% 0.012 260);
+  --color-neutral-800: oklch(88% 0.008 260);
+  --color-neutral-900: oklch(94% 0.005 260);
+  --color-neutral-950: oklch(98% 0.003 260);
 
-  /* Sidebar - slightly lighter in dark mode for contrast */
+  /* Primary - brighter, slightly desaturated */
+  --color-primary-50: oklch(22% 0.04 260);
+  --color-primary-100: oklch(26% 0.06 260);
+  --color-primary-200: oklch(32% 0.08 260);
+  --color-primary-300: oklch(42% 0.12 260);
+  --color-primary-400: oklch(55% 0.15 260);
+  --color-primary-500: oklch(62% 0.17 260);
+  --color-primary-600: oklch(70% 0.15 260);
+  --color-primary-700: oklch(78% 0.12 260);
+  --color-primary-800: oklch(85% 0.08 260);
+  --color-primary-900: oklch(92% 0.04 260);
+  --color-primary-950: oklch(96% 0.02 260);
+
+  /* Danger - brighter, slightly desaturated */
+  --color-danger-50: oklch(22% 0.04 25);
+  --color-danger-100: oklch(26% 0.06 25);
+  --color-danger-200: oklch(32% 0.1 25);
+  --color-danger-300: oklch(42% 0.13 25);
+  --color-danger-400: oklch(55% 0.15 25);
+  --color-danger-500: oklch(62% 0.16 25);
+  --color-danger-600: oklch(70% 0.14 25);
+  --color-danger-700: oklch(78% 0.1 25);
+  --color-danger-800: oklch(85% 0.06 25);
+  --color-danger-900: oklch(92% 0.03 25);
+  --color-danger-950: oklch(96% 0.015 25);
+
+  /* Success - brighter, slightly desaturated */
+  --color-success-50: oklch(22% 0.04 145);
+  --color-success-100: oklch(26% 0.06 145);
+  --color-success-200: oklch(32% 0.08 145);
+  --color-success-300: oklch(42% 0.1 145);
+  --color-success-400: oklch(55% 0.13 145);
+  --color-success-500: oklch(62% 0.14 145);
+  --color-success-600: oklch(70% 0.12 145);
+  --color-success-700: oklch(78% 0.09 145);
+  --color-success-800: oklch(85% 0.06 145);
+  --color-success-900: oklch(92% 0.03 145);
+  --color-success-950: oklch(96% 0.015 145);
+
+  /* Warning - brighter, slightly desaturated */
+  --color-warning-50: oklch(22% 0.04 75);
+  --color-warning-100: oklch(26% 0.07 75);
+  --color-warning-200: oklch(32% 0.1 75);
+  --color-warning-300: oklch(45% 0.12 75);
+  --color-warning-400: oklch(60% 0.14 75);
+  --color-warning-500: oklch(72% 0.14 75);
+  --color-warning-600: oklch(80% 0.12 75);
+  --color-warning-700: oklch(86% 0.09 75);
+  --color-warning-800: oklch(91% 0.06 75);
+  --color-warning-900: oklch(95% 0.03 75);
+  --color-warning-950: oklch(97% 0.015 75);
+
+  /* Surface - elevation through lightness */
+  --color-surface: var(--color-neutral-50);
+  --color-surface-raised: var(--color-neutral-100);
+  --color-surface-sunken: oklch(14% 0.012 260);
+
+  /* Sidebar - darker than surface for contrast */
   --color-sidebar: oklch(12% 0.015 260);
-  --color-sidebar-hover: oklch(18% 0.02 260);
-  --color-sidebar-active: oklch(24% 0.025 260);
+  --color-sidebar-hover: oklch(16% 0.018 260);
+  --color-sidebar-active: oklch(20% 0.02 260);
 
-  /* Border colors */
-  --color-border: oklch(28% 0.02 260);
-  --color-border-subtle: oklch(22% 0.015 260);
+  /* Borders - visible but subtle */
+  --color-border: var(--color-neutral-200);
+  --color-border-subtle: var(--color-neutral-100);
 
-  /* Ring color - brighter in dark */
-  --color-ring: oklch(65% 0.2 260);
+  /* Ring/focus - brighter */
+  --color-ring: var(--color-primary-500);
 
-  /* Text colors - inverted */
-  --color-text: oklch(95% 0.005 80);
-  --color-text-secondary: oklch(75% 0.01 80);
-  --color-text-muted: oklch(55% 0.01 80);
+  /* Text - using inverted neutral scale */
+  --color-text: var(--color-neutral-900);
+  --color-text-secondary: var(--color-neutral-600);
+  --color-text-muted: var(--color-neutral-500);
 
-  /* Interactive colors - brighter in dark mode */
-  --color-primary: oklch(60% 0.2 260);
-  --color-primary-hover: oklch(65% 0.22 260);
-  --color-danger: oklch(60% 0.2 25);
-  --color-danger-hover: oklch(65% 0.22 25);
-  --color-success: oklch(60% 0.18 155);
+  /* Interactive aliases */
+  --color-primary: var(--color-primary-500);
+  --color-primary-hover: var(--color-primary-400);
+  --color-danger: var(--color-danger-500);
+  --color-danger-hover: var(--color-danger-400);
+  --color-success: var(--color-success-500);
+  --color-warning: var(--color-warning-500);
+  --color-accent: var(--color-success-400);
 
-  /* Accent */
-  --color-accent: oklch(75% 0.18 160);
-
-  /* Shadows - more prominent in dark */
-  --shadow-card: 0 1px 3px oklch(0% 0 0 / 0.2), 0 4px 12px oklch(0% 0 0 / 0.3);
-  --shadow-card-hover: 0 2px 8px oklch(0% 0 0 / 0.3), 0 8px 24px oklch(0% 0 0 / 0.4);
+  /* Shadows - subtle glow effect instead of dark shadows */
+  --shadow-card: 0 0 0 1px var(--color-neutral-200), 0 4px 12px oklch(0% 0 0 / 0.4);
+  --shadow-card-hover: 0 0 0 1px var(--color-neutral-300), 0 8px 24px oklch(0% 0 0 / 0.5);
 }
 
 /* Base styles */
@@ -141,7 +371,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Custom scrollbar - light mode */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -152,24 +382,15 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: oklch(80% 0.01 80);
+  background: var(--color-neutral-300);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: oklch(70% 0.01 80);
+  background: var(--color-neutral-400);
 }
 
-/* Custom scrollbar - dark mode */
-.dark ::-webkit-scrollbar-thumb {
-  background: oklch(35% 0.02 260);
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: oklch(45% 0.02 260);
-}
-
-/* Sidebar scrollbar */
+/* Sidebar scrollbar (always dark) */
 .sidebar-scroll::-webkit-scrollbar-thumb {
   background: oklch(35% 0.02 260);
 }
@@ -181,27 +402,15 @@ body {
 /* Demo card pattern background */
 .demo-pattern {
   background-image:
-    radial-gradient(circle at 1px 1px, oklch(85% 0.01 80) 1px, transparent 0);
+    radial-gradient(circle at 1px 1px, var(--color-neutral-300) 1px, transparent 0);
   background-size: 24px 24px;
-}
-
-.dark .demo-pattern {
-  background-image:
-    radial-gradient(circle at 1px 1px, oklch(25% 0.02 260) 1px, transparent 0);
 }
 
 /* Subtle gradient mesh for hero areas */
 .gradient-mesh {
   background:
-    radial-gradient(ellipse at 20% 0%, oklch(92% 0.08 260 / 0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, oklch(90% 0.06 160 / 0.1) 0%, transparent 50%),
-    var(--color-surface);
-}
-
-.dark .gradient-mesh {
-  background:
-    radial-gradient(ellipse at 20% 0%, oklch(30% 0.1 260 / 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 100%, oklch(25% 0.08 160 / 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 20% 0%, oklch(from var(--color-primary-200) l c h / 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, oklch(from var(--color-success-200) l c h / 0.2) 0%, transparent 50%),
     var(--color-surface);
 }
 

@@ -1,11 +1,23 @@
 import { For, JSX, Component } from 'solid-js'
 import { ButtonIcon, DialogIcon, PopoverIcon, MenuIcon, LayersIcon } from '../icons'
 
+function PaletteIcon(props: { class?: string }) {
+  return (
+    <svg class={props.class} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="10" />
+      <circle cx="12" cy="8" r="2" />
+      <circle cx="8" cy="14" r="2" />
+      <circle cx="16" cy="14" r="2" />
+    </svg>
+  )
+}
+
 export const sections = [
   { id: 'button', label: 'Button', icon: ButtonIcon },
   { id: 'dialog', label: 'Dialog', icon: DialogIcon },
   { id: 'popover', label: 'Popover', icon: PopoverIcon },
   { id: 'dropdown-menu', label: 'Dropdown Menu', icon: MenuIcon },
+  { id: 'colors', label: 'Color Palette', icon: PaletteIcon },
 ] as const
 
 export type SectionId = typeof sections[number]['id']

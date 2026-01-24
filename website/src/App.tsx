@@ -1,17 +1,20 @@
-import { Component, createSignal, createEffect, onMount } from 'solid-js'
+import { Component, createSignal, createEffect, onMount, onCleanup } from 'solid-js'
 import { Theme, applyTheme, getSavedTheme, saveTheme, cycleTheme, onSystemThemeChange } from './theme'
-import { Sidebar, SectionId } from './components/Sidebar'
+import { Sidebar, SectionId, sections } from './components/Sidebar'
 import { Header } from './components/Header'
+import { ColorPaletteSection } from './sections/ColorPaletteSection'
 import { ButtonSection } from './sections/ButtonSection'
 import { DialogSection } from './sections/DialogSection'
 import { PopoverSection } from './sections/PopoverSection'
 import { DropdownMenuSection } from './sections/DropdownMenuSection'
 
 const App: Component = () => {
-  const [activeSection, setActiveSection] = createSignal<SectionId>('button')
+  const [activeSection, setActiveSection] = createSignal<SectionId>('colors')
   const [theme, setTheme] = createSignal<Theme>('system')
+  let isScrolling = false
 
   onMount(() => {
+    // Theme initialization
     const saved = getSavedTheme()
     if (saved) setTheme(saved)
     applyTheme(theme())
@@ -19,6 +22,34 @@ const App: Component = () => {
     onSystemThemeChange(() => {
       if (theme() === 'system') applyTheme('system')
     })
+
+    // Intersection observer for active section highlighting
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (isScrolling) return
+
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            const id = entry.target.id as SectionId
+            if (sections.some(s => s.id === id)) {
+              setActiveSection(id)
+            }
+          }
+        }
+      },
+      {
+        rootMargin: '-20% 0px -60% 0px', // Trigger when section is in top 20-40% of viewport
+        threshold: 0
+      }
+    )
+
+    // Observe all sections
+    sections.forEach(({ id }) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+
+    onCleanup(() => observer.disconnect())
   })
 
   createEffect(() => {
@@ -30,8 +61,11 @@ const App: Component = () => {
   const handleThemeToggle = () => setTheme(cycleTheme(theme()))
 
   const handleSectionClick = (id: SectionId) => {
+    isScrolling = true
     setActiveSection(id)
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    // Reset scrolling flag after animation
+    setTimeout(() => { isScrolling = false }, 1000)
   }
 
   return (
@@ -46,6 +80,7 @@ const App: Component = () => {
           <DialogSection />
           <PopoverSection />
           <DropdownMenuSection />
+          <ColorPaletteSection />
 
           <footer class="border-t border-border pt-8 pb-16">
             <div class="flex items-center justify-between text-sm text-text-muted">

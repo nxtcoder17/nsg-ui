@@ -35,8 +35,8 @@ export const Dialog = (props: DialogProps) => {
 
   return (
     <KobalteDialog
-      // open={local.show}
-      // onOpenChange={local.onChange}
+      open={local.show}
+      onOpenChange={local.onChange}
       modal
       preventScroll
     >

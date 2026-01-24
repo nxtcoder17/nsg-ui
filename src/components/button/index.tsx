@@ -13,11 +13,11 @@ export interface ButtonOwnProps {
 export type ButtonProps<T extends ValidComponent = 'button'> = PolymorphicProps<T, ButtonOwnProps & ButtonRootProps<T>>
 
 const variantStyles = {
-  default: 'bg-primary text-white hover:bg-primary/90',
-  outline: 'border border-border bg-transparent text-text hover:bg-surface-sunken',
-  ghost: 'bg-transparent text-text hover:bg-surface-sunken',
-  danger: 'bg-red-600 text-white hover:bg-red-700',
-  link: 'bg-transparent text-primary underline-offset-4 hover:underline',
+  default: 'bg-primary-500 text-primary-50 hover:bg-primary-600',
+  outline: 'border border-border bg-transparent text-text hover:bg-neutral-100',
+  ghost: 'bg-transparent text-text hover:bg-neutral-100',
+  danger: 'bg-danger-500 text-danger-50 hover:bg-danger-600',
+  link: 'bg-transparent text-primary-600 underline-offset-4 hover:underline hover:text-primary-700',
 }
 
 const sizeStyles = {
