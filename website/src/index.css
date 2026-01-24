@@ -1,0 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@import 'tailwindcss';
+
+/* Scan the component library source for Tailwind classes */
+@source "../../src/**/*.tsx";
+
+@theme {
+  /* Typography */
+  --font-display: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Surface colors */
+  --color-surface: oklch(97% 0.003 80);
+  --color-surface-raised: oklch(100% 0 0);
+  --color-surface-sunken: oklch(94% 0.005 80);
+
+  /* Sidebar dark theme */
+  --color-sidebar: oklch(18% 0.02 260);
+  --color-sidebar-hover: oklch(24% 0.025 260);
+  --color-sidebar-active: oklch(30% 0.03 260);
+
+  /* Border colors */
+  --color-border: oklch(90% 0.006 80);
+  --color-border-subtle: oklch(93% 0.003 80);
+
+  /* Ring color */
+  --color-ring: oklch(55% 0.2 260);
+
+  /* Text colors */
+  --color-text: oklch(15% 0.01 80);
+  --color-text-secondary: oklch(40% 0.01 80);
+  --color-text-muted: oklch(55% 0.005 80);
+
+  /* Interactive colors - deep indigo */
+  --color-primary: oklch(50% 0.2 260);
+  --color-primary-hover: oklch(45% 0.22 260);
+  --color-danger: oklch(55% 0.2 25);
+  --color-danger-hover: oklch(50% 0.22 25);
+  --color-success: oklch(55% 0.18 155);
+
+  /* Accent for highlights */
+  --color-accent: oklch(70% 0.18 160);
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 3px oklch(0% 0 0 / 0.04), 0 4px 12px oklch(0% 0 0 / 0.03);
+  --shadow-card-hover: 0 2px 8px oklch(0% 0 0 / 0.06), 0 8px 24px oklch(0% 0 0 / 0.04);
+
+  /* Animations */
+  --animate-scale-in: nsg-scale-in 0.2s ease-out;
+  --animate-fade-in: nsg-fade-in 0.2s ease-out;
+  --animate-slide-up: nsg-slide-up 0.2s ease-out;
+  --animate-slide-down: nsg-slide-down 0.2s ease-out;
+  --animate-float: nsg-float 6s ease-in-out infinite;
+
+  @keyframes nsg-scale-in {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes nsg-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes nsg-slide-up {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes nsg-slide-down {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes nsg-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: oklch(80% 0.01 80);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(70% 0.01 80);
+}
+
+/* Sidebar scrollbar - lighter for dark bg */
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: oklch(35% 0.02 260);
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: oklch(45% 0.02 260);
+}
+
+/* Demo card pattern background */
+.demo-pattern {
+  background-image:
+    radial-gradient(circle at 1px 1px, oklch(85% 0.01 80) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Subtle gradient mesh for hero areas */
+.gradient-mesh {
+  background:
+    radial-gradient(ellipse at 20% 0%, oklch(92% 0.08 260 / 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, oklch(90% 0.06 160 / 0.1) 0%, transparent 50%),
+    oklch(97% 0.003 80);
+}
