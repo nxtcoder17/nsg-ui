@@ -19,6 +19,34 @@ function MultiSelectDemo() {
   )
 }
 
+// Demo: Custom rendering with render prop
+function CustomRenderDemo() {
+  const [selected, setSelected] = createSignal<string[]>(['grid'])
+
+  const toggle = (id: string) => {
+    setSelected(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
+  }
+
+  const optionClass = (checked: boolean) =>
+    `w-full px-2 py-1.5 rounded transition-colors ${checked ? 'bg-primary/15 text-primary font-medium' : ''}`
+
+  return (
+    <DropdownMenu trigger={<Button variant="outline">Display Settings</Button>}>
+      <DropdownMenu.Select label="Toggle Options" multiple>
+        <DropdownMenu.Option checked={selected().includes('grid')} onChange={() => toggle('grid')}>
+          {({ checked }) => <span class={optionClass(checked)}>Show Grid</span>}
+        </DropdownMenu.Option>
+        <DropdownMenu.Option checked={selected().includes('rulers')} onChange={() => toggle('rulers')}>
+          {({ checked }) => <span class={optionClass(checked)}>Show Rulers</span>}
+        </DropdownMenu.Option>
+        <DropdownMenu.Option checked={selected().includes('guides')} onChange={() => toggle('guides')}>
+          {({ checked }) => <span class={optionClass(checked)}>Show Guides</span>}
+        </DropdownMenu.Option>
+      </DropdownMenu.Select>
+    </DropdownMenu>
+  )
+}
+
 // Demo: Single selection (radio)
 function SingleSelectDemo() {
   const [theme, setTheme] = createSignal('system')
@@ -61,11 +89,15 @@ export const DropdownMenuSection: Component = () => {
           </DropdownMenu>
         </DemoCard>
 
-        <DemoCard title="MultiSelect (Checkboxes)" description="Toggle multiple options independently">
+        <DemoCard title="Select (Multiple)" description="Toggle multiple options with checkmarks">
           <MultiSelectDemo />
         </DemoCard>
 
-        <DemoCard title="SingleSelect (Radio)" description="Single selection from options">
+        <DemoCard title="Custom Render" description="Highlight background instead of checkmark">
+          <CustomRenderDemo />
+        </DemoCard>
+
+        <DemoCard title="Select (Single)" description="Single selection from options">
           <SingleSelectDemo />
         </DemoCard>
 

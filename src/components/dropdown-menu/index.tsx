@@ -119,31 +119,52 @@ DropdownMenu.ActionItem = (props: ActionItemProps) => {
 // Option - Context-aware checkbox or radio item
 // ============================================================================
 
+export interface OptionState {
+  checked: boolean
+}
+
 export interface OptionProps {
-  label: string
-  /** For SingleSelect (radio) */
+  /** Label text (uses default rendering with indicator) */
+  label?: string
+  /** For single selection (radio): the option's value */
   value?: string
-  /** For MultiSelect (checkbox) */
+  /** For multiple selection (checkbox): controlled checked state */
   checked?: boolean
   onChange?: (checked: boolean) => void
   disabled?: boolean
   class?: string
+  /** Render prop for custom rendering. Receives { checked } state. */
+  children?: (state: OptionState) => JSX.Element
 }
 
 DropdownMenu.Option = (props: OptionProps) => {
-  const [local, others] = splitProps(props, ['label', 'value', 'checked', 'onChange', 'disabled', 'class'])
+  const [local, others] = splitProps(props, ['label', 'value', 'checked', 'onChange', 'disabled', 'class', 'children'])
   const ctx = useContext(OptionContext)
 
+  const hasCustomRender = typeof local.children === 'function'
+
   const itemClass = cn(
-    'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors',
+    'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 text-sm outline-none transition-colors',
     'focus:bg-surface-sunken',
     'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+    // Only add left padding for indicator when using default rendering
+    !hasCustomRender && 'pl-8 pr-2',
     local.class
   )
 
   const indicatorClass = 'absolute left-2 inline-flex items-center justify-center'
 
-  // Radio item (inside SingleSelect)
+  // Default content with indicator
+  const defaultContent = (icon: JSX.Element) => (
+    <>
+      <KobalteDropdownMenu.ItemIndicator class={indicatorClass}>
+        {icon}
+      </KobalteDropdownMenu.ItemIndicator>
+      {local.label}
+    </>
+  )
+
+  // Radio item (inside Select without multiple)
   if (ctx?.type === 'single') {
     return (
       <KobalteDropdownMenu.RadioItem
@@ -152,15 +173,16 @@ DropdownMenu.Option = (props: OptionProps) => {
         disabled={local.disabled}
         {...others}
       >
-        <KobalteDropdownMenu.ItemIndicator class={indicatorClass}>
-          <DotIcon />
-        </KobalteDropdownMenu.ItemIndicator>
-        {local.label}
+        {(state) => hasCustomRender
+          ? local.children!({ checked: state.checked() })
+          : defaultContent(<DotIcon />)
+        }
       </KobalteDropdownMenu.RadioItem>
     )
   }
 
-  // Checkbox item (inside MultiSelect or standalone)
+  // Checkbox item (inside Select with multiple)
+  // Note: We use local.checked directly since CheckboxItem is controlled
   return (
     <KobalteDropdownMenu.CheckboxItem
       class={itemClass}
@@ -169,10 +191,10 @@ DropdownMenu.Option = (props: OptionProps) => {
       disabled={local.disabled}
       {...others}
     >
-      <KobalteDropdownMenu.ItemIndicator class={indicatorClass}>
-        <CheckIcon />
-      </KobalteDropdownMenu.ItemIndicator>
-      {local.label}
+      {hasCustomRender
+        ? local.children!({ checked: local.checked ?? false })
+        : defaultContent(<CheckIcon />)
+      }
     </KobalteDropdownMenu.CheckboxItem>
   )
 }
