@@ -1,5 +1,6 @@
 import { For, JSX, Component } from 'solid-js'
 import { ButtonIcon, DialogIcon, PopoverIcon, MenuIcon, LayersIcon } from '../icons'
+import { IconsIcon } from '../sections/IconsSection'
 
 function PaletteIcon(props: { class?: string }) {
   return (
@@ -17,6 +18,7 @@ export const sections = [
   { id: 'dialog', label: 'Dialog', icon: DialogIcon },
   { id: 'popover', label: 'Popover', icon: PopoverIcon },
   { id: 'dropdown-menu', label: 'Dropdown Menu', icon: MenuIcon },
+  { id: 'icons', label: 'Icons', icon: IconsIcon },
   { id: 'colors', label: 'Color Palette', icon: PaletteIcon },
 ] as const
 

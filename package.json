@@ -11,6 +11,11 @@
       "solid": "./src/index.tsx",
       "import": "./src/index.tsx",
       "types": "./src/index.tsx"
+    },
+    "./icons": {
+      "solid": "./src/icons/index.tsx",
+      "import": "./src/icons/index.tsx",
+      "types": "./src/icons/index.tsx"
     }
   },
   "files": [

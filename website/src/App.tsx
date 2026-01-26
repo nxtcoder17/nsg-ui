@@ -7,6 +7,7 @@ import { ButtonSection } from './sections/ButtonSection'
 import { DialogSection } from './sections/DialogSection'
 import { PopoverSection } from './sections/PopoverSection'
 import { DropdownMenuSection } from './sections/DropdownMenuSection'
+import { IconsSection } from './sections/IconsSection'
 
 const App: Component = () => {
   const [activeSection, setActiveSection] = createSignal<SectionId>('colors')
@@ -80,6 +81,7 @@ const App: Component = () => {
           <DialogSection />
           <PopoverSection />
           <DropdownMenuSection />
+          <IconsSection />
           <ColorPaletteSection />
 
           <footer class="border-t border-border pt-8 pb-16">
