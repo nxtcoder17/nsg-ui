@@ -11,10 +11,6 @@
       "solid": "./src/index.tsx",
       "import": "./src/index.tsx",
       "types": "./src/index.tsx"
-    },
-    "./preset": {
-      "import": "./src/preset.ts",
-      "types": "./src/preset.ts"
     }
   },
   "files": [

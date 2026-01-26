@@ -7,10 +7,6 @@ const presetOptions: preset.PresetOptions = {
       entry: 'src/index.tsx',
       dev_entry: true,
     },
-    {
-      entry: 'src/preset.ts',
-      dev_entry: false,
-    },
   ],
   drop_console: true,
   cjs: false,

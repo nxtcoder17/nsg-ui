@@ -1,64 +1,35 @@
 import { Component, createSignal } from 'solid-js'
 import { DropdownMenu, DropdownMenuExample } from 'nsg-ui/components/dropdown-menu'
+import { Button } from 'nsg-ui/components/button'
 import { DemoCard } from '../components/DemoCard'
-import { MenuIcon, SettingsIcon, UserIcon, LogoutIcon, CheckIcon, DotIcon } from '../icons'
+import { MenuIcon, SettingsIcon, UserIcon, LogoutIcon } from '../icons'
 
-// Demo components
-function CheckboxMenuDemo() {
+// Demo: Multiple selection (checkboxes)
+function MultiSelectDemo() {
   const [showGrid, setShowGrid] = createSignal(true)
   const [showRulers, setShowRulers] = createSignal(false)
 
   return (
-    <DropdownMenu>
-      <DropdownMenu.Trigger variant="outline">View Options</DropdownMenu.Trigger>
-      <DropdownMenu.Panel>
-        <DropdownMenu.GroupLabel>Display</DropdownMenu.GroupLabel>
-        <DropdownMenu.CheckboxItem checked={showGrid()} onChange={setShowGrid}>
-          <DropdownMenu.ItemIndicator>
-            <CheckIcon class="w-4 h-4" />
-          </DropdownMenu.ItemIndicator>
-          Show Grid
-        </DropdownMenu.CheckboxItem>
-        <DropdownMenu.CheckboxItem checked={showRulers()} onChange={setShowRulers}>
-          <DropdownMenu.ItemIndicator>
-            <CheckIcon class="w-4 h-4" />
-          </DropdownMenu.ItemIndicator>
-          Show Rulers
-        </DropdownMenu.CheckboxItem>
-      </DropdownMenu.Panel>
+    <DropdownMenu trigger={<Button variant="outline">View Options</Button>}>
+      <DropdownMenu.Select label="Display" multiple>
+        <DropdownMenu.Option label="Show Grid" checked={showGrid()} onChange={setShowGrid} />
+        <DropdownMenu.Option label="Show Rulers" checked={showRulers()} onChange={setShowRulers} />
+      </DropdownMenu.Select>
     </DropdownMenu>
   )
 }
 
-function RadioMenuDemo() {
+// Demo: Single selection (radio)
+function SingleSelectDemo() {
   const [theme, setTheme] = createSignal('system')
 
   return (
-    <DropdownMenu>
-      <DropdownMenu.Trigger variant="outline">Theme: {theme()}</DropdownMenu.Trigger>
-      <DropdownMenu.Panel>
-        <DropdownMenu.RadioGroup value={theme()} onChange={setTheme}>
-          <DropdownMenu.GroupLabel>Theme</DropdownMenu.GroupLabel>
-          <DropdownMenu.RadioItem value="light">
-            <DropdownMenu.ItemIndicator>
-              <DotIcon class="w-4 h-4" />
-            </DropdownMenu.ItemIndicator>
-            Light
-          </DropdownMenu.RadioItem>
-          <DropdownMenu.RadioItem value="dark">
-            <DropdownMenu.ItemIndicator>
-              <DotIcon class="w-4 h-4" />
-            </DropdownMenu.ItemIndicator>
-            Dark
-          </DropdownMenu.RadioItem>
-          <DropdownMenu.RadioItem value="system">
-            <DropdownMenu.ItemIndicator>
-              <DotIcon class="w-4 h-4" />
-            </DropdownMenu.ItemIndicator>
-            System
-          </DropdownMenu.RadioItem>
-        </DropdownMenu.RadioGroup>
-      </DropdownMenu.Panel>
+    <DropdownMenu trigger={<Button variant="outline">Theme: {theme()}</Button>}>
+      <DropdownMenu.Select label="Theme" value={theme()} onChange={setTheme}>
+        <DropdownMenu.Option value="light" label="Light" />
+        <DropdownMenu.Option value="dark" label="Dark" />
+        <DropdownMenu.Option value="system" label="System" />
+      </DropdownMenu.Select>
     </DropdownMenu>
   )
 }
@@ -82,54 +53,33 @@ export const DropdownMenuSection: Component = () => {
         </DemoCard>
 
         <DemoCard title="With Icons" description="Enhanced visual hierarchy with icons">
-          <DropdownMenu>
-            <DropdownMenu.Trigger variant="outline">
-              <SettingsIcon class="w-4 h-4 mr-2" />
-              Settings
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Panel>
-              <DropdownMenu.Item>
-                <UserIcon class="w-4 h-4 mr-2" />
-                Profile
-              </DropdownMenu.Item>
-              <DropdownMenu.Item>
-                <SettingsIcon class="w-4 h-4 mr-2" />
-                Settings
-              </DropdownMenu.Item>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Item variant="danger">
-                <LogoutIcon class="w-4 h-4 mr-2" />
-                Logout
-              </DropdownMenu.Item>
-            </DropdownMenu.Panel>
+          <DropdownMenu trigger={<Button variant="outline"><SettingsIcon class="w-4 h-4 mr-2" />Settings</Button>}>
+            <DropdownMenu.ActionItem label="Profile" icon={<UserIcon class="w-4 h-4" />} onSelect={() => console.log('Profile')} />
+            <DropdownMenu.ActionItem label="Settings" icon={<SettingsIcon class="w-4 h-4" />} onSelect={() => console.log('Settings')} />
+            <DropdownMenu.Separator />
+            <DropdownMenu.ActionItem label="Logout" variant="danger" icon={<LogoutIcon class="w-4 h-4" />} onSelect={() => console.log('Logout')} />
           </DropdownMenu>
         </DemoCard>
 
-        <DemoCard title="With Checkbox Items" description="Toggle multiple options">
-          <CheckboxMenuDemo />
+        <DemoCard title="MultiSelect (Checkboxes)" description="Toggle multiple options independently">
+          <MultiSelectDemo />
         </DemoCard>
 
-        <DemoCard title="With Radio Items" description="Single selection from options">
-          <RadioMenuDemo />
+        <DemoCard title="SingleSelect (Radio)" description="Single selection from options">
+          <SingleSelectDemo />
         </DemoCard>
 
-        <DemoCard title="With Submenu" description="Nested menu structure">
-          <DropdownMenu>
-            <DropdownMenu.Trigger>Share</DropdownMenu.Trigger>
-            <DropdownMenu.Panel>
-              <DropdownMenu.Item>Copy Link</DropdownMenu.Item>
-              <DropdownMenu.Submenu>
-                <DropdownMenu.SubmenuTrigger>Share to...</DropdownMenu.SubmenuTrigger>
-                <DropdownMenu.SubmenuPanel>
-                  <DropdownMenu.Item>Twitter</DropdownMenu.Item>
-                  <DropdownMenu.Item>Facebook</DropdownMenu.Item>
-                  <DropdownMenu.Item>LinkedIn</DropdownMenu.Item>
-                  <DropdownMenu.Item>Email</DropdownMenu.Item>
-                </DropdownMenu.SubmenuPanel>
-              </DropdownMenu.Submenu>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Item>Embed</DropdownMenu.Item>
-            </DropdownMenu.Panel>
+        <DemoCard title="Nested Menu" description="Nested menu structure">
+          <DropdownMenu trigger={<Button>Share</Button>}>
+            <DropdownMenu.ActionItem label="Copy Link" onSelect={() => console.log('Copy Link')} />
+            <DropdownMenu.Menu label="Share to...">
+              <DropdownMenu.ActionItem label="Twitter" onSelect={() => console.log('Twitter')} />
+              <DropdownMenu.ActionItem label="Facebook" onSelect={() => console.log('Facebook')} />
+              <DropdownMenu.ActionItem label="LinkedIn" onSelect={() => console.log('LinkedIn')} />
+              <DropdownMenu.ActionItem label="Email" onSelect={() => console.log('Email')} />
+            </DropdownMenu.Menu>
+            <DropdownMenu.Separator />
+            <DropdownMenu.ActionItem label="Embed" onSelect={() => console.log('Embed')} />
           </DropdownMenu>
         </DemoCard>
       </div>
