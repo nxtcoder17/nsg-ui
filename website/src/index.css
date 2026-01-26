@@ -222,7 +222,15 @@
   --animate-fade-in: nsg-fade-in 0.2s ease-out;
   --animate-slide-up: nsg-slide-up 0.2s ease-out;
   --animate-slide-down: nsg-slide-down 0.2s ease-out;
+  --animate-slide-in-right: nsg-slide-in-right 0.3s ease-out;
+  --animate-fade-out: nsg-fade-out 0.2s ease-out forwards;
   --animate-float: nsg-float 6s ease-in-out infinite;
+  --animate-slide-from-top: nsg-slide-from-top 0.2s ease-out;
+
+  @keyframes nsg-slide-from-top {
+    from { opacity: 0; transform: translate(-50%, -10px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+  }
 
   @keyframes nsg-scale-in {
     from { opacity: 0; transform: scale(0.95); }
@@ -242,6 +250,16 @@
   @keyframes nsg-slide-down {
     from { opacity: 0; transform: translateY(-4px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes nsg-slide-in-right {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes nsg-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
   }
 
   @keyframes nsg-float {
@@ -417,4 +435,33 @@ body {
 /* Smooth transitions for theme switching */
 * {
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+/* Accordion animations */
+@keyframes accordion-down {
+  from { height: 0; opacity: 0; }
+  to { height: var(--kb-accordion-content-height); opacity: 1; }
+}
+
+@keyframes accordion-up {
+  from { height: var(--kb-accordion-content-height); opacity: 1; }
+  to { height: 0; opacity: 0; }
+}
+
+.animate-accordion-down {
+  animation: accordion-down 0.2s ease-out;
+}
+
+.animate-accordion-up {
+  animation: accordion-up 0.2s ease-out;
+}
+
+/* Progress indeterminate animation */
+@keyframes progress-indeterminate {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+.animate-progress-indeterminate {
+  animation: progress-indeterminate 1.5s ease-in-out infinite;
 }

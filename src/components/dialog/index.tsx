@@ -6,13 +6,18 @@ import { Button } from '../button'
 type DialogBaseProps = {
   show?: boolean
   onChange?: (show: boolean) => void
-  trigger: JSX.Element
+  /** Trigger element. If omitted, dialog is controlled entirely via show/onChange */
+  trigger?: JSX.Element
   description?: string
   children?: JSX.Element
   /** Close dialog on Escape key (default: true) */
   closeOnEscape?: boolean
   /** Close dialog on click outside (default: true) */
   closeOnClickOutside?: boolean
+  /** Position of the dialog: 'center' (default) or 'top' (command-bar style) */
+  position?: 'center' | 'top'
+  /** Additional classes for the content container */
+  contentClass?: string
 }
 
 export type DialogProps = DialogBaseProps & (
@@ -31,7 +36,11 @@ export const Dialog = (props: DialogProps) => {
     'closeOnEscape',
     'closeOnClickOutside',
     'aria-label',
+    'position',
+    'contentClass',
   ])
+
+  const position = () => local.position ?? 'center'
 
   return (
     <KobalteDialog
@@ -40,9 +49,11 @@ export const Dialog = (props: DialogProps) => {
       modal
       preventScroll
     >
-      <KobalteDialog.Trigger>
-        {local.trigger ?? <Button>FALLBACK - trigger undefined</Button>}
-      </KobalteDialog.Trigger>
+      <Show when={local.trigger}>
+        <KobalteDialog.Trigger as="span">
+          {local.trigger}
+        </KobalteDialog.Trigger>
+      </Show>
       <KobalteDialog.Portal>
         <KobalteDialog.Overlay
           class={cn(
@@ -50,34 +61,45 @@ export const Dialog = (props: DialogProps) => {
             'data-[expanded]:animate-fade-in'
           )}
         />
-        <KobalteDialog.Content
+        {/* Flexbox wrapper avoids transform conflicts with animations */}
+        <div
           class={cn(
-            'fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2',
-            'bg-surface-raised border border-border rounded-lg shadow-lg',
-            'data-[expanded]:animate-scale-in',
-            'focus:outline-none'
+            'fixed inset-0 z-50 flex justify-center pointer-events-none',
+            position() === 'center' ? 'items-center' : 'items-start pt-[15vh]'
           )}
-          aria-label={local.title ? undefined : local['aria-label']}
-          onEscapeKeyDown={(e) => local.closeOnEscape === false && e.preventDefault()}
-          onPointerDownOutside={(e) => local.closeOnClickOutside === false && e.preventDefault()}
         >
-          <Show when={local.title || local.description}>
-            <div class="p-6 space-y-2">
-              <Show when={local.title}>
-                <KobalteDialog.Title class="text-lg font-semibold text-text">
-                  {local.title}
-                </KobalteDialog.Title>
-              </Show>
-              <Show when={local.description}>
-                <KobalteDialog.Description class="text-sm text-text-secondary">
-                  {local.description}
-                </KobalteDialog.Description>
-              </Show>
-            </div>
-          </Show>
+          <KobalteDialog.Content
+            class={cn(
+              'pointer-events-auto w-full max-w-lg mx-4',
+              'bg-surface-raised border border-border rounded-lg shadow-lg',
+              position() === 'center'
+                ? 'data-[expanded]:animate-scale-in'
+                : 'data-[expanded]:animate-slide-up',
+              'focus:outline-none',
+              local.contentClass
+            )}
+            aria-label={local.title ? undefined : local['aria-label']}
+            onEscapeKeyDown={(e) => local.closeOnEscape === false && e.preventDefault()}
+            onPointerDownOutside={(e) => local.closeOnClickOutside === false && e.preventDefault()}
+          >
+            <Show when={local.title || local.description}>
+              <div class="p-6 space-y-2">
+                <Show when={local.title}>
+                  <KobalteDialog.Title class="text-lg font-semibold text-text">
+                    {local.title}
+                  </KobalteDialog.Title>
+                </Show>
+                <Show when={local.description}>
+                  <KobalteDialog.Description class="text-sm text-text-secondary">
+                    {local.description}
+                  </KobalteDialog.Description>
+                </Show>
+              </div>
+            </Show>
 
-          {local.children}
-        </KobalteDialog.Content>
+            {local.children}
+          </KobalteDialog.Content>
+        </div>
       </KobalteDialog.Portal>
     </KobalteDialog>
   )

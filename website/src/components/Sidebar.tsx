@@ -1,6 +1,32 @@
 import { For, JSX, Component } from 'solid-js'
 import { ButtonIcon, DialogIcon, PopoverIcon, MenuIcon, LayersIcon } from '../icons'
 import { IconsIcon } from '../sections/IconsSection'
+import { ToastIcon } from '../sections/ToastSection'
+import { RadioGroupIcon } from '../sections/RadioGroupSection'
+import { CheckboxIcon } from '../sections/CheckboxSection'
+import { ComboBoxIcon } from '../sections/ComboBoxSection'
+import { TextInputIcon } from '../sections/TextInputSection'
+import { NumberInputIcon } from '../sections/NumberInputSection'
+import { SearchSectionIcon } from '../sections/SearchSection'
+import { TabsIcon } from '../sections/TabsSection'
+import { SegmentedControlIcon } from '../sections/SegmentedControlSection'
+import { BadgeIcon } from '../sections/BadgeSection'
+import { LinkIcon } from '../sections/LinkSection'
+import { SeparatorIcon } from '../sections/SeparatorSection'
+import { ImageIcon } from '../sections/ImageSection'
+import { ProgressIcon } from '../sections/ProgressSection'
+import { AccordionIcon } from '../sections/AccordionSection'
+import { ToggleButtonIcon } from '../sections/ToggleButtonSection'
+
+function CommandBarIcon(props: { class?: string }) {
+  return (
+    <svg class={props.class} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <path d="M7 8l4 4-4 4" />
+      <line x1="13" y1="16" x2="17" y2="16" />
+    </svg>
+  )
+}
 
 function PaletteIcon(props: { class?: string }) {
   return (
@@ -18,6 +44,23 @@ export const sections = [
   { id: 'dialog', label: 'Dialog', icon: DialogIcon },
   { id: 'popover', label: 'Popover', icon: PopoverIcon },
   { id: 'dropdown-menu', label: 'Dropdown Menu', icon: MenuIcon },
+  { id: 'toast', label: 'Toast', icon: ToastIcon },
+  { id: 'radio-group', label: 'RadioGroup', icon: RadioGroupIcon },
+  { id: 'checkbox', label: 'Checkbox', icon: CheckboxIcon },
+  { id: 'combobox', label: 'ComboBox', icon: ComboBoxIcon },
+  { id: 'text-input', label: 'TextInput', icon: TextInputIcon },
+  { id: 'number-input', label: 'NumberInput', icon: NumberInputIcon },
+  { id: 'search', label: 'Search', icon: SearchSectionIcon },
+  { id: 'tabs', label: 'Tabs', icon: TabsIcon },
+  { id: 'segmented-control', label: 'Segmented Control', icon: SegmentedControlIcon },
+  { id: 'badge', label: 'Badge', icon: BadgeIcon },
+  { id: 'link', label: 'Link', icon: LinkIcon },
+  { id: 'separator', label: 'Separator', icon: SeparatorIcon },
+  { id: 'image', label: 'Image', icon: ImageIcon },
+  { id: 'progress', label: 'Progress', icon: ProgressIcon },
+  { id: 'accordion', label: 'Accordion', icon: AccordionIcon },
+  { id: 'toggle-button', label: 'Toggle Button', icon: ToggleButtonIcon },
+  { id: 'command-bar', label: 'CommandBar', icon: CommandBarIcon },
   { id: 'icons', label: 'Icons', icon: IconsIcon },
   { id: 'colors', label: 'Color Palette', icon: PaletteIcon },
 ] as const

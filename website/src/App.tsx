@@ -7,6 +7,23 @@ import { ButtonSection } from './sections/ButtonSection'
 import { DialogSection } from './sections/DialogSection'
 import { PopoverSection } from './sections/PopoverSection'
 import { DropdownMenuSection } from './sections/DropdownMenuSection'
+import { ToastSection } from './sections/ToastSection'
+import { RadioGroupSection } from './sections/RadioGroupSection'
+import { CheckboxSection } from './sections/CheckboxSection'
+import { ComboBoxSection } from './sections/ComboBoxSection'
+import { TextInputSection } from './sections/TextInputSection'
+import { NumberInputSection } from './sections/NumberInputSection'
+import { SearchSection } from './sections/SearchSection'
+import { TabsSection } from './sections/TabsSection'
+import { SegmentedControlSection } from './sections/SegmentedControlSection'
+import { BadgeSection } from './sections/BadgeSection'
+import { LinkSection } from './sections/LinkSection'
+import { SeparatorSection } from './sections/SeparatorSection'
+import { ImageSection } from './sections/ImageSection'
+import { ProgressSection } from './sections/ProgressSection'
+import { AccordionSection } from './sections/AccordionSection'
+import { ToggleButtonSection } from './sections/ToggleButtonSection'
+import { CommandBarSection } from './sections/CommandBarSection'
 import { IconsSection } from './sections/IconsSection'
 
 const App: Component = () => {
@@ -81,6 +98,23 @@ const App: Component = () => {
           <DialogSection />
           <PopoverSection />
           <DropdownMenuSection />
+          <ToastSection />
+          <RadioGroupSection />
+          <CheckboxSection />
+          <ComboBoxSection />
+          <TextInputSection />
+          <NumberInputSection />
+          <SearchSection />
+          <TabsSection />
+          <SegmentedControlSection />
+          <BadgeSection />
+          <LinkSection />
+          <SeparatorSection />
+          <ImageSection />
+          <ProgressSection />
+          <AccordionSection />
+          <ToggleButtonSection />
+          <CommandBarSection />
           <IconsSection />
           <ColorPaletteSection />
 
