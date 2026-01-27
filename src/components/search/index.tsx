@@ -152,7 +152,7 @@ export function Search<T extends SearchOption>(props: SearchProps<T>): JSX.Eleme
           <KobalteSearch.Content
             class={cn(
               'z-50 min-w-[8rem] overflow-hidden rounded-lg',
-              'bg-surface-raised border border-border shadow-lg',
+              'bg-surface-raised text-text border border-border shadow-lg',
               'animate-slide-down'
             )}
           >

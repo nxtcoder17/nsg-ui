@@ -38,7 +38,7 @@ export function Popover(props: PopoverProps) {
       <KobaltePopover.Portal>
         <KobaltePopover.Content
           class={cn(
-            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised shadow-lg',
+            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text shadow-lg',
             'data-[expanded]:animate-scale-in',
             'origin-[var(--kb-popover-content-transform-origin)]'
           )}

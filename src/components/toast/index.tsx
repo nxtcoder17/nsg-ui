@@ -173,7 +173,7 @@ const ToastItem = (props: ToastItemProps) => {
     <KobalteToast
       toastId={props.toastId}
       class={cn(
-        'flex items-start gap-3 p-4 rounded-lg border shadow-lg',
+        'flex items-start gap-3 p-4 rounded-lg border shadow-lg text-text',
         'animate-slide-in-right',
         'data-[closed]:animate-fade-out',
         styles.container

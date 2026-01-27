@@ -343,7 +343,7 @@
 
   /* Surface - elevation through lightness */
   --color-surface: var(--color-neutral-50);
-  --color-surface-raised: var(--color-neutral-100);
+  --color-surface-raised: oklch(24% 0.019 260);
   --color-surface-sunken: oklch(14% 0.012 260);
 
   /* Sidebar - darker than surface for contrast */
@@ -352,8 +352,8 @@
   --color-sidebar-active: oklch(20% 0.02 260);
 
   /* Borders - visible but subtle */
-  --color-border: var(--color-neutral-200);
-  --color-border-subtle: var(--color-neutral-100);
+  --color-border: var(--color-neutral-300);
+  --color-border-subtle: var(--color-neutral-200);
 
   /* Ring/focus - brighter */
   --color-ring: var(--color-primary-500);

@@ -1,4 +1,5 @@
 import { Component, createSignal, Show } from 'solid-js'
+import { Card } from 'nsg-ui'
 
 interface CodeBlockProps {
   code: string
@@ -40,7 +41,7 @@ export const DemoWithCode: Component<DemoWithCodeProps> = (props) => {
   const [showCode, setShowCode] = createSignal(false)
 
   return (
-    <div class="group relative bg-surface-raised rounded-xl border border-border shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300">
+    <Card class="group hover:shadow-[var(--shadow-card-hover)] transition-all duration-300">
       <div class="px-6 py-4 border-b border-border-subtle flex items-center justify-between">
         <div>
           <h3 class="font-semibold text-text text-[15px]">{props.title}</h3>
@@ -68,6 +69,6 @@ export const DemoWithCode: Component<DemoWithCodeProps> = (props) => {
           <CodeBlock code={props.code} />
         </div>
       </Show>
-    </div>
+    </Card>
   )
 }

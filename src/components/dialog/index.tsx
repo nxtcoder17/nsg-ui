@@ -71,7 +71,7 @@ export const Dialog = (props: DialogProps) => {
           <KobalteDialog.Content
             class={cn(
               'pointer-events-auto w-full max-w-lg mx-4',
-              'bg-surface-raised border border-border rounded-lg shadow-lg',
+              'bg-surface-raised text-text border border-border rounded-lg shadow-lg',
               position() === 'center'
                 ? 'data-[expanded]:animate-scale-in'
                 : 'data-[expanded]:animate-slide-up',

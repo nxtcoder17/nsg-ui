@@ -46,7 +46,7 @@ export const DropdownMenu = function (props: DropdownMenuProps) {
       <KobalteDropdownMenu.Portal>
         <KobalteDropdownMenu.Content
           class={cn(
-            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised p-1 shadow-lg',
+            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text p-1 shadow-lg',
             'data-[expanded]:animate-scale-in',
             'origin-[var(--kb-menu-content-transform-origin)]',
             local.class
@@ -127,7 +127,7 @@ DropdownMenu.Option = (props: OptionProps) => {
 
   const itemClass = cn(
     'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 text-sm outline-none transition-colors',
-    'focus:bg-surface-sunken',
+    'text-text focus:bg-surface-sunken',
     'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
     // Only add left padding for indicator when using default rendering
     !hasCustomRender && 'pl-8 pr-2',
@@ -288,7 +288,7 @@ DropdownMenu.Menu = (props: MenuProps) => {
       <KobalteDropdownMenu.SubTrigger
         class={cn(
           'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors',
-          'focus:bg-surface-sunken',
+          'text-text focus:bg-surface-sunken',
           'data-[expanded]:bg-surface-sunken',
           'data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
         )}
@@ -303,7 +303,7 @@ DropdownMenu.Menu = (props: MenuProps) => {
       <KobalteDropdownMenu.Portal>
         <KobalteDropdownMenu.SubContent
           class={cn(
-            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised p-1 shadow-lg',
+            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text p-1 shadow-lg',
             'data-[expanded]:animate-scale-in',
             'origin-[var(--kb-menu-content-transform-origin)]',
             local.class
