@@ -53,6 +53,7 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
   const [query, setQuery] = createSignal('')
   const [highlightedIndex, setHighlightedIndex] = createSignal(0)
   let inputRef: HTMLInputElement | undefined
+  let listRef: HTMLDivElement | undefined
 
   const filterFn = () => local.filterFn ?? defaultFilter
 
@@ -83,6 +84,13 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
     if (highlightedIndex() >= items.length) {
       setHighlightedIndex(Math.max(0, items.length - 1))
     }
+  })
+
+  // Scroll highlighted item into view
+  createEffect(() => {
+    const idx = highlightedIndex()
+    const el = listRef?.querySelector(`[data-index="${idx}"]`) as HTMLElement | null
+    el?.scrollIntoView({ block: 'nearest' })
   })
 
   // Global Cmd+K shortcut handler
@@ -160,7 +168,7 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
       </div>
 
       {/* Results list */}
-      <div class="max-h-72 overflow-y-auto p-2">
+      <div ref={listRef} class="max-h-72 overflow-y-auto p-2">
         <Show
           when={filteredItems().length > 0}
           fallback={
@@ -180,6 +188,7 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
               return (
                 <button
                   type="button"
+                  data-index={index()}
                   class={cn(
                     'w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-left',
                     'transition-colors duration-75',
