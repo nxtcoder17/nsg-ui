@@ -7,7 +7,6 @@ import { CheckboxIcon } from '../sections/CheckboxSection'
 import { ComboBoxIcon } from '../sections/ComboBoxSection'
 import { TextInputIcon } from '../sections/TextInputSection'
 import { NumberInputIcon } from '../sections/NumberInputSection'
-import { SearchSectionIcon } from '../sections/SearchSection'
 import { TabsIcon } from '../sections/TabsSection'
 import { SegmentedControlIcon } from '../sections/SegmentedControlSection'
 import { BadgeIcon } from '../sections/BadgeSection'
@@ -50,7 +49,6 @@ export const sections = [
   { id: 'combobox', label: 'ComboBox', icon: ComboBoxIcon },
   { id: 'text-input', label: 'TextInput', icon: TextInputIcon },
   { id: 'number-input', label: 'NumberInput', icon: NumberInputIcon },
-  { id: 'search', label: 'Search', icon: SearchSectionIcon },
   { id: 'tabs', label: 'Tabs', icon: TabsIcon },
   { id: 'segmented-control', label: 'Segmented Control', icon: SegmentedControlIcon },
   { id: 'badge', label: 'Badge', icon: BadgeIcon },

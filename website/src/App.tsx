@@ -13,7 +13,6 @@ import { CheckboxSection } from './sections/CheckboxSection'
 import { ComboBoxSection } from './sections/ComboBoxSection'
 import { TextInputSection } from './sections/TextInputSection'
 import { NumberInputSection } from './sections/NumberInputSection'
-import { SearchSection } from './sections/SearchSection'
 import { TabsSection } from './sections/TabsSection'
 import { SegmentedControlSection } from './sections/SegmentedControlSection'
 import { BadgeSection } from './sections/BadgeSection'
@@ -104,7 +103,6 @@ const App: Component = () => {
           <ComboBoxSection />
           <TextInputSection />
           <NumberInputSection />
-          <SearchSection />
           <TabsSection />
           <SegmentedControlSection />
           <BadgeSection />
