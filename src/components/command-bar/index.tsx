@@ -1,4 +1,4 @@
-import { type JSX, splitProps, createSignal, createEffect, For, Show, onMount, onCleanup } from 'solid-js'
+import { type JSX, splitProps, createSignal, createEffect, For, Show, onMount, onCleanup, createMemo } from 'solid-js'
 import { cn } from '../../utils/cn'
 import { SearchIcon } from '../../icons'
 import { Dialog } from '../dialog'
@@ -9,6 +9,7 @@ export type CommandBarItem = {
   icon?: (props: { class?: string }) => JSX.Element
   disabled?: boolean
   keywords?: string[]
+  group?: string
 }
 
 export type CommandBarItemState = {
@@ -62,6 +63,25 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
     if (!q) return local.items.filter(i => !i.disabled)
     return local.items.filter(i => !i.disabled && filterFn()(i, q))
   }
+
+  type GroupedEntry = { type: 'header'; label: string } | { type: 'item'; item: T; flatIndex: number }
+
+  const groupedEntries = createMemo((): GroupedEntry[] => {
+    const items = filteredItems()
+    const hasGroups = items.some(i => i.group)
+    if (!hasGroups) return items.map((item, i) => ({ type: 'item', item, flatIndex: i }))
+
+    const entries: GroupedEntry[] = []
+    let lastGroup: string | undefined
+    items.forEach((item, i) => {
+      if (item.group && item.group !== lastGroup) {
+        entries.push({ type: 'header', label: item.group })
+        lastGroup = item.group
+      }
+      entries.push({ type: 'item', item, flatIndex: i })
+    })
+    return entries
+  })
 
   // Reset on close
   createEffect(() => {
@@ -177,18 +197,26 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
             </div>
           }
         >
-          <For each={filteredItems()}>
-            {(item, index) => {
-              const isHighlighted = () => index() === highlightedIndex()
+          <For each={groupedEntries()}>
+            {(entry) => {
+              if (entry.type === 'header') {
+                return (
+                  <div class="px-3 pt-3 pb-1.5 text-xs font-semibold text-text-muted uppercase tracking-wider first:pt-1">
+                    {entry.label}
+                  </div>
+                )
+              }
+
+              const isHighlighted = () => entry.flatIndex === highlightedIndex()
               const state = () => ({
                 highlighted: isHighlighted(),
-                disabled: item.disabled ?? false,
+                disabled: entry.item.disabled ?? false,
               })
 
               return (
                 <button
                   type="button"
-                  data-index={index()}
+                  data-index={entry.flatIndex}
                   class={cn(
                     'w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-left',
                     'transition-colors duration-75',
@@ -196,24 +224,24 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
                       ? 'bg-primary-100 text-primary-900'
                       : 'text-text hover:bg-surface-sunken'
                   )}
-                  onMouseEnter={() => setHighlightedIndex(index())}
+                  onMouseEnter={() => setHighlightedIndex(entry.flatIndex)}
                   onClick={() => {
-                    local.onSelect(item)
+                    local.onSelect(entry.item)
                     local.onOpenChange?.(false)
                   }}
                 >
                   <Show when={local.itemComponent} fallback={
                     <>
-                      <Show when={item.icon}>
+                      <Show when={entry.item.icon}>
                         {(Icon) => {
                           const IconComponent = Icon()
                           return <IconComponent class={cn('w-5 h-5', isHighlighted() ? 'text-primary-600' : 'text-text-muted')} />
                         }}
                       </Show>
-                      <span>{item.label}</span>
+                      <span>{entry.item.label}</span>
                     </>
                   }>
-                    {local.itemComponent!(item, state())}
+                    {local.itemComponent!(entry.item, state())}
                   </Show>
                 </button>
               )
