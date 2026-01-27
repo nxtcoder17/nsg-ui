@@ -113,7 +113,7 @@ const Option = (props: RadioOptionProps) => {
         )}
       >
         <KobalteRadioGroup.ItemIndicator>
-          <DotIcon class="w-2.5 h-2.5 text-primary-500" />
+          <DotIcon size="xs" class="text-primary-500" />
         </KobalteRadioGroup.ItemIndicator>
       </KobalteRadioGroup.ItemControl>
       <div class="flex flex-col gap-0.5">

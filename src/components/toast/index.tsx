@@ -118,19 +118,19 @@ const AlertCircleIcon = (props: { class?: string }): JSX.Element => (
 
 const variantStyles: Record<ToastVariant, { container: string; icon: string }> = {
   info: {
-    container: 'border-primary-200 bg-primary-50 dark:border-primary-800 dark:bg-primary-950',
+    container: 'border-primary-200 bg-primary-50',
     icon: 'text-primary-500',
   },
   success: {
-    container: 'border-success-200 bg-success-50 dark:border-success-800 dark:bg-success-950',
+    container: 'border-success-200 bg-success-50',
     icon: 'text-success-500',
   },
   warning: {
-    container: 'border-warning-200 bg-warning-50 dark:border-warning-800 dark:bg-warning-950',
+    container: 'border-warning-200 bg-warning-50',
     icon: 'text-warning-500',
   },
   danger: {
-    container: 'border-danger-200 bg-danger-50 dark:border-danger-800 dark:bg-danger-950',
+    container: 'border-danger-200 bg-danger-50',
     icon: 'text-danger-500',
   },
 }

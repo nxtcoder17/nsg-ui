@@ -22,7 +22,7 @@ export type LinkProps = {
 // ============================================================================
 
 const variantStyles: Record<LinkVariant, string> = {
-  default: 'text-primary-500 hover:text-primary-600 dark:text-primary-400 dark:hover:text-primary-300',
+  default: 'text-primary-500 hover:text-primary-600',
   muted: 'text-text-secondary hover:text-text',
   danger: 'text-danger-500 hover:text-danger-600',
 }

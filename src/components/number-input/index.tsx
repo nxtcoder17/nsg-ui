@@ -68,7 +68,7 @@ export const NumberInput = (props: NumberInputProps) => {
 
   const buttonStyles = cn(
     'shrink-0 w-6 h-6 flex items-center justify-center rounded',
-    'text-text-secondary hover:text-text hover:bg-neutral-100 dark:hover:bg-neutral-800',
+    'text-text-secondary hover:text-text hover:bg-neutral-100',
     'transition-colors',
     'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent'
   )

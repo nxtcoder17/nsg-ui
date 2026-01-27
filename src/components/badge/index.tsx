@@ -21,11 +21,11 @@ export type BadgeProps = {
 // ============================================================================
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: 'bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300',
-  primary: 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-300',
-  success: 'bg-success-100 text-success-700 dark:bg-success-900 dark:text-success-300',
-  warning: 'bg-warning-100 text-warning-700 dark:bg-warning-900 dark:text-warning-300',
-  danger: 'bg-danger-100 text-danger-700 dark:bg-danger-900 dark:text-danger-300',
+  default: 'bg-neutral-100 text-neutral-700',
+  primary: 'bg-primary-100 text-primary-700',
+  success: 'bg-success-100 text-success-700',
+  warning: 'bg-warning-100 text-warning-700',
+  danger: 'bg-danger-100 text-danger-700',
   outline: 'bg-transparent border border-border text-text-secondary',
 }
 

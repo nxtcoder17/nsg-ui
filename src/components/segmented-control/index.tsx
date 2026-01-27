@@ -2,10 +2,6 @@ import { SegmentedControl as KobalteSegmentedControl } from '@kobalte/core/segme
 import { splitProps, JSX, For, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
 
-// ============================================================================
-// Types
-// ============================================================================
-
 export type SegmentedOption = {
   value: string
   label: string
@@ -26,10 +22,6 @@ export type SegmentedControlProps = {
   name?: string
   class?: string
 }
-
-// ============================================================================
-// SegmentedControl Component
-// ============================================================================
 
 export const SegmentedControl = (props: SegmentedControlProps) => {
   const [local, others] = splitProps(props, [
@@ -70,7 +62,7 @@ export const SegmentedControl = (props: SegmentedControlProps) => {
 
       <div
         class={cn(
-          'relative inline-flex p-1 rounded-lg bg-neutral-100 dark:bg-neutral-800',
+          'relative inline-flex p-1 rounded-lg bg-neutral-100',
           isVertical() ? 'flex-col' : 'flex-row'
         )}
       >

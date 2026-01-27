@@ -1,6 +1,7 @@
 import { Component, createSignal } from 'solid-js'
 import { Tabs } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'
+import { DemoWithCode } from '../components/CodeBlock'
 
 export function TabsIcon(props: { class?: string }) {
   return (
@@ -12,27 +13,49 @@ export function TabsIcon(props: { class?: string }) {
   )
 }
 
+const basicCode = `const [activeTab, setActiveTab] = createSignal('account')
+
+<Tabs value={activeTab()} onChange={setActiveTab}>
+  <Tabs.Item value="account" trigger={<span>Account</span>}>
+    Account content
+  </Tabs.Item>
+  <Tabs.Item value="password" trigger={<span>Password</span>}>
+    Password content
+  </Tabs.Item>
+  <Tabs.Item value="notifications" trigger={<span>Notifications</span>}>
+    Notifications content
+  </Tabs.Item>
+</Tabs>`
+
+const verticalCode = `<Tabs defaultValue="profile" orientation="vertical">
+  <Tabs.Item value="profile" trigger={<span>Profile</span>}>
+    Profile content
+  </Tabs.Item>
+  <Tabs.Item value="settings" trigger={<span>Settings</span>}>
+    Settings content
+  </Tabs.Item>
+  <Tabs.Item value="billing" trigger={<span>Billing</span>}>
+    Billing content
+  </Tabs.Item>
+  <Tabs.Item value="team" trigger={<span>Team</span>}>
+    Team content
+  </Tabs.Item>
+</Tabs>`
+
+const disabledCode = `<Tabs defaultValue="active">
+  <Tabs.Item value="active" trigger={<span>Active</span>}>
+    Active content
+  </Tabs.Item>
+  <Tabs.Item value="disabled" trigger={<span>Disabled</span>} disabled>
+    Disabled content
+  </Tabs.Item>
+  <Tabs.Item value="another" trigger={<span>Another</span>}>
+    Another content
+  </Tabs.Item>
+</Tabs>`
+
 export const TabsSection: Component = () => {
   const [activeTab, setActiveTab] = createSignal('account')
-
-  const basicTabs = [
-    { value: 'account', label: 'Account' },
-    { value: 'password', label: 'Password' },
-    { value: 'notifications', label: 'Notifications' },
-  ]
-
-  const verticalTabs = [
-    { value: 'profile', label: 'Profile' },
-    { value: 'settings', label: 'Settings' },
-    { value: 'billing', label: 'Billing' },
-    { value: 'team', label: 'Team' },
-  ]
-
-  const disabledTabs = [
-    { value: 'active', label: 'Active' },
-    { value: 'disabled', label: 'Disabled', disabled: true },
-    { value: 'another', label: 'Another' },
-  ]
 
   return (
     <section id="tabs" class="scroll-mt-24 mb-20">
@@ -47,64 +70,86 @@ export const TabsSection: Component = () => {
       </div>
 
       <div class="grid gap-6">
-        <DemoCard title="Basic" description="Horizontal tabs with content panels">
-          <Tabs
-            value={activeTab()}
-            onChange={setActiveTab}
-            tabs={basicTabs}
-          >
-            {(value) => (
-              <div class="p-4 rounded-lg bg-neutral-50 dark:bg-neutral-900">
-                {value === 'account' && (
-                  <div class="space-y-2">
-                    <h3 class="font-medium text-text">Account Settings</h3>
-                    <p class="text-sm text-text-secondary">Manage your account details and preferences.</p>
-                  </div>
-                )}
-                {value === 'password' && (
-                  <div class="space-y-2">
-                    <h3 class="font-medium text-text">Password Settings</h3>
-                    <p class="text-sm text-text-secondary">Update your password and security options.</p>
-                  </div>
-                )}
-                {value === 'notifications' && (
-                  <div class="space-y-2">
-                    <h3 class="font-medium text-text">Notification Preferences</h3>
-                    <p class="text-sm text-text-secondary">Configure how you receive notifications.</p>
-                  </div>
-                )}
+        <DemoWithCode title="Basic" description="Horizontal tabs with content panels" code={basicCode}>
+          <Tabs value={activeTab()} onChange={setActiveTab}>
+            <Tabs.Item value="account" trigger={<span>Account</span>}>
+              <div class="p-4 rounded-lg bg-neutral-50">
+                <div class="space-y-2">
+                  <h3 class="font-medium text-text">Account Settings</h3>
+                  <p class="text-sm text-text-secondary">Manage your account details and preferences.</p>
+                </div>
               </div>
-            )}
+            </Tabs.Item>
+            <Tabs.Item value="password" trigger={<span>Password</span>}>
+              <div class="p-4 rounded-lg bg-neutral-50">
+                <div class="space-y-2">
+                  <h3 class="font-medium text-text">Password Settings</h3>
+                  <p class="text-sm text-text-secondary">Update your password and security options.</p>
+                </div>
+              </div>
+            </Tabs.Item>
+            <Tabs.Item value="notifications" trigger={<span>Notifications</span>}>
+              <div class="p-4 rounded-lg bg-neutral-50">
+                <div class="space-y-2">
+                  <h3 class="font-medium text-text">Notification Preferences</h3>
+                  <p class="text-sm text-text-secondary">Configure how you receive notifications.</p>
+                </div>
+              </div>
+            </Tabs.Item>
           </Tabs>
           <div class="mt-4 text-sm text-text-secondary">
             Active: <span class="font-mono text-primary-500">{activeTab()}</span>
           </div>
-        </DemoCard>
+        </DemoWithCode>
 
-        <DemoCard title="Vertical" description="Side navigation style">
-          <Tabs
-            tabs={verticalTabs}
-            defaultValue="profile"
-            orientation="vertical"
-          >
-            {(value) => (
-              <div class="p-4 rounded-lg bg-neutral-50 dark:bg-neutral-900 min-h-[120px]">
-                <h3 class="font-medium text-text capitalize">{value}</h3>
-                <p class="text-sm text-text-secondary mt-1">Content for {value} tab.</p>
+        <DemoWithCode title="Vertical" description="Side navigation style" code={verticalCode}>
+          <Tabs defaultValue="profile" orientation="vertical">
+            <Tabs.Item value="profile" trigger={<span>Profile</span>}>
+              <div class="p-4 rounded-lg bg-neutral-50 min-h-[120px]">
+                <h3 class="font-medium text-text capitalize">Profile</h3>
+                <p class="text-sm text-text-secondary mt-1">Content for profile tab.</p>
               </div>
-            )}
+            </Tabs.Item>
+            <Tabs.Item value="settings" trigger={<span>Settings</span>}>
+              <div class="p-4 rounded-lg bg-neutral-50 min-h-[120px]">
+                <h3 class="font-medium text-text capitalize">Settings</h3>
+                <p class="text-sm text-text-secondary mt-1">Content for settings tab.</p>
+              </div>
+            </Tabs.Item>
+            <Tabs.Item value="billing" trigger={<span>Billing</span>}>
+              <div class="p-4 rounded-lg bg-neutral-50 min-h-[120px]">
+                <h3 class="font-medium text-text capitalize">Billing</h3>
+                <p class="text-sm text-text-secondary mt-1">Content for billing tab.</p>
+              </div>
+            </Tabs.Item>
+            <Tabs.Item value="team" trigger={<span>Team</span>}>
+              <div class="p-4 rounded-lg bg-neutral-50 min-h-[120px]">
+                <h3 class="font-medium text-text capitalize">Team</h3>
+                <p class="text-sm text-text-secondary mt-1">Content for team tab.</p>
+              </div>
+            </Tabs.Item>
           </Tabs>
-        </DemoCard>
+        </DemoWithCode>
 
-        <DemoCard title="Disabled Tab" description="Individual tabs can be disabled">
-          <Tabs tabs={disabledTabs} defaultValue="active">
-            {(value) => (
-              <div class="p-4 rounded-lg bg-neutral-50 dark:bg-neutral-900">
-                <p class="text-sm text-text">You selected: <strong>{value}</strong></p>
+        <DemoWithCode title="Disabled Tab" description="Individual tabs can be disabled" code={disabledCode}>
+          <Tabs defaultValue="active">
+            <Tabs.Item value="active" trigger={<span>Active</span>}>
+              <div class="p-4 rounded-lg bg-neutral-50">
+                <p class="text-sm text-text">You selected: <strong>active</strong></p>
               </div>
-            )}
+            </Tabs.Item>
+            <Tabs.Item value="disabled" trigger={<span>Disabled</span>} disabled>
+              <div class="p-4 rounded-lg bg-neutral-50">
+                <p class="text-sm text-text">You selected: <strong>disabled</strong></p>
+              </div>
+            </Tabs.Item>
+            <Tabs.Item value="another" trigger={<span>Another</span>}>
+              <div class="p-4 rounded-lg bg-neutral-50">
+                <p class="text-sm text-text">You selected: <strong>another</strong></p>
+              </div>
+            </Tabs.Item>
           </Tabs>
-        </DemoCard>
+        </DemoWithCode>
       </div>
     </section>
   )

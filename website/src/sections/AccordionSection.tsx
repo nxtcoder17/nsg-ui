@@ -40,7 +40,7 @@ export const AccordionSection: Component = () => {
       content: (
         <div class="space-y-2">
           <p>Install the package using your preferred package manager:</p>
-          <pre class="bg-neutral-100 dark:bg-neutral-800 p-2 rounded text-xs font-mono">
+          <pre class="bg-neutral-100 p-2 rounded text-xs font-mono">
             bun add nsg-ui
           </pre>
         </div>
@@ -52,7 +52,7 @@ export const AccordionSection: Component = () => {
       content: (
         <div class="space-y-2">
           <p>Import and use the component:</p>
-          <pre class="bg-neutral-100 dark:bg-neutral-800 p-2 rounded text-xs font-mono overflow-x-auto">
+          <pre class="bg-neutral-100 p-2 rounded text-xs font-mono overflow-x-auto">
 {`import { Accordion } from 'nsg-ui'
 
 <Accordion items={items} />`}
@@ -109,13 +109,13 @@ export const AccordionSection: Component = () => {
             <div class="flex gap-2">
               <button
                 onClick={() => setExpanded(['item-1', 'item-2', 'item-3'])}
-                class="px-3 py-1 text-sm bg-neutral-100 dark:bg-neutral-800 rounded"
+                class="px-3 py-1 text-sm bg-neutral-100 rounded"
               >
                 Expand All
               </button>
               <button
                 onClick={() => setExpanded([])}
-                class="px-3 py-1 text-sm bg-neutral-100 dark:bg-neutral-800 rounded"
+                class="px-3 py-1 text-sm bg-neutral-100 rounded"
               >
                 Collapse All
               </button>

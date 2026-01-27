@@ -1,41 +1,54 @@
 import { Tabs as KobalteTabs } from '@kobalte/core/tabs'
-import { splitProps, JSX, For, Show } from 'solid-js'
+import { splitProps, JSX, For, children } from 'solid-js'
 import { cn } from '../../utils/cn'
 
-// ============================================================================
-// Types
-// ============================================================================
-
-export type TabItem = {
+type TabItemData = {
+  $$tabItem: true
   value: string
-  label: string
+  trigger: JSX.Element
   disabled?: boolean
+  content: JSX.Element
+}
+
+type TabItemProps = {
+  value: string
+  trigger: JSX.Element
+  disabled?: boolean
+  children: JSX.Element
 }
 
 export type TabsProps = {
   value?: string
   defaultValue?: string
   onChange?: (value: string) => void
-  tabs: TabItem[]
   orientation?: 'horizontal' | 'vertical'
   class?: string
-  children: (value: string) => JSX.Element
+  children: JSX.Element
 }
 
-// ============================================================================
-// Tabs Component
-// ============================================================================
+const Item = (props: TabItemProps): JSX.Element => {
+  return {
+    $$tabItem: true,
+    get value() { return props.value },
+    get trigger() { return props.trigger },
+    get disabled() { return props.disabled },
+    get content() { return props.children },
+  } as unknown as JSX.Element
+}
 
-export const Tabs = (props: TabsProps) => {
+const TabsRoot = (props: TabsProps) => {
   const [local, others] = splitProps(props, [
     'value',
     'defaultValue',
     'onChange',
-    'tabs',
     'orientation',
     'class',
     'children',
   ])
+
+  const resolved = children(() => local.children)
+  const items = () =>
+    resolved.toArray().filter((c: any) => c?.$$tabItem) as unknown as TabItemData[]
 
   const isVertical = () => local.orientation === 'vertical'
 
@@ -60,11 +73,11 @@ export const Tabs = (props: TabsProps) => {
             : 'flex-row border-b border-border'
         )}
       >
-        <For each={local.tabs}>
-          {(tab) => (
+        <For each={items()}>
+          {(item) => (
             <KobalteTabs.Trigger
-              value={tab.value}
-              disabled={tab.disabled}
+              value={item.value}
+              disabled={item.disabled}
               class={cn(
                 'px-4 py-2 text-sm font-medium transition-colors',
                 'text-text-secondary hover:text-text',
@@ -76,19 +89,21 @@ export const Tabs = (props: TabsProps) => {
                   : 'border-b-2 border-transparent -mb-px data-[selected]:border-b-primary-500'
               )}
             >
-              {tab.label}
+              {item.trigger}
             </KobalteTabs.Trigger>
           )}
         </For>
       </KobalteTabs.List>
 
-      <For each={local.tabs}>
-        {(tab) => (
-          <KobalteTabs.Content value={tab.value} class="flex-1 outline-none">
-            {local.children(tab.value)}
+      <For each={items()}>
+        {(item) => (
+          <KobalteTabs.Content value={item.value} class="flex-1 outline-none">
+            {item.content}
           </KobalteTabs.Content>
         )}
       </For>
     </KobalteTabs>
   )
 }
+
+export const Tabs = Object.assign(TabsRoot, { Item })

@@ -24,22 +24,19 @@ const baseStyles = cn(
 
 const variantStyles: Record<ToggleButtonVariant, string> = {
   default: cn(
-    'bg-neutral-100 dark:bg-neutral-800 text-text-secondary',
-    'hover:bg-neutral-200 dark:hover:bg-neutral-700',
-    'data-[pressed]:bg-primary-100 data-[pressed]:text-primary-700',
-    'dark:data-[pressed]:bg-primary-900 dark:data-[pressed]:text-primary-300'
+    'bg-neutral-100 text-text-secondary',
+    'hover:bg-neutral-200',
+    'data-[pressed]:bg-primary-100 data-[pressed]:text-primary-700'
   ),
   outline: cn(
     'border border-border bg-transparent text-text-secondary',
-    'hover:bg-neutral-100 dark:hover:bg-neutral-800',
-    'data-[pressed]:border-primary-500 data-[pressed]:bg-primary-50 data-[pressed]:text-primary-700',
-    'dark:data-[pressed]:bg-primary-950 dark:data-[pressed]:text-primary-300'
+    'hover:bg-neutral-100',
+    'data-[pressed]:border-primary-500 data-[pressed]:bg-primary-50 data-[pressed]:text-primary-700'
   ),
   ghost: cn(
     'bg-transparent text-text-secondary',
-    'hover:bg-neutral-100 dark:hover:bg-neutral-800',
-    'data-[pressed]:bg-primary-100 data-[pressed]:text-primary-700',
-    'dark:data-[pressed]:bg-primary-900 dark:data-[pressed]:text-primary-300'
+    'hover:bg-neutral-100',
+    'data-[pressed]:bg-primary-100 data-[pressed]:text-primary-700'
   ),
 }
 

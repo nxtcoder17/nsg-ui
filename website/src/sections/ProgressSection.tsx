@@ -50,13 +50,13 @@ export const ProgressSection: Component = () => {
             <div class="flex gap-2">
               <button
                 onClick={() => setValue(Math.max(0, value() - 10))}
-                class="px-3 py-1 text-sm bg-neutral-100 dark:bg-neutral-800 rounded"
+                class="px-3 py-1 text-sm bg-neutral-100 rounded"
               >
                 -10
               </button>
               <button
                 onClick={() => setValue(Math.min(100, value() + 10))}
-                class="px-3 py-1 text-sm bg-neutral-100 dark:bg-neutral-800 rounded"
+                class="px-3 py-1 text-sm bg-neutral-100 rounded"
               >
                 +10
               </button>

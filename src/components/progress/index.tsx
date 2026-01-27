@@ -75,7 +75,7 @@ export const Progress = (props: ProgressProps) => {
 
       <KobalteProgress.Track
         class={cn(
-          'w-full rounded-full bg-neutral-200 dark:bg-neutral-700 overflow-hidden',
+          'w-full rounded-full bg-neutral-200 overflow-hidden',
           sizeStyles[local.size ?? 'md']
         )}
       >

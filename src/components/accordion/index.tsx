@@ -53,7 +53,7 @@ export const Accordion = (props: AccordionProps) => {
                 class={cn(
                   'flex w-full items-center justify-between px-4 py-3',
                   'text-sm font-medium text-text',
-                  'hover:bg-neutral-50 dark:hover:bg-neutral-800/50',
+                  'hover:bg-neutral-50',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset',
                   'transition-colors',
                   'disabled:opacity-50 disabled:cursor-not-allowed'
