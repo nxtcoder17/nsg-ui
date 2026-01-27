@@ -18,11 +18,13 @@ export interface PopoverProps {
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end'
   /** Gap between popover and trigger */
   gutter?: number
+  /** Override inner content wrapper classes (default: "p-4") */
+  class?: string
 }
 
 export function Popover(props: PopoverProps) {
   const [local, others] = splitProps(props, [
-    'show', 'onChange', 'trigger', 'triggerLabel', 'title', 'description', 'children', 'arrow', 'placement', 'gutter'
+    'show', 'onChange', 'trigger', 'triggerLabel', 'title', 'description', 'children', 'arrow', 'placement', 'gutter', 'class'
   ])
 
   return (
@@ -47,7 +49,7 @@ export function Popover(props: PopoverProps) {
             <KobaltePopover.Arrow class="fill-surface-raised" />
           </Show>
 
-          <div class="p-4">
+          <div class={cn("p-4", local.class)}>
             <Show when={local.title || local.description}>
               <div class="space-y-1 mb-2">
                 <Show when={local.title}>
