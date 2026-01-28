@@ -12,6 +12,8 @@ export type ProgressProps = {
   label?: string
   showValue?: boolean
   variant?: ProgressVariant
+  /** Custom fill color (CSS color string). Overrides variant when set. */
+  color?: string
   size?: 'sm' | 'md' | 'lg'
   class?: string
 }
@@ -38,6 +40,7 @@ export const Progress = (props: ProgressProps) => {
     'label',
     'showValue',
     'variant',
+    'color',
     'size',
     'class',
   ])
@@ -82,11 +85,12 @@ export const Progress = (props: ProgressProps) => {
         <KobalteProgress.Fill
           class={cn(
             'h-full rounded-full transition-all duration-300',
-            variantStyles[local.variant ?? 'default'],
+            !local.color && variantStyles[local.variant ?? 'default'],
             local.indeterminate && 'animate-progress-indeterminate w-1/3'
           )}
           style={{
             width: local.indeterminate ? undefined : 'var(--kb-progress-fill-width)',
+            background: local.color,
           }}
         />
       </KobalteProgress.Track>

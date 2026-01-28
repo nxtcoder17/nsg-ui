@@ -22,6 +22,8 @@ export type TabsProps = {
   defaultValue?: string
   onChange?: (value: string) => void
   orientation?: 'horizontal' | 'vertical'
+  /** Custom color for the selected tab indicator (CSS color string) */
+  indicatorColor?: string
   class?: string
   children: JSX.Element
 }
@@ -42,6 +44,7 @@ const TabsRoot = (props: TabsProps) => {
     'defaultValue',
     'onChange',
     'orientation',
+    'indicatorColor',
     'class',
     'children',
   ])
@@ -82,12 +85,29 @@ const TabsRoot = (props: TabsProps) => {
                 'px-4 py-2 text-sm font-medium transition-colors',
                 'text-text-secondary hover:text-text',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
-                'data-[selected]:text-primary-500',
                 'data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed',
+                // Selected styles - use CSS variable when indicatorColor is set
+                local.indicatorColor
+                  ? 'data-[selected]:text-[var(--indicator-color)]'
+                  : 'data-[selected]:text-primary-500',
+                // Border indicator
                 isVertical()
-                  ? 'text-left border-r-2 border-transparent -mr-px data-[selected]:border-r-primary-500'
-                  : 'border-b-2 border-transparent -mb-px data-[selected]:border-b-primary-500'
+                  ? cn(
+                      'text-left border-r-2 border-transparent -mr-px',
+                      local.indicatorColor
+                        ? 'data-[selected]:border-r-[var(--indicator-color)]'
+                        : 'data-[selected]:border-r-primary-500'
+                    )
+                  : cn(
+                      'border-b-2 border-transparent -mb-px',
+                      local.indicatorColor
+                        ? 'data-[selected]:border-b-[var(--indicator-color)]'
+                        : 'data-[selected]:border-b-primary-500'
+                    )
               )}
+              style={local.indicatorColor ? {
+                '--indicator-color': local.indicatorColor,
+              } as any : undefined}
             >
               {item.trigger}
             </KobalteTabs.Trigger>
