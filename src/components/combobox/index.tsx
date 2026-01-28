@@ -1,5 +1,5 @@
 import { Search as KobalteSearch } from '@kobalte/core/search'
-import { type JSX, splitProps, Show, For, createSignal } from 'solid-js'
+import { type JSX, splitProps, Show, For, createSignal, createEffect, on } from 'solid-js'
 import { cn } from '../../utils/cn'
 import { CheckIcon, SearchIcon, SpinnerIcon, XIcon } from '../../icons'
 
@@ -33,6 +33,8 @@ export type ComboBoxProps<T extends ComboBoxOption = ComboBoxOption> = {
   /** Additional classes for the control wrapper */
   triggerClass?: string
   debounce?: number
+  /** When to open the dropdown: "focus" (click/focus) or "input" (typing only). Defaults to "focus". */
+  triggerMode?: 'focus' | 'input'
   // For object options
   optionValue?: keyof T | ((option: T) => string)
   optionLabel?: keyof T | ((option: T) => string)
@@ -70,6 +72,7 @@ const getOptionDisabled = <T extends ComboBoxOption>(option: T): boolean => {
   return option.disabled ?? false
 }
 
+
 // ============================================================================
 // ComboBox Component
 // ============================================================================
@@ -93,6 +96,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
     'inputClass',
     'triggerClass',
     'debounce',
+    'triggerMode',
     'optionValue',
     'optionLabel',
     'optionDisabled',
@@ -107,7 +111,15 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const [inputValue, setInputValue] = createSignal('')
   const [internalOptions, setInternalOptions] = createSignal<T[]>(local.options)
 
+  // Sync internalOptions when external options change (e.g. async load)
+  createEffect(on(() => local.options, (opts) => {
+    if (!inputValue().trim()) {
+      setInternalOptions(() => opts)
+    }
+  }))
+
   const hasExternalFilter = () => !!local.onInputChange
+  const resolvedTriggerMode = () => local.triggerMode ?? 'focus'
 
   const handleInputChange = (value: string) => {
     setInputValue(value)
@@ -260,7 +272,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
           disabled={local.disabled}
           name={local.name}
           debounceOptionsMillisecond={local.debounce}
-          triggerMode={hasExternalFilter() ? "input" : "focus"}
+          triggerMode={resolvedTriggerMode()}
           itemComponent={renderItemComponent}
           class={cn('relative', local.containerClass)}
           {...others as any}
@@ -330,7 +342,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
         disabled={local.disabled}
         name={local.name}
         debounceOptionsMillisecond={local.debounce}
-        triggerMode={hasExternalFilter() ? "input" : "focus"}
+        triggerMode={resolvedTriggerMode()}
         itemComponent={renderItemComponent}
         class={cn('relative', local.containerClass)}
         {...others as any}
