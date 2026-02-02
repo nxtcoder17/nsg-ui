@@ -4,7 +4,9 @@ import { cn } from '../../utils/cn'
 
 export type SegmentedOption = {
   value: string
-  label: string
+  label?: string
+  /** Icon element to display (can be used with or without label) */
+  icon?: JSX.Element
   disabled?: boolean
 }
 
@@ -61,14 +63,15 @@ export const SegmentedControl = (props: SegmentedControlProps) => {
       </Show>
 
       <div
+        role="presentation"
         class={cn(
-          'relative inline-flex p-1 rounded-lg bg-neutral-100',
+          'relative inline-flex p-1 rounded-lg bg-surface-sunken',
           isVertical() ? 'flex-col' : 'flex-row'
         )}
       >
         <KobalteSegmentedControl.Indicator
           class={cn(
-            'absolute bg-surface-raised rounded-md shadow-sm transition-all duration-200',
+            'absolute bg-surface-raised rounded-md shadow-sm transition-all duration-200 pointer-events-none',
             isVertical() ? 'left-1 right-1' : 'top-1 bottom-1'
           )}
         />
@@ -79,15 +82,16 @@ export const SegmentedControl = (props: SegmentedControlProps) => {
               disabled={option.disabled}
               class={cn(
                 'relative z-10 px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer',
-                'text-text-secondary transition-colors',
+                'text-text-secondary transition-colors hover:text-text hover:bg-transparent',
                 'data-[checked]:text-text',
                 'data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
               )}
             >
               <KobalteSegmentedControl.ItemInput class="sr-only" />
-              <KobalteSegmentedControl.ItemLabel>
-                {option.label}
+              <KobalteSegmentedControl.ItemLabel class="flex items-center gap-1.5">
+                <Show when={option.icon}>{option.icon}</Show>
+                <Show when={option.label}>{option.label}</Show>
               </KobalteSegmentedControl.ItemLabel>
             </KobalteSegmentedControl.Item>
           )}
