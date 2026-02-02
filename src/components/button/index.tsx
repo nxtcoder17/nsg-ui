@@ -5,7 +5,7 @@ import { cn } from '../../utils/cn'
 
 export interface ButtonOwnProps {
   variant?: 'default' | 'outline' | 'ghost' | 'danger' | 'link'
-  size?: 'sm' | 'md' | 'lg' | 'icon'
+  size?: 'sm' | 'md' | 'lg' | 'icon' | 'icon-sm'
   class?: string
   children?: JSX.Element
 }
@@ -25,6 +25,7 @@ const sizeStyles = {
   md: 'h-10 px-4 text-sm rounded-md',
   lg: 'h-12 px-6 text-base rounded-lg',
   icon: 'h-10 w-10 rounded-md',
+  'icon-sm': 'h-6 w-6 rounded-sm',
 }
 
 export const Button = function <T extends ValidComponent = 'button'>(props: ButtonProps<T>) {
