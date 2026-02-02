@@ -24,6 +24,12 @@ export type TabsProps = {
   orientation?: 'horizontal' | 'vertical'
   /** Custom color for the selected tab indicator (CSS color string) */
   indicatorColor?: string
+  /** Navigation-only mode - renders only tab triggers without content panels */
+  navigationOnly?: boolean
+  /** Custom classes for the tab list container */
+  listClass?: string
+  /** Custom classes for each tab trigger */
+  triggerClass?: string
   class?: string
   children: JSX.Element
 }
@@ -45,6 +51,9 @@ const TabsRoot = (props: TabsProps) => {
     'onChange',
     'orientation',
     'indicatorColor',
+    'navigationOnly',
+    'listClass',
+    'triggerClass',
     'class',
     'children',
   ])
@@ -71,9 +80,10 @@ const TabsRoot = (props: TabsProps) => {
       <KobalteTabs.List
         class={cn(
           'flex shrink-0',
-          isVertical()
+          !local.listClass && (isVertical()
             ? 'flex-col border-r border-border pr-4'
-            : 'flex-row border-b border-border'
+            : 'flex-row border-b border-border'),
+          local.listClass
         )}
       >
         <For each={items()}>
@@ -82,7 +92,9 @@ const TabsRoot = (props: TabsProps) => {
               value={item.value}
               disabled={item.disabled}
               class={cn(
-                'px-4 py-2 text-sm font-medium transition-colors',
+                // Default styles (applied when no triggerClass override)
+                !local.triggerClass && 'px-4 py-2 text-sm font-medium',
+                'transition-colors',
                 'text-text-secondary hover:text-text',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                 'data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed',
@@ -103,7 +115,8 @@ const TabsRoot = (props: TabsProps) => {
                       local.indicatorColor
                         ? 'data-[selected]:border-b-[var(--indicator-color)]'
                         : 'data-[selected]:border-b-primary-500'
-                    )
+                    ),
+                local.triggerClass
               )}
               style={local.indicatorColor ? {
                 '--indicator-color': local.indicatorColor,
@@ -115,13 +128,15 @@ const TabsRoot = (props: TabsProps) => {
         </For>
       </KobalteTabs.List>
 
-      <For each={items()}>
-        {(item) => (
-          <KobalteTabs.Content value={item.value} class="flex-1 outline-none">
-            {item.content}
-          </KobalteTabs.Content>
-        )}
-      </For>
+      {!local.navigationOnly && (
+        <For each={items()}>
+          {(item) => (
+            <KobalteTabs.Content value={item.value} class="flex-1 outline-none">
+              {item.content}
+            </KobalteTabs.Content>
+          )}
+        </For>
+      )}
     </KobalteTabs>
   )
 }
