@@ -81,7 +81,7 @@ export const SegmentedControl = (props: SegmentedControlProps) => {
               value={option.value}
               disabled={option.disabled}
               class={cn(
-                'relative z-10 px-3 py-1.5 text-sm font-medium rounded-md cursor-pointer',
+                'relative z-10 text-sm font-medium rounded-md cursor-pointer',
                 'text-text-secondary transition-colors hover:text-text hover:bg-transparent',
                 'data-[checked]:text-text',
                 'data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed',
@@ -89,7 +89,7 @@ export const SegmentedControl = (props: SegmentedControlProps) => {
               )}
             >
               <KobalteSegmentedControl.ItemInput class="sr-only" />
-              <KobalteSegmentedControl.ItemLabel class="flex items-center gap-1.5">
+              <KobalteSegmentedControl.ItemLabel class="flex items-center justify-center gap-1.5 px-3 py-1.5 w-full h-full">
                 <Show when={option.icon}>{option.icon}</Show>
                 <Show when={option.label}>{option.label}</Show>
               </KobalteSegmentedControl.ItemLabel>
