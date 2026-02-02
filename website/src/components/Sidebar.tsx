@@ -16,6 +16,7 @@ import { ImageIcon } from '../sections/ImageSection'
 import { ProgressIcon } from '../sections/ProgressSection'
 import { AccordionIcon } from '../sections/AccordionSection'
 import { ToggleButtonIcon } from '../sections/ToggleButtonSection'
+import { ContextMenuIcon } from '../sections/ContextMenuSection'
 
 function CommandBarIcon(props: { class?: string }) {
   return (
@@ -43,6 +44,7 @@ export const sections = [
   { id: 'dialog', label: 'Dialog', icon: DialogIcon },
   { id: 'popover', label: 'Popover', icon: PopoverIcon },
   { id: 'dropdown-menu', label: 'Dropdown Menu', icon: MenuIcon },
+  { id: 'context-menu', label: 'Context Menu', icon: ContextMenuIcon },
   { id: 'toast', label: 'Toast', icon: ToastIcon },
   { id: 'radio-group', label: 'RadioGroup', icon: RadioGroupIcon },
   { id: 'checkbox', label: 'Checkbox', icon: CheckboxIcon },

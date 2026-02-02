@@ -7,6 +7,7 @@ import { ButtonSection } from './sections/ButtonSection'
 import { DialogSection } from './sections/DialogSection'
 import { PopoverSection } from './sections/PopoverSection'
 import { DropdownMenuSection } from './sections/DropdownMenuSection'
+import { ContextMenuSection } from './sections/ContextMenuSection'
 import { ToastSection } from './sections/ToastSection'
 import { RadioGroupSection } from './sections/RadioGroupSection'
 import { CheckboxSection } from './sections/CheckboxSection'
@@ -97,6 +98,7 @@ const App: Component = () => {
           <DialogSection />
           <PopoverSection />
           <DropdownMenuSection />
+          <ContextMenuSection />
           <ToastSection />
           <RadioGroupSection />
           <CheckboxSection />
