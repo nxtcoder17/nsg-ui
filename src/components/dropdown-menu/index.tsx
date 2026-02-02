@@ -153,10 +153,11 @@ DropdownMenu.Option = (props: OptionProps) => {
         class={itemClass}
         value={local.value!}
         disabled={local.disabled}
+        closeOnSelect={true}
         {...others}
       >
         {(state) => hasCustomRender
-          ? local.children!({ checked: state.checked() })
+          ? local.children!({ checked: state?.checked() ?? false })
           : defaultContent(<DotIcon />)
         }
       </KobalteDropdownMenu.RadioItem>
