@@ -208,7 +208,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
         'outline-none'
       )}
     >
-      {(state) => {
+      {((state: { selected: () => boolean; highlighted: () => boolean; disabled: () => boolean } | undefined) => {
         if (!state) {
           return (
             <KobalteSearch.ItemLabel>
@@ -232,7 +232,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
             </Show>
           </>
         )
-      }}
+      }) as unknown as JSX.Element}
     </KobalteSearch.Item>
   )
 

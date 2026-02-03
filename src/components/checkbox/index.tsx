@@ -61,7 +61,7 @@ export const Checkbox = (props: CheckboxProps) => {
       )}
       {...others}
     >
-      {(state) => (
+      {(state: { checked: () => boolean; indeterminate: () => boolean }) => (
         <div class="flex items-start gap-3">
           <KobalteCheckbox.Input class="sr-only" />
           <KobalteCheckbox.Control

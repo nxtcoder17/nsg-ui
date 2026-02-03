@@ -1,7 +1,7 @@
 import { Dialog as KobalteDialog } from '@kobalte/core/dialog'
 import { type JSX, splitProps, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
-import { Button } from '../button'
+import { Button, type ButtonOwnProps } from '../button'
 
 type DialogBaseProps = {
   show?: boolean
@@ -107,23 +107,4 @@ export const Dialog = (props: DialogProps) => {
 
 Dialog.CloseButton = (props: ButtonOwnProps) => {
   return <KobalteDialog.CloseButton as={Button} variant="outline" {...props}/>
-}
-
-Dialog.ExampleUsage = () => {
-  return (
-    <Dialog
-      trigger={<Button>Example Usage</Button>}
-      title="Welcome to nsg-ui"
-      description="A minimal, accessible component library for SolidJS."
-    >
-      <div class="p-6 pt-0">
-        <p class="text-text-secondary mb-4">
-          This dialog demonstrates the basic usage with a title, description, and custom content.
-        </p>
-        <div class="flex justify-end">
-          <Button onClick={() => setShow(false)}>Close</Button>
-        </div>
-      </div>
-    </Dialog>
-  );
 }

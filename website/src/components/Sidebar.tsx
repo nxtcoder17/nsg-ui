@@ -17,6 +17,7 @@ import { ProgressIcon } from '../sections/ProgressSection'
 import { AccordionIcon } from '../sections/AccordionSection'
 import { ToggleButtonIcon } from '../sections/ToggleButtonSection'
 import { ContextMenuIcon } from '../sections/ContextMenuSection'
+import { TextIcon } from '../sections/TextSection'
 
 function CommandBarIcon(props: { class?: string }) {
   return (
@@ -40,6 +41,7 @@ function PaletteIcon(props: { class?: string }) {
 }
 
 export const sections = [
+  { id: 'text', label: 'Text', icon: TextIcon },
   { id: 'button', label: 'Button', icon: ButtonIcon },
   { id: 'dialog', label: 'Dialog', icon: DialogIcon },
   { id: 'popover', label: 'Popover', icon: PopoverIcon },

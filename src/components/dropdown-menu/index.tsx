@@ -156,10 +156,10 @@ DropdownMenu.Option = (props: OptionProps) => {
         closeOnSelect={true}
         {...others}
       >
-        {(state) => hasCustomRender
+        {((state: { checked: () => boolean }) => hasCustomRender
           ? local.children!({ checked: state?.checked() ?? false })
           : defaultContent(<DotIcon />)
-        }
+        ) as unknown as JSX.Element}
       </KobalteDropdownMenu.RadioItem>
     )
   }

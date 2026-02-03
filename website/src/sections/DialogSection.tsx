@@ -88,10 +88,6 @@ export const DialogSection: Component = () => {
       </div>
 
       <div class="grid gap-6">
-        <DemoCard title="Library Example" description="Built-in example from the component">
-          <Dialog.ExampleUsage />
-        </DemoCard>
-
         <DemoCard title="Delete Item Confirmation" description="Dialog for Delete Item Confirmation">
           <DeleteItemDialog />
         </DemoCard>

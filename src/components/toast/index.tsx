@@ -273,7 +273,7 @@ const showToast = (variant: ToastVariant, payload: ToastPayload): number => {
     <ToastItem toastId={props.toastId} data={data} />
   ), {
     duration: payload.persistent ? Infinity : (payload.duration ?? 2000),
-  })
+  } as Parameters<typeof kobalteToaster.show>[1])
 }
 
 export const toast = {

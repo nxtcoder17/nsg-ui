@@ -12,10 +12,6 @@ export interface ContextMenuProps {
   children: JSX.Element
   /** Menu content */
   content: JSX.Element
-  /** Controlled open state */
-  show?: boolean
-  /** Callback when open state changes */
-  onChange?: (show: boolean) => void
   /** Whether the menu is disabled */
   disabled?: boolean
   /** Additional class for the menu content */
@@ -24,13 +20,11 @@ export interface ContextMenuProps {
 
 export const ContextMenu = function (props: ContextMenuProps) {
   const [local, others] = splitProps(props, [
-    'children', 'content', 'show', 'onChange', 'disabled', 'class'
+    'children', 'content', 'disabled', 'class'
   ])
 
   return (
     <KobalteContextMenu
-      open={local.show}
-      onOpenChange={local.onChange}
       {...others}
     >
       <KobalteContextMenu.Trigger as="div" disabled={local.disabled}>
@@ -187,10 +181,10 @@ ContextMenu.Option = (props: OptionProps) => {
         closeOnSelect={true}
         {...others}
       >
-        {(state) => hasCustomRender
+        {((state: { checked: () => boolean }) => hasCustomRender
           ? local.children!({ checked: state?.checked() ?? false })
           : defaultContent(<DotIcon />)
-        }
+        ) as unknown as JSX.Element}
       </KobalteContextMenu.RadioItem>
     )
   }

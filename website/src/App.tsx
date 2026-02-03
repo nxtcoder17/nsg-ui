@@ -25,6 +25,7 @@ import { AccordionSection } from './sections/AccordionSection'
 import { ToggleButtonSection } from './sections/ToggleButtonSection'
 import { CommandBarSection } from './sections/CommandBarSection'
 import { IconsSection } from './sections/IconsSection'
+import { TextSection } from './sections/TextSection'
 
 const App: Component = () => {
   const [activeSection, setActiveSection] = createSignal<SectionId>('colors')
@@ -94,6 +95,7 @@ const App: Component = () => {
         <Header theme={theme()} onThemeToggle={handleThemeToggle} />
 
         <div class="max-w-5xl mx-auto px-8 py-12">
+          <TextSection />
           <ButtonSection />
           <DialogSection />
           <PopoverSection />

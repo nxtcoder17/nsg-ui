@@ -1,16 +1,16 @@
-import { Button as KobalteButton, type ButtonRootProps } from '@kobalte/core/button'
-import { type PolymorphicProps } from '@kobalte/core/polymorphic'
-import { type JSX, splitProps, type ValidComponent } from 'solid-js'
+import { Button as KobalteButton } from '@kobalte/core/button'
+import { type JSX, splitProps, type ValidComponent, type ComponentProps } from 'solid-js'
 import { cn } from '../../utils/cn'
 
 export interface ButtonOwnProps {
   variant?: 'default' | 'outline' | 'ghost' | 'danger' | 'link'
   size?: 'sm' | 'md' | 'lg' | 'icon' | 'icon-sm'
+  as?: ValidComponent
   class?: string
   children?: JSX.Element
 }
 
-export type ButtonProps<T extends ValidComponent = 'button'> = PolymorphicProps<T, ButtonOwnProps & ButtonRootProps<T>>
+export type ButtonProps = ButtonOwnProps & Omit<ComponentProps<'button'>, keyof ButtonOwnProps>
 
 const variantStyles = {
   default: 'bg-primary-500 text-primary-50 hover:bg-primary-600',
@@ -28,17 +28,18 @@ const sizeStyles = {
   'icon-sm': 'h-6 w-6 rounded-sm',
 }
 
-export const Button = function <T extends ValidComponent = 'button'>(props: ButtonProps<T>) {
-  const [local, others] = splitProps(props as ButtonOwnProps & ButtonRootProps<'button'>, [
+export const Button = (props: ButtonProps) => {
+  const [local, others] = splitProps(props, [
     'variant',
     'size',
+    'as',
     'class',
     'children',
   ])
 
   return (
     <KobalteButton
-      as={(props as { as?: T }).as}
+      as={local.as}
       class={cn(
         'inline-flex items-center justify-center font-medium transition-colors',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',

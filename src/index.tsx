@@ -24,3 +24,4 @@ export { Progress, type ProgressProps, type ProgressVariant } from './components
 export { Accordion, type AccordionProps, type AccordionItem } from './components/accordion'
 export { ToggleButton, type ToggleButtonProps, type ToggleButtonVariant, type ToggleButtonSize } from './components/toggle-button'
 export { CommandBar, type CommandBarProps, type CommandBarItem, type CommandBarItemState } from './components/command-bar'
+export { Text, type TextProps, type TextColor, type TextElement } from './components/text'
