@@ -23,7 +23,8 @@
   ],
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup"
+    "build": "tsup",
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "@kobalte/core": "^0.13.0",
@@ -48,5 +49,13 @@
     "tailwind",
     "kobalte"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nxtcoder17/nsg-ui"
+  },
+  "bugs": {
+    "url": "https://github.com/nxtcoder17/nsg-ui/issues"
+  },
+  "homepage": "https://github.com/nxtcoder17/nsg-ui#readme"
 }

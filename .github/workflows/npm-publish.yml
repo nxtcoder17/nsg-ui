@@ -1,0 +1,90 @@
+name: Publish to NPM
+
+on:
+  push:
+    branches: [master]
+  release:
+    types: [published]
+
+concurrency:
+  group: publish-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  github-release:
+    name: Create Github Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      packages: write
+
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      semver: ${{ steps.meta.outputs.semver }}
+      is_tag: ${{ steps.meta.outputs.is_tag }}
+    steps:
+      - uses: nxtcoder17/actions/metadata@main
+        id: meta
+
+      - name: Create github release
+        uses: nxtcoder17/actions/github-release-create@main
+        with:
+          name: ${{ steps.meta.outputs.version }}
+          github_token: ${{ github.token }}
+          pre_release: ${{ !fromJSON(steps.meta.outputs.is_tag) }}
+
+  publish:
+    needs: github-release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Typecheck
+        run: bun run typecheck
+
+      - name: Build
+        run: bun run build
+
+      - name: Verify dist
+        run: |
+          if [ ! -f dist/index.js ]; then
+            echo "ERROR: dist/index.js not found"
+            exit 1
+          fi
+          if [ ! -f dist/index.d.ts ]; then
+            echo "ERROR: dist/index.d.ts not found"
+            exit 1
+          fi
+          echo "Build artifacts verified:"
+          ls -la dist/
+
+      - name: Set package version
+        run: |
+          VERSION="${{ needs.github-release.outputs.semver }}"
+          jq --arg v "$VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
+          echo "Package version: $VERSION"
+
+      - name: Setup npm auth
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
+      - name: Publish nightly
+        if: needs.github-release.outputs.is_tag != 'true'
+        run: bunx npm publish --provenance --access public --tag nightly
+
+      - name: Publish release
+        if: needs.github-release.outputs.is_tag == 'true'
+        run: bunx npm publish --provenance --access public
