@@ -7,6 +7,10 @@ const presetOptions: preset.PresetOptions = {
       entry: 'src/index.tsx',
       dev_entry: true,
     },
+    {
+      entry: 'src/icons/index.tsx',
+      name: 'icons',
+    },
   ],
   drop_console: true,
   cjs: false,

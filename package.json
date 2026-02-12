@@ -3,23 +3,24 @@
   "version": "0.0.1",
   "description": "Not-So-Good UI - A SolidJS component library with Tailwind CSS",
   "type": "module",
-  "main": "./src/index.tsx",
-  "module": "./src/index.tsx",
-  "types": "./src/index.tsx",
+  "main": "./dist/index/index.js",
+  "module": "./dist/index/index.js",
+  "types": "./dist/index/index.d.ts",
   "exports": {
     ".": {
-      "solid": "./src/index.tsx",
-      "import": "./src/index.tsx",
-      "types": "./src/index.tsx"
+      "solid": "./dist/index/index.jsx",
+      "import": "./dist/index/index.js",
+      "types": "./dist/index/index.d.ts"
     },
     "./icons": {
-      "solid": "./src/icons/index.tsx",
-      "import": "./src/icons/index.tsx",
-      "types": "./src/icons/index.tsx"
+      "solid": "./dist/icons/index.jsx",
+      "import": "./dist/icons/index.js",
+      "types": "./dist/icons/index.d.ts"
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "!dist/**/*.map"
   ],
   "scripts": {
     "dev": "tsup --watch",

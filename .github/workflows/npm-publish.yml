@@ -61,16 +61,16 @@ jobs:
 
       - name: Verify dist
         run: |
-          if [ ! -f dist/index.js ]; then
-            echo "ERROR: dist/index.js not found"
+          if [ ! -f dist/index/index.js ]; then
+            echo "ERROR: dist/index/index.js not found"
             exit 1
           fi
-          if [ ! -f dist/index.d.ts ]; then
-            echo "ERROR: dist/index.d.ts not found"
+          if [ ! -f dist/index/index.d.ts ]; then
+            echo "ERROR: dist/index/index.d.ts not found"
             exit 1
           fi
           echo "Build artifacts verified:"
-          ls -la dist/
+          ls -laR dist/
 
       - name: Set package version
         run: |
