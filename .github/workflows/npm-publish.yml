@@ -23,6 +23,7 @@ jobs:
       version: ${{ steps.meta.outputs.version }}
       semver: ${{ steps.meta.outputs.semver }}
       is_tag: ${{ steps.meta.outputs.is_tag }}
+      commit_slug: ${{ steps.meta.outputs.commit_slug }}
     steps:
       - uses: nxtcoder17/actions/metadata@main
         id: meta
@@ -72,19 +73,30 @@ jobs:
           echo "Build artifacts verified:"
           ls -laR dist/
 
-      - name: Set package version
-        run: |
-          VERSION="${{ needs.github-release.outputs.semver }}"
-          jq --arg v "$VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
-          echo "Package version: $VERSION"
-
       - name: Setup npm auth
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
+      - name: patch package version
+        run: |+
+          VERSION="${{ needs.github-release.outputs.semver }}"
+          if [ "${{ needs.github-release.outputs.is_tag }}" != "true" ]; then
+            VERSION="$VERSION.${{ needs.github-release.outputs.commit_slug }}"
+          fi
+
       - name: Publish nightly
         if: needs.github-release.outputs.is_tag != 'true'
-        run: bunx npm publish --provenance --access public --tag nightly
+        env:
+          VERSION: "${{ needs.github-release.outputs.semver }}.${{ needs.github-release.outputs.commit_slug }}"
+        run: |+
+          jq --arg v "$VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
+          echo "Publishing Package version: $VERSION"
+          bunx npm publish --provenance --access public --tag nightly
 
       - name: Publish release
         if: needs.github-release.outputs.is_tag == 'true'
-        run: bunx npm publish --provenance --access public
+        env:
+          VERSION: "${{ needs.github-release.outputs.semver }}"
+        run: |+
+          jq --arg v "$VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
+          echo "Publishing Package version: $VERSION"
+          bunx npm publish --provenance --access public
