@@ -4,7 +4,15 @@
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
-@import '../node_modules/nsg-ui/dist/theme.css';
+
+/* FOR PRODUCTION */
+/* @import '../node_modules/nsg-ui/dist/theme.css'; */
+
+/* FOR DEVELOPMENT */
+@import '../node_modules/nsg-ui/src/styles/theme.css';
+@source "../node_modules/nsg-ui/src/components";
+@source "../node_modules/nsg-ui/src/icons";
+@source "../node_modules/nsg-ui/src/utils";
 
 @theme {
   --font-sans: 'Outfit', system-ui, sans-serif;

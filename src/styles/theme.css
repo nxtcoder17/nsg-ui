@@ -61,7 +61,7 @@
 
   --color-surface: oklch(98% 0.005 50);
   --color-surface-raised: oklch(100% 0 0);
-  --color-surface-sunken: oklch(96% 0.008 50);
+  --color-surface-sunken: oklch(97% 0.007 260);
   --color-border: oklch(92% 0.01 50);
   --color-border-subtle: oklch(96% 0.008 50);
   --color-ring: oklch(52% 0.2 260);
