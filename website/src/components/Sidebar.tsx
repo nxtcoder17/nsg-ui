@@ -76,7 +76,7 @@ interface SidebarProps {
 
 export const Sidebar: Component<SidebarProps> = (props) => {
   return (
-    <aside class="fixed left-0 top-0 h-full w-64 bg-primary-950 flex flex-col">
+    <aside class="fixed left-0 top-0 h-full w-64 bg-surface-sunken flex flex-col border-r border-border">
       {/* Logo area */}
       <div class="px-6 py-8">
         <div class="flex items-center gap-3">
@@ -84,15 +84,15 @@ export const Sidebar: Component<SidebarProps> = (props) => {
             <LayersIcon class="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 class="text-white font-semibold text-lg tracking-tight">nsg-ui</h1>
-            <p class="text-white/50 text-xs">Component Library</p>
+            <h1 class="text-text font-semibold text-lg tracking-tight">nsg-ui</h1>
+            <p class="text-text-muted text-xs">Component Library</p>
           </div>
         </div>
       </div>
 
       {/* Navigation */}
       <nav class="flex-1 px-3 sidebar-scroll overflow-y-auto">
-        <div class="text-white/60 text-[11px] font-medium uppercase tracking-wider px-3 mb-2">
+        <div class="text-text-muted text-[11px] font-medium uppercase tracking-wider px-3 mb-2">
           Components
         </div>
         <div class="space-y-1">
@@ -102,14 +102,14 @@ export const Sidebar: Component<SidebarProps> = (props) => {
                 onClick={() => props.onSectionClick(section.id)}
                 class={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
                   props.activeSection === section.id
-                    ? 'bg-white/10 text-white shadow-lg shadow-black/20'
-                    : 'text-white/60 hover:bg-white/5 hover:text-white/90'
+                    ? 'bg-primary-100 text-primary shadow-sm'
+                    : 'text-text-secondary hover:bg-surface-raised hover:text-text'
                 }`}
               >
                 <section.icon class="w-[18px] h-[18px]" />
                 {section.label}
                 {props.activeSection === section.id && (
-                  <div class="ml-auto w-1.5 h-1.5 rounded-full bg-success-400" />
+                  <div class="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
                 )}
               </button>
             )}
@@ -118,10 +118,10 @@ export const Sidebar: Component<SidebarProps> = (props) => {
       </nav>
 
       {/* Footer */}
-      <div class="px-6 py-6 border-t border-white/10">
-        <div class="flex items-center gap-2 text-white/60 text-xs">
+      <div class="px-6 py-6 border-t border-border">
+        <div class="flex items-center gap-2 text-text-muted text-xs">
           <span>Built with</span>
-          <span class="text-white/60 font-medium">SolidJS</span>
+          <span class="text-text-secondary font-medium">SolidJS</span>
         </div>
       </div>
     </aside>

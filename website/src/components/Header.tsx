@@ -32,7 +32,7 @@ export const Header: Component<HeaderProps> = (props) => {
           <a
             href="https://github.com/nxtcoder17/nsg-ui"
             target="_blank"
-            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-sidebar text-white text-sm font-medium hover:bg-sidebar-hover transition-colors"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-300 text-neutral-50 dark:text-neutral-900 text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-400 transition-colors"
           >
             <GitHubIcon class="w-4 h-4" />
             GitHub
