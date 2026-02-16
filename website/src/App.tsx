@@ -88,7 +88,7 @@ const App: Component = () => {
   }
 
   return (
-    <div class="min-h-screen bg-surface font-[var(--font-display)]">
+    <div class="min-h-screen bg-surface">
       <Sidebar activeSection={activeSection()} onSectionClick={handleSectionClick} />
 
       <main class="ml-64 min-h-screen gradient-mesh">

@@ -1,6 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@latest/nxtfont.css');
 
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
 @import '../node_modules/nsg-ui/dist/theme.css';
+
+@theme {
+  --font-sans: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'NxtFont', ui-monospace, monospace;
+}
+
+.gradient-mesh {
+  background:
+    radial-gradient(ellipse at 20% 0%, oklch(from var(--color-primary-200) l c h / 0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, oklch(from var(--color-success-200) l c h / 0.2) 0%, transparent 50%),
+    var(--color-surface);
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: oklch(35% 0.02 260);
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: oklch(45% 0.02 260);
+}
+
