@@ -1,6 +1,7 @@
 import { Component, createSignal } from 'solid-js'
 import { DropdownMenu, DropdownMenuExample } from 'nsg-ui/components/dropdown-menu'
 import { Button } from 'nsg-ui/components/button'
+import { Text } from 'nsg-ui/components/text'
 import { DemoCard } from '../components/DemoCard'
 import { MenuIcon, SettingsIcon, UserIcon, LogoutIcon } from '../icons'
 
@@ -82,7 +83,12 @@ export const DropdownMenuSection: Component = () => {
 
         <DemoCard title="With Icons" description="Enhanced visual hierarchy with icons">
           <DropdownMenu trigger={<Button variant="outline"><SettingsIcon class="w-4 h-4 mr-2" />Settings</Button>}>
-            <DropdownMenu.ActionItem label="Profile" icon={<UserIcon class="w-4 h-4" />} onSelect={() => console.log('Profile')} />
+            <DropdownMenu.ActionItem onSelect={() => console.log('Profile')}>
+              <span class="flex flex-row items-center gap-2">
+                <UserIcon class="w-4 h-4" />
+                <Text>Profile</Text>
+              </span>
+            </DropdownMenu.ActionItem>
             <DropdownMenu.ActionItem label="Settings" icon={<SettingsIcon class="w-4 h-4" />} onSelect={() => console.log('Settings')} />
             <DropdownMenu.Separator />
             <DropdownMenu.ActionItem label="Logout" variant="danger" icon={<LogoutIcon class="w-4 h-4" />} onSelect={() => console.log('Logout')} />

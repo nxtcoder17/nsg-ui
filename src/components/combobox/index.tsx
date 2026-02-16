@@ -3,10 +3,6 @@ import { type JSX, splitProps, Show, For, createSignal, createEffect, on } from 
 import { cn } from '../../utils/cn'
 import { CheckIcon, SearchIcon, SpinnerIcon, XIcon } from '../../icons'
 
-// ============================================================================
-// Types
-// ============================================================================
-
 export type ComboBoxOption = string | { value: string; label: string; disabled?: boolean }
 
 export type ComboBoxItemState = {
@@ -72,10 +68,6 @@ const getOptionDisabled = <T extends ComboBoxOption>(option: T): boolean => {
   return option.disabled ?? false
 }
 
-
-// ============================================================================
-// ComboBox Component
-// ============================================================================
 
 export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T>): JSX.Element
 export function ComboBox<T extends ComboBoxOption>(props: ComboBoxMultipleProps<T>): JSX.Element
