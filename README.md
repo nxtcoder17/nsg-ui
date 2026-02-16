@@ -12,27 +12,35 @@ bun add nsg-ui @kobalte/core solid-js
 
 ### Tailwind CSS 4
 
-Add the `@source` directive to scan the library for Tailwind classes:
+In your main CSS file:
 
 ```css
 @import 'tailwindcss';
-@source "node_modules/nsg-ui/dist/**/*.{js,jsx}";
+@import 'nsg-ui/theme.css';
+@source "node_modules/nsg-ui/dist/**/*.js";
 ```
 
-Define theme colors in your `@theme` block:
+That's it. The theme includes:
+- All color scales (neutral, primary, danger, success, warning)
+- Light mode colors in `@theme`
+- Dark mode overrides in `.dark`
+- Semantic tokens (surface, border, text, etc.)
+- Animations and utilities
+
+### Custom Colors
+
+Override colors after importing the theme:
 
 ```css
-@theme {
-  --color-surface: oklch(97% 0.003 80);
-  --color-surface-raised: oklch(100% 0 0);
-  --color-border: oklch(90% 0.006 80);
-  --color-text: oklch(15% 0.01 80);
-  --color-text-secondary: oklch(40% 0.01 80);
-  --color-text-muted: oklch(55% 0.01 80);
-  --color-primary: oklch(50% 0.2 260);
-  --color-danger: oklch(55% 0.2 25);
-  --color-success: oklch(55% 0.15 145);
-  --color-warning: oklch(70% 0.15 75);
+@import 'tailwindcss';
+@import 'nsg-ui/theme.css';
+
+:root {
+  --color-primary-500: oklch(55% 0.25 200);
+}
+
+.dark {
+  --color-primary-500: oklch(65% 0.20 200);
 }
 ```
 
