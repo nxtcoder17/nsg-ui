@@ -3,9 +3,10 @@ import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
 import devtools from 'solid-devtools/vite';
 import { resolve } from 'path';
+import { nsgCssEditorPlugin } from './vite-plugin-css-editor';
 
 export default defineConfig({
-  plugins: [devtools(), solidPlugin(), tailwindcss()],
+  plugins: [devtools(), solidPlugin(), tailwindcss(), nsgCssEditorPlugin()],
   server: {
     port: 3000,
     fs: {

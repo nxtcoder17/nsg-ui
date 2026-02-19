@@ -1,5 +1,4 @@
-import { Component, createSignal, createEffect, onMount, onCleanup } from 'solid-js'
-import { Theme, applyTheme, getSavedTheme, saveTheme, cycleTheme, onSystemThemeChange } from './theme'
+import { Component, createSignal, onMount, onCleanup } from 'solid-js'
 import { Sidebar, SectionId, sections } from './components/Sidebar'
 import { Header } from './components/Header'
 import { ColorPaletteSection } from './sections/ColorPaletteSection'
@@ -26,22 +25,13 @@ import { ToggleButtonSection } from './sections/ToggleButtonSection'
 import { CommandBarSection } from './sections/CommandBarSection'
 import { IconsSection } from './sections/IconsSection'
 import { TextSection } from './sections/TextSection'
+import { CssEditorPanel } from './components/CssEditorPanel'
 
 const App: Component = () => {
   const [activeSection, setActiveSection] = createSignal<SectionId>('colors')
-  const [theme, setTheme] = createSignal<Theme>('system')
   let isScrolling = false
 
   onMount(() => {
-    // Theme initialization
-    const saved = getSavedTheme()
-    if (saved) setTheme(saved)
-    applyTheme(theme())
-
-    onSystemThemeChange(() => {
-      if (theme() === 'system') applyTheme('system')
-    })
-
     // Intersection observer for active section highlighting
     const observer = new IntersectionObserver(
       (entries) => {
@@ -71,14 +61,6 @@ const App: Component = () => {
     onCleanup(() => observer.disconnect())
   })
 
-  createEffect(() => {
-    const currentTheme = theme()
-    applyTheme(currentTheme)
-    saveTheme(currentTheme)
-  })
-
-  const handleThemeToggle = () => setTheme(cycleTheme(theme()))
-
   const handleSectionClick = (id: SectionId) => {
     isScrolling = true
     setActiveSection(id)
@@ -91,8 +73,9 @@ const App: Component = () => {
     <div class="min-h-screen bg-surface">
       <Sidebar activeSection={activeSection()} onSectionClick={handleSectionClick} />
 
+      <CssEditorPanel />
       <main class="ml-64 min-h-screen gradient-mesh">
-        <Header theme={theme()} onThemeToggle={handleThemeToggle} />
+        <Header />
 
         <div class="max-w-5xl mx-auto px-8 py-12">
           <TextSection />

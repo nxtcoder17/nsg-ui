@@ -84,14 +84,26 @@ export const DropdownMenuSection: Component = () => {
         <DemoCard title="With Icons" description="Enhanced visual hierarchy with icons">
           <DropdownMenu trigger={<Button variant="outline"><SettingsIcon class="w-4 h-4 mr-2" />Settings</Button>}>
             <DropdownMenu.ActionItem onSelect={() => console.log('Profile')}>
-              <span class="flex flex-row items-center gap-2">
+              <Text class="flex flex-row place-items-baseline gap-2">
                 <UserIcon class="w-4 h-4" />
-                <Text>Profile</Text>
-              </span>
+                Profile
+              </Text>
             </DropdownMenu.ActionItem>
-            <DropdownMenu.ActionItem label="Settings" icon={<SettingsIcon class="w-4 h-4" />} onSelect={() => console.log('Settings')} />
+
+            <DropdownMenu.ActionItem onSelect={() => console.log('Settings')}> 
+              <Text class="flex flex-row items-center gap-2">
+                <SettingsIcon class="w-4 h-4" />
+                Settings
+              </Text>
+            </DropdownMenu.ActionItem>
             <DropdownMenu.Separator />
-            <DropdownMenu.ActionItem label="Logout" variant="danger" icon={<LogoutIcon class="w-4 h-4" />} onSelect={() => console.log('Logout')} />
+
+            <DropdownMenu.ActionItem variant="danger" onSelect={() => console.log('Logout')}>
+              <Text class="flex flex-row items-center gap-2">
+                <LogoutIcon class="w-4 h-4" />
+                Logout
+              </Text>
+            </DropdownMenu.ActionItem>
           </DropdownMenu>
         </DemoCard>
 
@@ -111,6 +123,11 @@ export const DropdownMenuSection: Component = () => {
           <DropdownMenu trigger={<Button>Share</Button>}>
             <DropdownMenu.ActionItem label="Copy Link" onSelect={() => console.log('Copy Link')} />
             <DropdownMenu.Menu label="Share to...">
+              <DropdownMenu.ActionItem onSelect={() => console.log('Twitter')}>
+                <Text class="flex flex-row items-center gap-2">
+                  Twitter
+                </Text>
+              </DropdownMenu.ActionItem>
               <DropdownMenu.ActionItem label="Twitter" onSelect={() => console.log('Twitter')} />
               <DropdownMenu.ActionItem label="Facebook" onSelect={() => console.log('Facebook')} />
               <DropdownMenu.ActionItem label="LinkedIn" onSelect={() => console.log('LinkedIn')} />

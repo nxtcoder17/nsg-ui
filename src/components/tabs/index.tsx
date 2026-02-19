@@ -2,6 +2,20 @@ import { Tabs as KobalteTabs } from '@kobalte/core/tabs'
 import { splitProps, JSX, For, children } from 'solid-js'
 import { cn } from '../../utils/cn'
 
+/** @deprecated Use @utility nsg-tabs-* in CSS instead */
+export const tabsStyles = {
+  list: 'nsg-tabs-list',
+  listVertical: 'nsg-tabs-list-vertical',
+  trigger: 'nsg-tabs-trigger',
+  triggerSelected: 'data-[selected]:text-primary-500',
+  triggerSelectedBorderBottom: 'border-b-2 border-transparent -mb-px data-[selected]:border-b-primary-500',
+  triggerSelectedBorderRight: 'text-left border-r-2 border-transparent -mr-px data-[selected]:border-r-primary-500',
+}
+
+// ============================================================================
+// Types
+// ============================================================================
+
 type TabItemData = {
   $$tabItem: true
   value: string
@@ -22,17 +36,17 @@ export type TabsProps = {
   defaultValue?: string
   onChange?: (value: string) => void
   orientation?: 'horizontal' | 'vertical'
-  /** Custom color for the selected tab indicator (CSS color string) */
   indicatorColor?: string
-  /** Navigation-only mode - renders only tab triggers without content panels */
   navigationOnly?: boolean
-  /** Custom classes for the tab list container */
   listClass?: string
-  /** Custom classes for each tab trigger */
   triggerClass?: string
   class?: string
   children: JSX.Element
 }
+
+// ============================================================================
+// Components
+// ============================================================================
 
 const Item = (props: TabItemProps): JSX.Element => {
   return {
@@ -80,9 +94,10 @@ const TabsRoot = (props: TabsProps) => {
       <KobalteTabs.List
         class={cn(
           'flex shrink-0',
+          isVertical() ? 'flex-col' : 'flex-row',
           !local.listClass && (isVertical()
-            ? 'flex-col border-r border-border pr-4'
-            : 'flex-row border-b border-border'),
+            ? 'nsg-tabs-list-vertical'
+            : 'nsg-tabs-list'),
           local.listClass
         )}
       >
@@ -92,17 +107,13 @@ const TabsRoot = (props: TabsProps) => {
               value={item.value}
               disabled={item.disabled}
               class={cn(
-                // Default styles (applied when no triggerClass override)
-                !local.triggerClass && 'px-4 py-2 text-sm font-medium',
+                !local.triggerClass && 'nsg-tabs-trigger',
                 'transition-colors',
                 'text-text-secondary hover:text-text',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1',
                 'data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed',
-                // Selected styles - use CSS variable when indicatorColor is set
                 local.indicatorColor
                   ? 'data-[selected]:text-[var(--indicator-color)]'
-                  : 'data-[selected]:text-primary-500',
-                // Border indicator
+                  : tabsStyles.triggerSelected,
                 isVertical()
                   ? cn(
                       'text-left border-r-2 border-transparent -mr-px',

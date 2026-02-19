@@ -1,34 +1,61 @@
 import { Accordion as KobalteAccordion } from '@kobalte/core/accordion'
-import { splitProps, JSX, For } from 'solid-js'
+import { splitProps, JSX, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
 import { ChevronDownIcon } from '../../icons'
 
-export type AccordionItem = {
-  value: string
-  title: string
-  content: JSX.Element
-  disabled?: boolean
+/** @deprecated Use @utility nsg-accordion-* in CSS instead */
+export const accordionStyles = {
+  trigger: 'nsg-accordion-trigger',
+  content: 'nsg-accordion-content',
 }
 
+// ============================================================================
+// Types
+// ============================================================================
+
 export type AccordionProps = {
-  items: AccordionItem[]
   value?: string[]
   defaultValue?: string[]
   onChange?: (value: string[]) => void
   multiple?: boolean
   collapsible?: boolean
   class?: string
+  children?: JSX.Element
 }
 
-export const Accordion = (props: AccordionProps) => {
+type AccordionItemProps = {
+  value: string
+  disabled?: boolean
+  class?: string
+  children?: JSX.Element
+}
+
+type AccordionTriggerProps = {
+  unstyled?: boolean
+  triggerIconClass?: string
+  class?: string
+  children?: JSX.Element
+}
+
+type AccordionContentProps = {
+  unstyled?: boolean
+  class?: string
+  children?: JSX.Element
+}
+
+// ============================================================================
+// Root
+// ============================================================================
+
+const AccordionRoot = (props: AccordionProps) => {
   const [local, others] = splitProps(props, [
-    'items',
     'value',
     'defaultValue',
     'onChange',
     'multiple',
     'collapsible',
     'class',
+    'children',
   ])
 
   return (
@@ -38,50 +65,90 @@ export const Accordion = (props: AccordionProps) => {
       onChange={local.onChange}
       multiple={local.multiple}
       collapsible={local.collapsible ?? true}
-      class={cn('divide-y divide-border rounded-lg border border-border', local.class)}
+      class={cn('nsg-accordion-root', local.class)}
       {...others}
     >
-      <For each={local.items}>
-        {(item) => (
-          <KobalteAccordion.Item
-            value={item.value}
-            disabled={item.disabled}
-            class="group"
-          >
-            <KobalteAccordion.Header>
-              <KobalteAccordion.Trigger
-                class={cn(
-                  'flex w-full items-center justify-between px-4 py-3',
-                  'text-sm font-medium text-text',
-                  'hover:bg-neutral-50',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset',
-                  'transition-colors',
-                  'disabled:opacity-50 disabled:cursor-not-allowed'
-                )}
-              >
-                {item.title}
-                <ChevronDownIcon
-                  class={cn(
-                    'text-text-secondary transition-transform duration-200',
-                    'group-data-[expanded]:rotate-180'
-                  )}
-                />
-              </KobalteAccordion.Trigger>
-            </KobalteAccordion.Header>
-            <KobalteAccordion.Content
-              class={cn(
-                'overflow-hidden text-sm text-text-secondary',
-                'data-[expanded]:animate-accordion-down',
-                'data-[closed]:animate-accordion-up'
-              )}
-            >
-              <div class="px-4 pb-4">
-                {item.content}
-              </div>
-            </KobalteAccordion.Content>
-          </KobalteAccordion.Item>
-        )}
-      </For>
+      {local.children}
     </KobalteAccordion>
   )
 }
+
+// ============================================================================
+// Item
+// ============================================================================
+
+const Item = (props: AccordionItemProps) => {
+  const [local, others] = splitProps(props, ['value', 'disabled', 'class', 'children'])
+
+  return (
+    <KobalteAccordion.Item
+      value={local.value}
+      disabled={local.disabled}
+      class={cn('group', local.class)}
+      {...others}
+    >
+      {local.children}
+    </KobalteAccordion.Item>
+  )
+}
+
+// ============================================================================
+// Trigger
+// ============================================================================
+
+const Trigger = (props: AccordionTriggerProps) => {
+  const [local, others] = splitProps(props, ['unstyled', 'triggerIconClass', 'class', 'children'])
+
+  return (
+    <KobalteAccordion.Header>
+      <KobalteAccordion.Trigger
+        class={cn(
+          'flex w-full items-center justify-between',
+          'disabled:opacity-50 disabled:cursor-not-allowed',
+          !local.unstyled && 'nsg-accordion-trigger',
+          local.class
+        )}
+        {...others}
+      >
+        {local.children}
+        <ChevronDownIcon
+          class={cn(
+            'nsg-accordion-icon',
+            'group-data-[expanded]:rotate-180',
+            local.triggerIconClass
+          )}
+        />
+      </KobalteAccordion.Trigger>
+    </KobalteAccordion.Header>
+  )
+}
+
+// ============================================================================
+// Content
+// ============================================================================
+
+const Content = (props: AccordionContentProps) => {
+  const [local, others] = splitProps(props, ['unstyled', 'class', 'children'])
+
+  return (
+    <KobalteAccordion.Content
+      class={cn(
+        'overflow-hidden',
+        !local.unstyled && 'nsg-accordion-content',
+        'data-[expanded]:animate-accordion-down',
+        'data-[closed]:animate-accordion-up',
+      )}
+      {...others}
+    >
+      <div class={cn('nsg-accordion-content-inner', local.class)}>
+        {local.children}
+      </div>
+    </KobalteAccordion.Content>
+  )
+}
+
+// ============================================================================
+// Export
+// ============================================================================
+
+export const Accordion = Object.assign(AccordionRoot, { Item, Trigger, Content })

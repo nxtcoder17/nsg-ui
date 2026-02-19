@@ -7,14 +7,23 @@ import { CheckIcon, DotIcon, ChevronRightIcon } from '../../icons'
 type OptionContextValue = { type: 'single' | 'multi' }
 const OptionContext = createContext<OptionContextValue>()
 
+/** @deprecated Use @utility nsg-context-menu-* in CSS instead */
+export const contextMenuStyles = {
+  actionItem: 'nsg-context-menu-action',
+  actionItemDefault: 'nsg-context-menu-action',
+  actionItemDanger: 'nsg-context-menu-action-danger',
+  option: 'nsg-context-menu-option',
+  separator: 'nsg-context-menu-separator',
+}
+
+// ============================================================================
+// Root
+// ============================================================================
+
 export interface ContextMenuProps {
-  /** Element that triggers the context menu on right-click */
   children: JSX.Element
-  /** Menu content */
   content: JSX.Element
-  /** Whether the menu is disabled */
   disabled?: boolean
-  /** Additional class for the menu content */
   class?: string
 }
 
@@ -34,7 +43,8 @@ export const ContextMenu = function (props: ContextMenuProps) {
       <KobalteContextMenu.Portal>
         <KobalteContextMenu.Content
           class={cn(
-            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text p-1 shadow-lg',
+            'z-50',
+            'nsg-context-menu-content',
             'data-[expanded]:animate-scale-in',
             'origin-[var(--kb-menu-content-transform-origin)]',
             local.class
@@ -48,7 +58,7 @@ export const ContextMenu = function (props: ContextMenuProps) {
 }
 
 // ============================================================================
-// ActionItem - Simple clickable menu item
+// ActionItem
 // ============================================================================
 
 export interface ActionItemProps {
@@ -57,20 +67,22 @@ export interface ActionItemProps {
   variant?: 'default' | 'danger'
   disabled?: boolean
   onSelect?: () => void
+  unstyled?: boolean
   class?: string
 }
 
 ContextMenu.ActionItem = (props: ActionItemProps) => {
-  const [local, others] = splitProps(props, ['label', 'icon', 'variant', 'disabled', 'onSelect', 'class'])
+  const [local, others] = splitProps(props, ['label', 'icon', 'variant', 'disabled', 'onSelect', 'unstyled', 'class'])
 
   return (
     <KobalteContextMenu.Item
       class={cn(
-        'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors',
-        'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-        local.variant === 'danger'
-          ? 'text-danger focus:bg-danger/10 focus:text-danger'
-          : 'text-text focus:bg-surface-sunken',
+        'relative flex cursor-pointer select-none items-center outline-none transition-colors',
+        !local.unstyled && (
+          local.variant === 'danger'
+            ? 'nsg-context-menu-action-danger'
+            : 'nsg-context-menu-action'
+        ),
         local.class
       )}
       disabled={local.disabled}
@@ -90,15 +102,16 @@ ContextMenu.ActionItem = (props: ActionItemProps) => {
 // ============================================================================
 
 export interface SeparatorProps {
+  unstyled?: boolean
   class?: string
 }
 
 ContextMenu.Separator = (props: SeparatorProps) => (
-  <KobalteContextMenu.Separator class={cn('-mx-1 my-1 h-px bg-border', props.class)} />
+  <KobalteContextMenu.Separator class={cn(!props.unstyled && 'nsg-context-menu-separator', props.class)} />
 )
 
 // ============================================================================
-// Group - Visual grouping with optional label
+// Group
 // ============================================================================
 
 export interface GroupProps {
@@ -123,7 +136,7 @@ ContextMenu.Group = (props: GroupProps) => {
 }
 
 // ============================================================================
-// Option - Context-aware checkbox or radio item
+// Option
 // ============================================================================
 
 export interface OptionState {
@@ -131,37 +144,33 @@ export interface OptionState {
 }
 
 export interface OptionProps {
-  /** Label text (uses default rendering with indicator) */
   label?: string
-  /** For single selection (radio): the option's value */
   value?: string
-  /** For multiple selection (checkbox): controlled checked state */
   checked?: boolean
   onChange?: (checked: boolean) => void
   disabled?: boolean
+  unstyled?: boolean
   class?: string
-  /** Render prop for custom rendering. Receives { checked } state. */
   children?: (state: OptionState) => JSX.Element
 }
 
 ContextMenu.Option = (props: OptionProps) => {
-  const [local, others] = splitProps(props, ['label', 'value', 'checked', 'onChange', 'disabled', 'class', 'children'])
+  const [local, others] = splitProps(props, ['label', 'value', 'checked', 'onChange', 'disabled', 'unstyled', 'class', 'children'])
   const ctx = useContext(OptionContext)
 
   const hasCustomRender = typeof local.children === 'function'
 
   const itemClass = cn(
-    'relative flex cursor-pointer select-none items-center rounded-sm py-1.5 text-sm outline-none transition-colors',
-    'text-text focus:bg-surface-sunken',
-    'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-    // Only add left padding for indicator when using default rendering
-    !hasCustomRender && 'pl-8 pr-2',
+    'relative flex cursor-pointer select-none items-center outline-none transition-colors',
+    !local.unstyled && [
+      'nsg-context-menu-option',
+      !hasCustomRender && 'pl-8 pr-2',
+    ],
     local.class
   )
 
   const indicatorClass = 'absolute left-2 inline-flex items-center justify-center'
 
-  // Default content with indicator
   const defaultContent = (icon: JSX.Element) => (
     <>
       <KobalteContextMenu.ItemIndicator class={indicatorClass}>
@@ -171,7 +180,6 @@ ContextMenu.Option = (props: OptionProps) => {
     </>
   )
 
-  // Radio item (inside Select without multiple)
   if (ctx?.type === 'single') {
     return (
       <KobalteContextMenu.RadioItem
@@ -189,7 +197,6 @@ ContextMenu.Option = (props: OptionProps) => {
     )
   }
 
-  // Checkbox item (inside Select with multiple)
   return (
     <KobalteContextMenu.CheckboxItem
       class={itemClass}
@@ -207,16 +214,13 @@ ContextMenu.Option = (props: OptionProps) => {
 }
 
 // ============================================================================
-// Select - Radio group (single) or Checkbox group (multiple)
+// Select
 // ============================================================================
 
 export interface SelectProps {
   label?: string
-  /** Enable multiple selection (checkboxes). Default: single selection (radio) */
   multiple?: boolean
-  /** For single selection: controlled value */
   value?: string
-  /** For single selection: change handler */
   onChange?: (value: string) => void
   children: JSX.Element
   class?: string
@@ -225,7 +229,6 @@ export interface SelectProps {
 ContextMenu.Select = (props: SelectProps) => {
   const [local, others] = splitProps(props, ['label', 'multiple', 'value', 'onChange', 'children', 'class'])
 
-  // Multiple selection (checkboxes)
   if (local.multiple) {
     return (
       <KobalteContextMenu.Group class={local.class} {...others}>
@@ -241,7 +244,6 @@ ContextMenu.Select = (props: SelectProps) => {
     )
   }
 
-  // Single selection (radio)
   return (
     <KobalteContextMenu.RadioGroup value={local.value} onChange={local.onChange} class={local.class} {...others}>
       <Show when={local.label}>
@@ -257,7 +259,7 @@ ContextMenu.Select = (props: SelectProps) => {
 }
 
 // ============================================================================
-// Menu - Nested submenu
+// Menu
 // ============================================================================
 
 export interface MenuProps {
@@ -275,10 +277,8 @@ ContextMenu.Menu = (props: MenuProps) => {
     <KobalteContextMenu.Sub {...others}>
       <KobalteContextMenu.SubTrigger
         class={cn(
-          'relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors',
-          'text-text focus:bg-surface-sunken',
-          'data-[expanded]:bg-surface-sunken',
-          'data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
+          'relative flex cursor-pointer select-none items-center outline-none transition-colors',
+          'nsg-context-menu-subtrigger',
         )}
         disabled={local.disabled}
       >
@@ -291,7 +291,8 @@ ContextMenu.Menu = (props: MenuProps) => {
       <KobalteContextMenu.Portal>
         <KobalteContextMenu.SubContent
           class={cn(
-            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text p-1 shadow-lg',
+            'z-50',
+            'nsg-context-menu-subcontent',
             'data-[expanded]:animate-scale-in',
             'origin-[var(--kb-menu-content-transform-origin)]',
             local.class

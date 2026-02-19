@@ -10,6 +10,7 @@
 
 /* FOR DEVELOPMENT */
 @import '../node_modules/nsg-ui/src/styles/theme.css';
+@import './styles/overrides.css';
 @source "../node_modules/nsg-ui/src/components";
 @source "../node_modules/nsg-ui/src/icons";
 @source "../node_modules/nsg-ui/src/utils";

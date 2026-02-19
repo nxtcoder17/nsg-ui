@@ -1,45 +1,163 @@
-import { type JSX, splitProps, createSignal, createEffect, For, Show, onMount, onCleanup, createMemo } from 'solid-js'
+import { type JSX, splitProps, createSignal, createEffect, For, Show, onMount, onCleanup, createMemo, children } from 'solid-js'
 import { cn } from '../../utils/cn'
 import { SearchIcon } from '../../icons'
 import { Dialog } from '../dialog'
 
-export type CommandBarItem = {
+/** @deprecated Use @utility nsg-command-bar-* in CSS instead */
+export const commandBarStyles = {
+  input: 'nsg-command-bar-input',
+  groupHeader: 'nsg-command-bar-group-header',
+  item: 'nsg-command-bar-item',
+  itemHighlighted: 'nsg-command-bar-item-highlighted',
+  itemDefault: 'nsg-command-bar-item-default',
+  footer: 'nsg-command-bar-footer',
+}
+
+// ============================================================================
+// Sentinel types
+// ============================================================================
+
+type CommandBarItemData = {
+  $$commandBarItem: true
   id: string
   label: string
   icon?: (props: { class?: string }) => JSX.Element
   disabled?: boolean
   keywords?: string[]
-  group?: string
 }
+
+type CommandBarGroupData = {
+  $$commandBarGroup: true
+  label: string
+  children: JSX.Element
+}
+
+// ============================================================================
+// Types
+// ============================================================================
 
 export type CommandBarItemState = {
   highlighted: boolean
   disabled: boolean
 }
 
-export type CommandBarProps<T extends CommandBarItem> = {
-  items: T[]
+export type CommandBarProps = {
   open?: boolean
   onOpenChange?: (open: boolean) => void
-  onSelect: (item: T) => void
+  onSelect: (id: string, label: string) => void
   placeholder?: string
   noResultsMessage?: string
-  filterFn?: (item: T, query: string) => boolean
-  itemComponent?: (item: T, state: CommandBarItemState) => JSX.Element
+  filterFn?: (item: { id: string; label: string; keywords?: string[] }, query: string) => boolean
+  itemComponent?: (item: { id: string; label: string; icon?: (props: { class?: string }) => JSX.Element }, state: CommandBarItemState) => JSX.Element
   globalShortcut?: boolean
   class?: string
+  children?: JSX.Element
 }
 
-const defaultFilter = <T extends CommandBarItem>(item: T, query: string): boolean => {
+type CommandBarItemProps = {
+  id: string
+  label: string
+  icon?: (props: { class?: string }) => JSX.Element
+  disabled?: boolean
+  keywords?: string[]
+}
+
+type CommandBarGroupProps = {
+  label: string
+  children: JSX.Element
+}
+
+// ============================================================================
+// Sub-components (sentinel objects)
+// ============================================================================
+
+const Item = (props: CommandBarItemProps): JSX.Element => {
+  return {
+    $$commandBarItem: true,
+    get id() { return props.id },
+    get label() { return props.label },
+    get icon() { return props.icon },
+    get disabled() { return props.disabled },
+    get keywords() { return props.keywords },
+  } as unknown as JSX.Element
+}
+
+const Group = (props: CommandBarGroupProps): JSX.Element => {
+  return {
+    $$commandBarGroup: true,
+    get label() { return props.label },
+    get children() { return props.children },
+  } as unknown as JSX.Element
+}
+
+// ============================================================================
+// Helpers
+// ============================================================================
+
+const defaultFilter = (item: { id: string; label: string; keywords?: string[] }, query: string): boolean => {
   const q = query.toLowerCase()
   if (item.label.toLowerCase().includes(q)) return true
   if (item.keywords?.some(k => k.toLowerCase().includes(q))) return true
   return false
 }
 
-export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>): JSX.Element {
+/** Recursively extract CommandBarItemData from resolved children (handles Groups) */
+function extractItems(resolved: any[]): CommandBarItemData[] {
+  const items: CommandBarItemData[] = []
+  for (const child of resolved) {
+    if (child?.$$commandBarItem) {
+      items.push(child as unknown as CommandBarItemData)
+    } else if (child?.$$commandBarGroup) {
+      const group = child as unknown as CommandBarGroupData
+      const groupResolved = children(() => group.children)
+      const groupArr = groupResolved.toArray()
+      for (const gc of groupArr) {
+        if ((gc as any)?.$$commandBarItem) {
+          items.push(gc as unknown as CommandBarItemData)
+        }
+      }
+    }
+  }
+  return items
+}
+
+/** Build grouped entries from resolved children for rendering */
+function buildGroupedEntries(
+  resolved: any[],
+  filteredIds: Set<string>
+): ({ type: 'header'; label: string } | { type: 'item'; item: CommandBarItemData; flatIndex: number })[] {
+  const entries: ({ type: 'header'; label: string } | { type: 'item'; item: CommandBarItemData; flatIndex: number })[] = []
+  let flatIndex = 0
+
+  for (const child of resolved) {
+    if (child?.$$commandBarItem) {
+      const item = child as unknown as CommandBarItemData
+      if (filteredIds.has(item.id)) {
+        entries.push({ type: 'item', item, flatIndex })
+        flatIndex++
+      }
+    } else if (child?.$$commandBarGroup) {
+      const group = child as unknown as CommandBarGroupData
+      const groupResolved = children(() => group.children)
+      const groupItems = groupResolved.toArray().filter((gc: any) => gc?.$$commandBarItem && filteredIds.has(gc.id)) as unknown as CommandBarItemData[]
+      if (groupItems.length > 0) {
+        entries.push({ type: 'header', label: group.label })
+        for (const item of groupItems) {
+          entries.push({ type: 'item', item, flatIndex })
+          flatIndex++
+        }
+      }
+    }
+  }
+  return entries
+}
+
+// ============================================================================
+// Root Component
+// ============================================================================
+
+function CommandBarRoot(props: CommandBarProps): JSX.Element {
   const [local, others] = splitProps(props, [
-    'items',
     'open',
     'onOpenChange',
     'onSelect',
@@ -49,6 +167,7 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
     'itemComponent',
     'globalShortcut',
     'class',
+    'children',
   ])
 
   const [query, setQuery] = createSignal('')
@@ -56,32 +175,21 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
   let inputRef: HTMLInputElement | undefined
   let listRef: HTMLDivElement | undefined
 
+  const resolved = children(() => local.children)
+  const allItems = createMemo(() => extractItems(resolved.toArray()))
+
   const filterFn = () => local.filterFn ?? defaultFilter
 
-  const filteredItems = () => {
+  const filteredItems = createMemo(() => {
     const q = query().trim()
-    if (!q) return local.items.filter(i => !i.disabled)
-    return local.items.filter(i => !i.disabled && filterFn()(i, q))
-  }
-
-  type GroupedEntry = { type: 'header'; label: string } | { type: 'item'; item: T; flatIndex: number }
-
-  const groupedEntries = createMemo((): GroupedEntry[] => {
-    const items = filteredItems()
-    const hasGroups = items.some(i => i.group)
-    if (!hasGroups) return items.map((item, i) => ({ type: 'item', item, flatIndex: i }))
-
-    const entries: GroupedEntry[] = []
-    let lastGroup: string | undefined
-    items.forEach((item, i) => {
-      if (item.group && item.group !== lastGroup) {
-        entries.push({ type: 'header', label: item.group })
-        lastGroup = item.group
-      }
-      entries.push({ type: 'item', item, flatIndex: i })
-    })
-    return entries
+    const items = allItems()
+    if (!q) return items.filter(i => !i.disabled)
+    return items.filter(i => !i.disabled && filterFn()(i, q))
   })
+
+  const filteredIds = createMemo(() => new Set(filteredItems().map(i => i.id)))
+
+  const groupedEntries = createMemo(() => buildGroupedEntries(resolved.toArray(), filteredIds()))
 
   // Reset on close
   createEffect(() => {
@@ -98,7 +206,7 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
     }
   })
 
-  // Clamp highlighted index when filtered items change
+  // Clamp highlighted index
   createEffect(() => {
     const items = filteredItems()
     if (highlightedIndex() >= items.length) {
@@ -113,7 +221,7 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
     el?.scrollIntoView({ block: 'nearest' })
   })
 
-  // Global Cmd+K shortcut handler
+  // Global Cmd+K shortcut
   onMount(() => {
     if (local.globalShortcut === false) return
 
@@ -148,7 +256,7 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
         e.preventDefault()
         const item = items[highlightedIndex()]
         if (item) {
-          local.onSelect(item)
+          local.onSelect(item.id, item.label)
           local.onOpenChange?.(false)
         }
         break
@@ -176,11 +284,7 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
           }}
           onKeyDown={handleKeyDown}
           placeholder={local.placeholder ?? 'Search...'}
-          class={cn(
-            'flex-1 h-12 text-sm bg-transparent',
-            'text-text placeholder:text-text-muted',
-            'focus:outline-none'
-          )}
+          class="nsg-command-bar-input"
         />
         <kbd class="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium text-text-muted bg-surface-sunken border border-border rounded">
           esc
@@ -201,7 +305,7 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
             {(entry) => {
               if (entry.type === 'header') {
                 return (
-                  <div class="px-3 pt-3 pb-1.5 text-xs font-semibold text-text-muted uppercase tracking-wider first:pt-1">
+                  <div class="nsg-command-bar-group-header">
                     {entry.label}
                   </div>
                 )
@@ -218,15 +322,14 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
                   type="button"
                   data-index={entry.flatIndex}
                   class={cn(
-                    'w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-left',
-                    'transition-colors duration-75',
+                    'nsg-command-bar-item',
                     isHighlighted()
-                      ? 'bg-primary-100 text-primary-900'
-                      : 'text-text hover:bg-surface-sunken'
+                      ? 'nsg-command-bar-item-highlighted'
+                      : 'nsg-command-bar-item-default',
                   )}
                   onMouseEnter={() => setHighlightedIndex(entry.flatIndex)}
                   onClick={() => {
-                    local.onSelect(entry.item)
+                    local.onSelect(entry.item.id, entry.item.label)
                     local.onOpenChange?.(false)
                   }}
                 >
@@ -250,8 +353,8 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
         </Show>
       </div>
 
-      {/* Footer with keyboard hints */}
-      <div class="flex items-center gap-4 px-4 py-2.5 border-t border-border text-xs text-text-muted">
+      {/* Footer */}
+      <div class="nsg-command-bar-footer">
         <span class="flex items-center gap-1.5">
           <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&uarr;</kbd>
           <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&darr;</kbd>
@@ -265,3 +368,9 @@ export function CommandBar<T extends CommandBarItem>(props: CommandBarProps<T>):
     </Dialog>
   )
 }
+
+// ============================================================================
+// Export
+// ============================================================================
+
+export const CommandBar = Object.assign(CommandBarRoot, { Item, Group })
