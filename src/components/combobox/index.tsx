@@ -3,6 +3,23 @@ import { type JSX, splitProps, Show, For, createSignal, createEffect, on } from 
 import { cn } from '../../utils/cn'
 import { CheckIcon, SearchIcon, SpinnerIcon, XIcon } from '../../icons'
 
+/** @deprecated Use @utility nsg-combo-box-* in CSS instead */
+export const comboBoxStyles = {
+  control: 'nsg-combo-box-control',
+  controlInvalid: 'nsg-combo-box-control-invalid',
+  controlMultiple: 'nsg-combo-box-control-multi',
+  input: 'nsg-combo-box-input',
+  inputMultiple: 'nsg-combo-box-input-multi',
+  content: 'nsg-combo-box-content',
+  item: 'nsg-combo-box-item',
+  tag: 'nsg-combo-box-tag',
+  errorMessage: 'nsg-combo-box-error',
+}
+
+// ============================================================================
+// Types
+// ============================================================================
+
 export type ComboBoxOption = string | { value: string; label: string; disabled?: boolean }
 
 export type ComboBoxItemState = {
@@ -24,22 +41,15 @@ export type ComboBoxProps<T extends ComboBoxOption = ComboBoxOption> = {
   name?: string
   errorMessage?: string
   containerClass?: string
-  /** Additional classes for the input element */
   inputClass?: string
-  /** Additional classes for the control wrapper */
   triggerClass?: string
   debounce?: number
-  /** When to open the dropdown: "focus" (click/focus) or "input" (typing only). Defaults to "focus". */
   triggerMode?: 'focus' | 'input'
-  // For object options
   optionValue?: keyof T | ((option: T) => string)
   optionLabel?: keyof T | ((option: T) => string)
   optionDisabled?: keyof T | ((option: T) => boolean)
-  /** Custom render function for dropdown items */
   itemComponent?: (item: T, state: ComboBoxItemState) => JSX.Element
-  /** Prefix icon */
   prefix?: JSX.Element
-  /** Custom content rendered below the listbox when there are no results */
   noResultComponent?: (inputValue: string) => JSX.Element
 }
 
@@ -68,6 +78,9 @@ const getOptionDisabled = <T extends ComboBoxOption>(option: T): boolean => {
   return option.disabled ?? false
 }
 
+// ============================================================================
+// Component
+// ============================================================================
 
 export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T>): JSX.Element
 export function ComboBox<T extends ComboBoxOption>(props: ComboBoxMultipleProps<T>): JSX.Element
@@ -103,7 +116,6 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const [inputValue, setInputValue] = createSignal('')
   const [internalOptions, setInternalOptions] = createSignal<T[]>(local.options)
 
-  // Sync internalOptions when external options change (e.g. async load)
   createEffect(on(() => local.options, (opts) => {
     if (!inputValue().trim()) {
       setInternalOptions(() => opts)
@@ -118,7 +130,6 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
     if (local.onInputChange) {
       local.onInputChange(value)
     } else {
-      // Built-in filtering when no external onInputChange
       const query = value.toLowerCase().trim()
       if (!query) {
         setInternalOptions(() => local.options)
@@ -139,14 +150,12 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
     return opts.filter((opt) => !selected.includes(getOptionValue(opt)))
   }
 
-  // Map string[] value back to T[] objects, preserving selection order
   const resolvedMultiValue = (): T[] => {
     const selected = (props as ComboBoxMultipleProps<T>).value ?? []
     const optionMap = new Map(local.options.map((opt) => [getOptionValue(opt), opt]))
     return selected.map((val) => optionMap.get(val)).filter(Boolean) as T[]
   }
 
-  // Backspace removes last selected item when input is empty (multi-select)
   const handleBackspace = (e: KeyboardEvent) => {
     if (e.key !== 'Backspace') return
     if (!isMultiple()) return
@@ -157,7 +166,6 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
     ;(props as ComboBoxMultipleProps<T>).onChange(current.slice(0, -1))
   }
 
-  // Select first non-disabled option on Enter when nothing is highlighted
   const handleKeyDown = (e: KeyboardEvent) => {
     handleBackspace(e)
     if (e.key !== 'Enter') return
@@ -165,7 +173,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
     const listboxId = input.getAttribute('aria-controls')
     const listbox = listboxId ? document.getElementById(listboxId) : null
     const highlighted = listbox?.querySelector('[data-highlighted]')
-    if (highlighted) return // Kobalte handles it
+    if (highlighted) return
 
     const opts = resolvedOptions()
     const firstEnabled = opts.find((opt) => !getOptionDisabled(opt))
@@ -179,11 +187,9 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
       if (!current.includes(val)) {
         multiOnChange([...current, val])
       }
-      // Clear input text
       input.value = ''
       handleInputChange('')
     } else {
-      // Single select: click the DOM item so Kobalte handles selection + close
       const firstItem = listbox?.querySelector('[role="option"]:not([data-disabled])') as HTMLElement | null
       firstItem?.click()
     }
@@ -192,13 +198,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const renderItemComponent = (itemProps: any) => (
     <KobalteSearch.Item
       item={itemProps.item}
-      class={cn(
-        'flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md cursor-pointer',
-        'text-text',
-        'data-[highlighted]:bg-primary-100 data-[highlighted]:text-primary-900',
-        'data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed',
-        'outline-none'
-      )}
+      class="nsg-combo-box-item"
     >
       {((state: { selected: () => boolean; highlighted: () => boolean; disabled: () => boolean } | undefined) => {
         if (!state) {
@@ -231,11 +231,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const renderContent = () => (
     <KobalteSearch.Portal>
       <KobalteSearch.Content
-        class={cn(
-          'z-50 min-w-[8rem] overflow-hidden rounded-lg',
-          'bg-surface-raised text-text border border-border shadow-lg',
-          'animate-slide-down'
-        )}
+        class={cn('z-50', 'nsg-combo-box-content')}
       >
         <KobalteSearch.Listbox class="p-1 max-h-60 overflow-auto" />
         <Show when={local.noResultComponent && inputValue().trim()}>
@@ -247,7 +243,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
     </KobalteSearch.Portal>
   )
 
-  // Single select version
+  // Single select
   if (!isMultiple()) {
     return (
       <div class="flex flex-col gap-0.5">
@@ -271,12 +267,8 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
         >
           <KobalteSearch.Control
             class={cn(
-              'flex items-center gap-2 h-10 px-3 rounded-md',
-              'bg-surface-raised border',
-              'focus-within:ring-2 focus-within:border-transparent',
-              isInvalid()
-                ? 'border-danger-500 focus-within:ring-danger-200'
-                : 'border-border focus-within:ring-ring',
+              'nsg-combo-box-control',
+              isInvalid() && 'nsg-combo-box-control-invalid',
               local.triggerClass
             )}
           >
@@ -285,13 +277,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
             </KobalteSearch.Icon>
             <KobalteSearch.Input
               onKeyDown={handleKeyDown}
-              class={cn(
-                'flex-1 h-full text-sm bg-transparent',
-                'text-text placeholder:text-text-muted',
-                'focus:outline-none',
-                'disabled:cursor-not-allowed',
-                local.inputClass
-              )}
+              class={cn('nsg-combo-box-input', local.inputClass)}
             />
             <KobalteSearch.Indicator class="text-text-muted shrink-0">
               <Show when={local.loading}>
@@ -302,13 +288,13 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
           {renderContent()}
         </KobalteSearch>
         <Show when={local.errorMessage}>
-          <span class="text-xs text-danger-500">{local.errorMessage}</span>
+          <span class="nsg-combo-box-error">{local.errorMessage}</span>
         </Show>
       </div>
     )
   }
 
-  // Multiple select version
+  // Multiple select
   const multiProps = props as ComboBoxMultipleProps<T>
   return (
     <div class="flex flex-col gap-0.5">
@@ -317,7 +303,6 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
         options={resolvedOptions()}
         onInputChange={handleInputChange}
         onChange={(vals: any) => {
-          // Kobalte fires with its full internal selection — find the new item(s)
           const allVals: string[] = vals.map(getOptionValue)
           const current = multiProps.value ?? []
           const added = allVals.filter((v: string) => !current.includes(v))
@@ -341,12 +326,8 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
       >
         <KobalteSearch.Control<T>
           class={cn(
-            'flex items-start gap-2 min-h-10 px-2 py-1.5 rounded-md',
-            'bg-surface-raised border',
-            'focus-within:ring-2 focus-within:border-transparent',
-            isInvalid()
-              ? 'border-danger-500 focus-within:ring-danger-200'
-              : 'border-border focus-within:ring-ring',
+            'nsg-combo-box-control-multi',
+            isInvalid() && 'nsg-combo-box-control-invalid',
             local.triggerClass
           )}
         >
@@ -356,10 +337,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
               <For each={resolvedMultiValue()}>
                 {(option) => (
                   <span
-                    class={cn(
-                      'inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium',
-                      'bg-primary-100 text-primary-800'
-                    )}
+                    class="nsg-combo-box-tag"
                     onPointerDown={(e) => e.stopPropagation()}
                   >
                     {getOptionLabel(option)}
@@ -380,13 +358,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
               <KobalteSearch.Input
                 onKeyDown={handleKeyDown}
                 placeholder={resolvedMultiValue().length === 0 ? local.placeholder : undefined}
-                class={cn(
-                  'flex-1 min-w-20 h-6 px-1 text-sm bg-transparent',
-                  'text-text placeholder:text-text-muted',
-                  'focus:outline-none',
-                  'disabled:cursor-not-allowed',
-                  local.inputClass
-                )}
+                class={cn('nsg-combo-box-input-multi', local.inputClass)}
               />
             </div>
             <KobalteSearch.Indicator class="text-text-muted shrink-0 self-center">
@@ -400,7 +372,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
       {renderContent()}
       </KobalteSearch>
       <Show when={local.errorMessage}>
-        <span class="text-xs text-danger-500">{local.errorMessage}</span>
+        <span class="nsg-combo-box-error">{local.errorMessage}</span>
       </Show>
     </div>
   )

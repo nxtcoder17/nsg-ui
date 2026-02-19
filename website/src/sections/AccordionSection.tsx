@@ -15,59 +15,6 @@ export function AccordionIcon(props: { class?: string }) {
 export const AccordionSection: Component = () => {
   const [expanded, setExpanded] = createSignal<string[]>([])
 
-  const faqItems = [
-    {
-      value: 'item-1',
-      title: 'Is it accessible?',
-      content: 'Yes! The accordion follows WAI-ARIA design patterns and supports full keyboard navigation.',
-    },
-    {
-      value: 'item-2',
-      title: 'Can I style it?',
-      content: 'Absolutely. The component accepts className props and uses data attributes for state-based styling.',
-    },
-    {
-      value: 'item-3',
-      title: 'Is it animated?',
-      content: 'Yes, it includes smooth expand/collapse animations using CSS keyframes.',
-    },
-  ]
-
-  const advancedItems = [
-    {
-      value: 'installation',
-      title: 'Installation',
-      content: (
-        <div class="space-y-2">
-          <p>Install the package using your preferred package manager:</p>
-          <pre class="bg-neutral-100 p-2 rounded text-xs font-mono">
-            bun add nsg-ui
-          </pre>
-        </div>
-      ),
-    },
-    {
-      value: 'usage',
-      title: 'Usage',
-      content: (
-        <div class="space-y-2">
-          <p>Import and use the component:</p>
-          <pre class="bg-neutral-100 p-2 rounded text-xs font-mono overflow-x-auto">
-{`import { Accordion } from 'nsg-ui'
-
-<Accordion items={items} />`}
-          </pre>
-        </div>
-      ),
-    },
-    {
-      value: 'disabled',
-      title: 'Disabled Item',
-      content: 'This item is disabled and cannot be expanded.',
-      disabled: true,
-    },
-  ]
-
   return (
     <section id="accordion" class="scroll-mt-24 mb-20">
       <div class="mb-8">
@@ -83,24 +30,63 @@ export const AccordionSection: Component = () => {
       <div class="grid gap-6">
         <DemoCard title="Basic" description="Single item open at a time (collapsible)">
           <div class="max-w-lg">
-            <Accordion items={faqItems} />
+            <Accordion collapsible>
+              <Accordion.Item value="item-1">
+                <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
+                <Accordion.Content>Yes! The accordion follows WAI-ARIA design patterns and supports full keyboard navigation.</Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="item-2">
+                <Accordion.Trigger>Can I style it?</Accordion.Trigger>
+                <Accordion.Content>Absolutely. The component accepts className props and uses data attributes for state-based styling.</Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="item-3">
+                <Accordion.Trigger>Is it animated?</Accordion.Trigger>
+                <Accordion.Content>Yes, it includes smooth expand/collapse animations using CSS keyframes.</Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
           </div>
         </DemoCard>
 
         <DemoCard title="Multiple" description="Allow multiple items open simultaneously">
           <div class="max-w-lg">
-            <Accordion items={faqItems} multiple />
+            <Accordion multiple collapsible>
+              <Accordion.Item value="item-1">
+                <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
+                <Accordion.Content>Yes! The accordion follows WAI-ARIA design patterns and supports full keyboard navigation.</Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="item-2">
+                <Accordion.Trigger>Can I style it?</Accordion.Trigger>
+                <Accordion.Content>Absolutely. The component accepts className props and uses data attributes for state-based styling.</Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="item-3">
+                <Accordion.Trigger>Is it animated?</Accordion.Trigger>
+                <Accordion.Content>Yes, it includes smooth expand/collapse animations using CSS keyframes.</Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
           </div>
         </DemoCard>
 
         <DemoCard title="Controlled" description="Control expanded state externally">
           <div class="max-w-lg space-y-4">
             <Accordion
-              items={faqItems}
               value={expanded()}
               onChange={setExpanded}
               multiple
-            />
+              collapsible
+            >
+              <Accordion.Item value="item-1">
+                <Accordion.Trigger>Is it accessible?</Accordion.Trigger>
+                <Accordion.Content>Yes! The accordion follows WAI-ARIA design patterns and supports full keyboard navigation.</Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="item-2">
+                <Accordion.Trigger>Can I style it?</Accordion.Trigger>
+                <Accordion.Content>Absolutely. The component accepts className props and uses data attributes for state-based styling.</Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="item-3">
+                <Accordion.Trigger>Is it animated?</Accordion.Trigger>
+                <Accordion.Content>Yes, it includes smooth expand/collapse animations using CSS keyframes.</Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
             <div class="text-sm text-text-secondary">
               Expanded: <span class="font-mono text-primary-500">
                 {expanded().length ? expanded().join(', ') : 'none'}
@@ -125,7 +111,41 @@ export const AccordionSection: Component = () => {
 
         <DemoCard title="Rich Content & Disabled" description="Complex content with disabled state">
           <div class="max-w-lg">
-            <Accordion items={advancedItems} />
+            <Accordion collapsible>
+              <Accordion.Item value="installation">
+                <Accordion.Trigger>Installation</Accordion.Trigger>
+                <Accordion.Content>
+                  <div class="space-y-2">
+                    <p>Install the package using your preferred package manager:</p>
+                    <pre class="bg-neutral-100 p-2 rounded text-xs font-mono">
+                      bun add nsg-ui
+                    </pre>
+                  </div>
+                </Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="usage">
+                <Accordion.Trigger>Usage</Accordion.Trigger>
+                <Accordion.Content>
+                  <div class="space-y-2">
+                    <p>Import and use the component:</p>
+                    <pre class="bg-neutral-100 p-2 rounded text-xs font-mono overflow-x-auto">
+{`import { Accordion } from 'nsg-ui'
+
+<Accordion collapsible>
+  <Accordion.Item value="faq">
+    <Accordion.Trigger>Question?</Accordion.Trigger>
+    <Accordion.Content>Answer.</Accordion.Content>
+  </Accordion.Item>
+</Accordion>`}
+                    </pre>
+                  </div>
+                </Accordion.Content>
+              </Accordion.Item>
+              <Accordion.Item value="disabled" disabled>
+                <Accordion.Trigger>Disabled Item</Accordion.Trigger>
+                <Accordion.Content>This item is disabled and cannot be expanded.</Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
           </div>
         </DemoCard>
       </div>

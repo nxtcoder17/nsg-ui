@@ -1,4 +1,4 @@
-import { Component, createSignal, createMemo } from 'solid-js'
+import { Component, createSignal } from 'solid-js'
 import { CommandBar } from 'nsg-ui'
 import { Button } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'
@@ -17,18 +17,8 @@ function CommandBarIcon(props: { class?: string }) {
 export const CommandBarSection: Component = () => {
   const [open, setOpen] = createSignal(false)
 
-  // Build items lazily to avoid circular dependency at module init
-  const sectionItems = createMemo(() =>
-    sections.map(s => ({
-      id: s.id,
-      label: s.label,
-      icon: s.icon,
-      keywords: [s.id.replace(/-/g, ' ')],
-    }))
-  )
-
-  const handleSelect = (item: ReturnType<typeof sectionItems>[number]) => {
-    const el = document.getElementById(item.id)
+  const handleSelect = (id: string) => {
+    const el = document.getElementById(id)
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' })
     }
@@ -70,13 +60,23 @@ export const CommandBarSection: Component = () => {
           </div>
 
           <CommandBar
-            items={sectionItems()}
             open={open()}
             onOpenChange={setOpen}
             onSelect={handleSelect}
             placeholder="Search components..."
             noResultsMessage="No components found"
-          />
+          >
+            <CommandBar.Group label="Components">
+              {sections.map(s => (
+                <CommandBar.Item
+                  id={s.id}
+                  label={s.label}
+                  icon={s.icon}
+                  keywords={[s.id.replace(/-/g, ' ')]}
+                />
+              ))}
+            </CommandBar.Group>
+          </CommandBar>
         </DemoCard>
 
         <DemoCard title="Features" description="Built-in keyboard navigation and filtering">

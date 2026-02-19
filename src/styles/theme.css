@@ -211,3 +211,269 @@
 .animate-fade-out { animation: nsg-fade-out 0.2s ease-out forwards; }
 .animate-slide-from-top { animation: nsg-slide-from-top 0.2s ease-out; }
 .animate-progress-indeterminate { animation: progress-indeterminate 1.5s ease-in-out infinite; }
+
+/* ============================================================================
+ * Component Utilities (@utility)
+ *
+ * Consumers can override any component part globally via:
+ *   @utility nsg-<component>-<part> { @apply ...; }
+ * ============================================================================ */
+
+/* --- SegmentedControl --- */
+
+@utility nsg-segmented-control-track {
+  @apply p-1 rounded-lg bg-surface-sunken;
+}
+
+@utility nsg-segmented-control-indicator {
+  @apply bg-surface-raised rounded-md shadow-sm transition-all duration-200;
+}
+
+@utility nsg-segmented-control-item {
+  @apply rounded-sm text-text-secondary transition-colors;
+  @apply hover:text-text data-[checked]:text-text;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+}
+
+@utility nsg-segmented-control-item-separator {
+  @apply before:absolute before:left-0 before:top-[25%] before:h-[50%] before:w-px before:bg-text-muted/40 before:content-[''] before:transition-opacity data-[checked]:before:opacity-0;
+}
+
+@utility nsg-segmented-control-label {
+  @apply text-sm font-medium text-text;
+}
+
+@utility nsg-segmented-control-description {
+  @apply text-xs text-text-secondary;
+}
+
+@utility nsg-segmented-control-error {
+  @apply text-xs text-danger-500;
+}
+
+/* --- Accordion --- */
+
+@utility nsg-accordion-root {
+  @apply divide-y divide-border rounded-lg border border-border;
+}
+
+@utility nsg-accordion-trigger {
+  @apply px-4 py-3 text-sm font-medium text-text;
+  @apply hover:bg-neutral-50 transition-colors;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset;
+}
+
+@utility nsg-accordion-icon {
+  @apply text-text-secondary transition-transform duration-200;
+}
+
+@utility nsg-accordion-content {
+  @apply text-sm text-text-secondary;
+}
+
+@utility nsg-accordion-content-inner {
+  @apply px-4 pb-4;
+}
+
+/* --- DropdownMenu --- */
+
+@utility nsg-dropdown-menu-content {
+  @apply bg-surface-raised border border-border text-text p-1.5;
+  @apply shadow-[0_4px_24px_-4px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.08)];
+}
+
+@utility nsg-dropdown-menu-action {
+  @apply rounded-sm px-2 py-1 text-sm text-text;
+  @apply data-[highlighted]:bg-surface-sunken data-[highlighted]:text-text;
+}
+
+@utility nsg-dropdown-menu-action-danger {
+  @apply rounded-sm px-2 py-1 text-sm text-danger;
+  @apply data-[highlighted]:bg-danger-100 data-[highlighted]:text-danger;
+}
+
+@utility nsg-dropdown-menu-option {
+  @apply rounded-lg py-2 text-sm text-text;
+  @apply focus:bg-surface-sunken;
+  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+}
+
+@utility nsg-dropdown-menu-separator {
+  @apply -mx-1.5 my-1.5 h-px bg-border;
+}
+
+@utility nsg-dropdown-menu-subtrigger {
+  @apply px-3 py-2 text-sm text-text;
+  @apply focus:bg-surface-sunken data-[expanded]:bg-surface-sunken;
+  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+}
+
+@utility nsg-dropdown-menu-subcontent {
+  @apply rounded-xl min-w-[10rem] overflow-hidden p-1.5;
+  @apply bg-surface-raised border border-border text-text;
+  @apply shadow-[0_4px_24px_-4px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.08)];
+}
+
+/* --- ContextMenu --- */
+
+@utility nsg-context-menu-content {
+  @apply min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text p-1 shadow-lg;
+}
+
+@utility nsg-context-menu-action {
+  @apply rounded-sm px-2 py-1.5 text-sm text-text;
+  @apply focus:bg-surface-sunken;
+  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+}
+
+@utility nsg-context-menu-action-danger {
+  @apply rounded-sm px-2 py-1.5 text-sm text-danger;
+  @apply focus:bg-danger/10 focus:text-danger;
+  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+}
+
+@utility nsg-context-menu-option {
+  @apply rounded-sm py-1.5 text-sm text-text;
+  @apply focus:bg-surface-sunken;
+  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+}
+
+@utility nsg-context-menu-separator {
+  @apply -mx-1 my-1 h-px bg-border;
+}
+
+@utility nsg-context-menu-subtrigger {
+  @apply rounded-sm px-2 py-1.5 text-sm text-text;
+  @apply focus:bg-surface-sunken data-[expanded]:bg-surface-sunken;
+  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+}
+
+@utility nsg-context-menu-subcontent {
+  @apply min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text p-1 shadow-lg;
+}
+
+/* --- Dialog --- */
+
+@utility nsg-dialog-overlay {
+  @apply bg-black/50 backdrop-blur-sm;
+}
+
+@utility nsg-dialog-content {
+  @apply bg-surface-raised text-text border border-border rounded-lg shadow-lg;
+}
+
+@utility nsg-dialog-title {
+  @apply text-lg font-semibold text-text;
+}
+
+@utility nsg-dialog-description {
+  @apply text-sm text-text-secondary;
+}
+
+/* --- Tabs --- */
+
+@utility nsg-tabs-list {
+  @apply border-b border-border;
+}
+
+@utility nsg-tabs-list-vertical {
+  @apply border-r border-border pr-4;
+}
+
+@utility nsg-tabs-trigger {
+  @apply px-4 py-2 text-sm font-medium transition-colors;
+  @apply text-text-secondary hover:text-text;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1;
+  @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed;
+}
+
+/* --- RadioGroup --- */
+
+@utility nsg-radio-group-option {
+  @apply flex items-start gap-3;
+}
+
+@utility nsg-radio-group-control {
+  @apply border-2 border-neutral-300 bg-surface-raised;
+  @apply group-hover:border-primary-400;
+  @apply data-[checked]:border-primary-500 data-[checked]:bg-primary-50;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  @apply transition-colors;
+}
+
+@utility nsg-radio-group-label {
+  @apply text-sm font-medium text-text cursor-pointer;
+}
+
+@utility nsg-radio-group-description {
+  @apply text-xs text-text-secondary;
+}
+
+/* --- CommandBar --- */
+
+@utility nsg-command-bar-input {
+  @apply flex-1 h-12 text-sm bg-transparent text-text placeholder:text-text-muted focus:outline-none;
+}
+
+@utility nsg-command-bar-group-header {
+  @apply px-3 pt-3 pb-1.5 text-xs font-semibold text-text-muted uppercase tracking-wider first:pt-1;
+}
+
+@utility nsg-command-bar-item {
+  @apply w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-left transition-colors duration-75;
+}
+
+@utility nsg-command-bar-item-highlighted {
+  @apply bg-primary-100 text-primary-900;
+}
+
+@utility nsg-command-bar-item-default {
+  @apply text-text hover:bg-surface-sunken;
+}
+
+@utility nsg-command-bar-footer {
+  @apply flex items-center gap-4 px-4 py-2.5 border-t border-border text-xs text-text-muted;
+}
+
+/* --- ComboBox --- */
+
+@utility nsg-combo-box-control {
+  @apply flex items-center gap-2 h-10 px-3 rounded-md bg-surface-raised border border-border;
+  @apply focus-within:ring-2 focus-within:border-transparent focus-within:ring-ring;
+}
+
+@utility nsg-combo-box-control-multi {
+  @apply flex items-start gap-2 min-h-10 px-2 py-1.5 rounded-md bg-surface-raised border border-border;
+  @apply focus-within:ring-2 focus-within:border-transparent focus-within:ring-ring;
+}
+
+@utility nsg-combo-box-control-invalid {
+  @apply border-danger-500 focus-within:ring-danger-200;
+}
+
+@utility nsg-combo-box-input {
+  @apply flex-1 h-full text-sm bg-transparent text-text placeholder:text-text-muted focus:outline-none disabled:cursor-not-allowed;
+}
+
+@utility nsg-combo-box-input-multi {
+  @apply flex-1 min-w-20 h-6 px-1 text-sm bg-transparent text-text placeholder:text-text-muted focus:outline-none;
+}
+
+@utility nsg-combo-box-content {
+  @apply min-w-[8rem] overflow-hidden rounded-lg bg-surface-raised text-text border border-border shadow-lg;
+  animation: nsg-slide-down 0.2s ease-out;
+}
+
+@utility nsg-combo-box-item {
+  @apply flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md cursor-pointer;
+  @apply text-text data-[highlighted]:bg-primary-100 data-[highlighted]:text-primary-900;
+  @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed outline-none;
+}
+
+@utility nsg-combo-box-tag {
+  @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800;
+}
+
+@utility nsg-combo-box-error {
+  @apply text-xs text-danger-500;
+}

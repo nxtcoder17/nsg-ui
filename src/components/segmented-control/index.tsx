@@ -1,28 +1,20 @@
 import { SegmentedControl as KobalteSegmentedControl } from '@kobalte/core/segmented-control'
-import { splitProps, JSX, For, Show } from 'solid-js'
+import { splitProps, JSX, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
-
-export type SegmentedOption = {
-  value: string
-  label?: string
-  /** Icon element to display (can be used with or without label) */
-  icon?: JSX.Element
-  disabled?: boolean
-}
 
 export type SegmentedControlProps = {
   value?: string
   defaultValue?: string
   onChange?: (value: string) => void
-  options: SegmentedOption[]
   label?: string
   description?: string
   errorMessage?: string
   validationState?: 'valid' | 'invalid'
-  orientation?: 'horizontal' | 'vertical'
+  direction?: 'row' | 'column'
   disabled?: boolean
   name?: string
   class?: string
+  children?: JSX.Element
 }
 
 export const SegmentedControl = (props: SegmentedControlProps) => {
@@ -30,34 +22,33 @@ export const SegmentedControl = (props: SegmentedControlProps) => {
     'value',
     'defaultValue',
     'onChange',
-    'options',
     'label',
     'description',
     'errorMessage',
     'validationState',
-    'orientation',
+    'direction',
     'disabled',
     'name',
     'class',
+    'children',
   ])
 
-  const isInvalid = () => local.validationState === 'invalid'
-  const isVertical = () => local.orientation === 'vertical'
+  const isColumn = () => local.direction === 'column'
 
   return (
     <KobalteSegmentedControl
       value={local.value}
       defaultValue={local.defaultValue}
       onChange={local.onChange}
-      orientation={local.orientation}
+      orientation={isColumn() ? 'vertical' : 'horizontal'}
       validationState={local.validationState}
       disabled={local.disabled}
       name={local.name}
-      class={cn('flex flex-col gap-1.5', local.disabled && 'opacity-50', local.class)}
+      class={cn('flex flex-col gap-1.5 max-w-fit', local.disabled && 'opacity-50', local.class)}
       {...others}
     >
       <Show when={local.label}>
-        <KobalteSegmentedControl.Label class="text-sm font-medium text-text">
+        <KobalteSegmentedControl.Label class="nsg-segmented-control-label">
           {local.label}
         </KobalteSegmentedControl.Label>
       </Show>
@@ -65,50 +56,67 @@ export const SegmentedControl = (props: SegmentedControlProps) => {
       <div
         role="presentation"
         class={cn(
-          'relative inline-flex p-1 rounded-lg bg-surface-sunken',
-          isVertical() ? 'flex-col' : 'flex-row'
+          'relative inline-flex items-stretch',
+          'nsg-segmented-control-track',
+          '[&>*:nth-child(2)]:before:hidden [&>[data-checked]+*]:before:opacity-0',
+          isColumn() ? 'flex-col' : 'flex-row',
         )}
       >
         <KobalteSegmentedControl.Indicator
           class={cn(
-            'absolute bg-surface-raised rounded-md shadow-sm transition-all duration-200 pointer-events-none',
-            isVertical() ? 'left-1 right-1' : 'top-1 bottom-1'
+            'absolute pointer-events-none',
+            'nsg-segmented-control-indicator',
+            isColumn() ? 'left-1 right-1' : 'top-1 bottom-1'
           )}
         />
-        <For each={local.options}>
-          {(option) => (
-            <KobalteSegmentedControl.Item
-              value={option.value}
-              disabled={option.disabled}
-              class={cn(
-                'relative z-10 text-sm font-medium rounded-md cursor-pointer',
-                'text-text-secondary transition-colors hover:text-text hover:bg-transparent',
-                'data-[checked]:text-text',
-                'data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-              )}
-            >
-              <KobalteSegmentedControl.ItemInput class="sr-only" />
-              <KobalteSegmentedControl.ItemLabel class="flex items-center justify-center gap-1.5 px-3 py-1.5 w-full h-full">
-                <Show when={option.icon}>{option.icon}</Show>
-                <Show when={option.label}>{option.label}</Show>
-              </KobalteSegmentedControl.ItemLabel>
-            </KobalteSegmentedControl.Item>
-          )}
-        </For>
+        {local.children}
       </div>
 
       <Show when={local.description}>
-        <KobalteSegmentedControl.Description class="text-xs text-text-secondary">
+        <KobalteSegmentedControl.Description class="nsg-segmented-control-description">
           {local.description}
         </KobalteSegmentedControl.Description>
       </Show>
 
       <Show when={local.errorMessage}>
-        <KobalteSegmentedControl.ErrorMessage class="text-xs text-danger-500">
+        <KobalteSegmentedControl.ErrorMessage class="nsg-segmented-control-error">
           {local.errorMessage}
         </KobalteSegmentedControl.ErrorMessage>
       </Show>
     </KobalteSegmentedControl>
+  )
+}
+
+export type SegmentedControlItemProps = {
+  value: string
+  disabled?: boolean
+  class?: string
+  unstyled?: boolean
+  children?: JSX.Element
+}
+
+SegmentedControl.Item = (props: SegmentedControlItemProps) => {
+  const [local, others] = splitProps(props, ['value', 'disabled', 'class', 'children', 'unstyled'])
+
+  return (
+    <KobalteSegmentedControl.Item
+      value={local.value}
+      disabled={local.disabled}
+      class={cn(
+        'relative z-10 cursor-pointer flex items-center justify-center',
+        'data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed',
+        !local.unstyled && [
+          'nsg-segmented-control-item',
+          'nsg-segmented-control-item-separator',
+        ],
+        local.class,
+      )}
+      {...others}
+    >
+      <KobalteSegmentedControl.ItemInput class="sr-only" />
+      <KobalteSegmentedControl.ItemLabel class={'flex items-center justify-center gap-1.5 px-3 py-1.5 w-full h-full'}>
+        {local.children}
+      </KobalteSegmentedControl.ItemLabel>
+    </KobalteSegmentedControl.Item>
   )
 }

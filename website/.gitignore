@@ -27,3 +27,4 @@ gitignore
 .DS_Store
 Thumbs.db
 .secrets
+src/styles/overrides.css

@@ -3,6 +3,14 @@ import { type JSX, splitProps, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
 import { DotIcon } from '../../icons'
 
+/** @deprecated Use @utility nsg-radio-group-* in CSS instead */
+export const radioGroupStyles = {
+  option: 'nsg-radio-group-option',
+  control: 'nsg-radio-group-control',
+  label: 'nsg-radio-group-label',
+  description: 'nsg-radio-group-description',
+}
+
 // ============================================================================
 // Types
 // ============================================================================
@@ -25,6 +33,7 @@ export type RadioOptionProps = {
   label: string
   description?: string
   disabled?: boolean
+  unstyled?: boolean
   class?: string
 }
 
@@ -87,6 +96,7 @@ const Option = (props: RadioOptionProps) => {
     'label',
     'description',
     'disabled',
+    'unstyled',
     'class',
   ])
 
@@ -95,7 +105,8 @@ const Option = (props: RadioOptionProps) => {
       value={local.value}
       disabled={local.disabled}
       class={cn(
-        'flex items-start gap-3 group',
+        'group',
+        !local.unstyled && 'nsg-radio-group-option',
         local.disabled && 'opacity-50 cursor-not-allowed',
         local.class
       )}
@@ -104,12 +115,8 @@ const Option = (props: RadioOptionProps) => {
       <KobalteRadioGroup.ItemInput class="sr-only" />
       <KobalteRadioGroup.ItemControl
         class={cn(
-          'w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 mt-px',
-          'border-neutral-300 bg-surface-raised',
-          'group-hover:border-primary-400',
-          'data-[checked]:border-primary-500 data-[checked]:bg-primary-50',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-          'transition-colors'
+          'w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-px',
+          !local.unstyled && 'nsg-radio-group-control',
         )}
       >
         <KobalteRadioGroup.ItemIndicator>
@@ -117,11 +124,11 @@ const Option = (props: RadioOptionProps) => {
         </KobalteRadioGroup.ItemIndicator>
       </KobalteRadioGroup.ItemControl>
       <div class="flex flex-col gap-0.5">
-        <KobalteRadioGroup.ItemLabel class="text-sm font-medium text-text cursor-pointer">
+        <KobalteRadioGroup.ItemLabel class={cn(!local.unstyled && 'nsg-radio-group-label')}>
           {local.label}
         </KobalteRadioGroup.ItemLabel>
         <Show when={local.description}>
-          <KobalteRadioGroup.ItemDescription class="text-xs text-text-secondary">
+          <KobalteRadioGroup.ItemDescription class={cn(!local.unstyled && 'nsg-radio-group-description')}>
             {local.description}
           </KobalteRadioGroup.ItemDescription>
         </Show>

@@ -9,22 +9,27 @@ import { Button } from '../button'
 type OptionContextValue = { type: 'single' | 'multi' }
 const OptionContext = createContext<OptionContextValue>()
 
+/** @deprecated Use @utility nsg-dropdown-menu-* in CSS instead */
+export const dropdownMenuStyles = {
+  actionItem: 'nsg-dropdown-menu-action',
+  actionItemDefault: 'nsg-dropdown-menu-action',
+  actionItemDanger: 'nsg-dropdown-menu-action-danger',
+  option: 'nsg-dropdown-menu-option',
+  separator: 'nsg-dropdown-menu-separator',
+}
+
+// ============================================================================
+// Root
+// ============================================================================
+
 export interface DropdownMenuProps {
-  /** Controlled open state */
   show?: boolean
-  /** Callback when open state changes */
   onChange?: (show: boolean) => void
-  /** Trigger element (should be a Button or similar interactive element) */
   trigger: JSX.Element
-  /** Accessible label for the trigger (required for icon-only triggers) */
   triggerLabel?: string
-  /** Placement relative to trigger */
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end'
-  /** Gap between menu and trigger */
   gutter?: number
-  /** Menu content */
   children?: JSX.Element
-  /** Additional class for the menu content */
   class?: string
 }
 
@@ -49,9 +54,8 @@ export const DropdownMenu = function (props: DropdownMenuProps) {
       <KobalteDropdownMenu.Portal>
         <KobalteDropdownMenu.Content
           class={cn(
-            'z-50 min-w-6 overflow-hidden p-1.5',
-            'bg-surface-raised border border-border text-text',
-            'shadow-[0_4px_24px_-4px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.08)]',
+            'z-50 min-w-6 overflow-hidden',
+            'nsg-dropdown-menu-content',
             'data-[expanded]:animate-scale-in',
             'origin-[var(--kb-menu-content-transform-origin)]',
             local.class
@@ -63,6 +67,10 @@ export const DropdownMenu = function (props: DropdownMenuProps) {
     </KobalteDropdownMenu>
   )
 }
+
+// ============================================================================
+// ActionItem
+// ============================================================================
 
 export interface ActionItemProps {
   variant?: 'default' | 'danger'
@@ -81,12 +89,11 @@ DropdownMenu.ActionItem = (props: ActionItemProps) => {
       class={cn(
         'group relative flex cursor-pointer select-none items-center outline-none transition-all duration-150',
         'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-        !local.unstyled && [
-          'rounded-sm px-2 py-1 text-sm',
+        !local.unstyled && (
           local.variant === 'danger'
-            ? 'text-danger data-[highlighted]:bg-danger-100 data-[highlighted]:text-danger'
-            : 'text-text data-[highlighted]:bg-surface-sunken data-[highlighted]:text-text',
-        ],
+            ? 'nsg-dropdown-menu-action-danger'
+            : 'nsg-dropdown-menu-action'
+        ),
         local.class
       )}
       disabled={local.disabled}
@@ -98,42 +105,42 @@ DropdownMenu.ActionItem = (props: ActionItemProps) => {
   )
 }
 
+// ============================================================================
+// Option
+// ============================================================================
+
 export interface OptionState {
   checked: boolean
 }
 
 export interface OptionProps {
-  /** Label text (uses default rendering with indicator) */
   label?: string
-  /** For single selection (radio): the option's value */
   value?: string
-  /** For multiple selection (checkbox): controlled checked state */
   checked?: boolean
   onChange?: (checked: boolean) => void
   disabled?: boolean
+  unstyled?: boolean
   class?: string
-  /** Render prop for custom rendering. Receives { checked } state. */
   children?: (state: OptionState) => JSX.Element
 }
 
 DropdownMenu.Option = (props: OptionProps) => {
-  const [local, others] = splitProps(props, ['label', 'value', 'checked', 'onChange', 'disabled', 'class', 'children'])
+  const [local, others] = splitProps(props, ['label', 'value', 'checked', 'onChange', 'disabled', 'unstyled', 'class', 'children'])
   const ctx = useContext(OptionContext)
 
   const hasCustomRender = typeof local.children === 'function'
 
   const itemClass = cn(
-    'relative flex cursor-pointer select-none items-center rounded-lg py-2 text-sm outline-none transition-all duration-150',
-    'text-text focus:bg-surface-sunken',
-    'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-    // Only add left padding for indicator when using default rendering
-    !hasCustomRender && 'pl-9 pr-3',
+    'relative flex cursor-pointer select-none items-center outline-none transition-all duration-150',
+    !local.unstyled && [
+      'nsg-dropdown-menu-option',
+      !hasCustomRender && 'pl-9 pr-3',
+    ],
     local.class
   )
 
   const indicatorClass = 'absolute left-3 inline-flex items-center justify-center text-primary'
 
-  // Default content with indicator
   const defaultContent = (icon: JSX.Element) => (
     <>
       <KobalteDropdownMenu.ItemIndicator class={indicatorClass}>
@@ -143,7 +150,6 @@ DropdownMenu.Option = (props: OptionProps) => {
     </>
   )
 
-  // Radio item (inside Select without multiple)
   if (ctx?.type === 'single') {
     return (
       <KobalteDropdownMenu.RadioItem
@@ -161,8 +167,6 @@ DropdownMenu.Option = (props: OptionProps) => {
     )
   }
 
-  // Checkbox item (inside Select with multiple)
-  // Note: We use local.checked directly since CheckboxItem is controlled
   return (
     <KobalteDropdownMenu.CheckboxItem
       class={itemClass}
@@ -179,13 +183,22 @@ DropdownMenu.Option = (props: OptionProps) => {
   )
 }
 
+// ============================================================================
+// Separator
+// ============================================================================
+
 export interface SeparatorProps {
+  unstyled?: boolean
   class?: string
 }
 
 DropdownMenu.Separator = (props: SeparatorProps) => (
-  <KobalteDropdownMenu.Separator class={cn('-mx-1.5 my-1.5 h-px bg-border', props.class)} />
+  <KobalteDropdownMenu.Separator class={cn(!props.unstyled && 'nsg-dropdown-menu-separator', props.class)} />
 )
+
+// ============================================================================
+// Group
+// ============================================================================
 
 export interface GroupProps {
   label?: string
@@ -193,40 +206,29 @@ export interface GroupProps {
   class?: string
 }
 
-const ItemLabel = (props) => {
-  return <Show when={props.children}>
-    <KobalteDropdownMenu.ItemLabel>
-      <Text color="muted" class="text-sm">{props.children}</Text>
-    </KobalteDropdownMenu.ItemLabel>
-  </Show>
-}
-
-const GroupLabel = (props) => {
-  return <Show when={props.children}>
-    <KobalteDropdownMenu.GroupLabel>
-      <Text color="muted" class="text-sm">{props.children}</Text>
-    </KobalteDropdownMenu.GroupLabel>
-  </Show>
-}
-
 DropdownMenu.Group = (props: GroupProps) => {
   const [local, others] = splitProps(props, ['label', 'children', 'class'])
 
   return (
     <KobalteDropdownMenu.Group class={local.class} {...others}>
-      <GroupLabel>{local.label}</GroupLabel>
+      <Show when={local.label}>
+        <KobalteDropdownMenu.GroupLabel>
+          <Text color="muted" class="text-sm">{local.label}</Text>
+        </KobalteDropdownMenu.GroupLabel>
+      </Show>
       {local.children}
     </KobalteDropdownMenu.Group>
   )
 }
 
+// ============================================================================
+// Select
+// ============================================================================
+
 export interface SelectProps {
   label?: string
-  /** Enable multiple selection (checkboxes). Default: single selection (radio) */
   multiple?: boolean
-  /** For single selection: controlled value */
   value?: string
-  /** For single selection: change handler */
   onChange?: (value: string) => void
   children: JSX.Element
   class?: string
@@ -235,11 +237,14 @@ export interface SelectProps {
 DropdownMenu.Select = (props: SelectProps) => {
   const [local, others] = splitProps(props, ['label', 'multiple', 'value', 'onChange', 'children', 'class'])
 
-  // Multiple selection (checkboxes)
   if (local.multiple) {
     return (
       <KobalteDropdownMenu.Group class={local.class} {...others}>
-        <GroupLabel>{local.label}</GroupLabel>
+        <Show when={local.label}>
+          <KobalteDropdownMenu.GroupLabel>
+            <Text color="muted" class="text-sm">{local.label}</Text>
+          </KobalteDropdownMenu.GroupLabel>
+        </Show>
         <OptionContext.Provider value={{ type: 'multi' }}>
           {local.children}
         </OptionContext.Provider>
@@ -247,16 +252,23 @@ DropdownMenu.Select = (props: SelectProps) => {
     )
   }
 
-  // Single selection (radio)
   return (
     <KobalteDropdownMenu.RadioGroup value={local.value} onChange={local.onChange} class={local.class} {...others}>
-      <GroupLabel>{local.label}</GroupLabel>
+      <Show when={local.label}>
+        <KobalteDropdownMenu.GroupLabel>
+          <Text color="muted" class="text-sm">{local.label}</Text>
+        </KobalteDropdownMenu.GroupLabel>
+      </Show>
       <OptionContext.Provider value={{ type: 'single' }}>
         {local.children}
       </OptionContext.Provider>
     </KobalteDropdownMenu.RadioGroup>
   )
 }
+
+// ============================================================================
+// Menu
+// ============================================================================
 
 export interface MenuProps {
   label: string
@@ -274,10 +286,8 @@ DropdownMenu.Menu = (props: MenuProps) => {
       <KobalteDropdownMenu.SubTrigger
         class={cn(
           'max-w-fit',
-          'relative flex cursor-pointer select-none items-center px-3 py-2 text-sm outline-none transition-all duration-150',
-          'text-text focus:bg-surface-sunken',
-          'data-[expanded]:bg-surface-sunken',
-          'data-[disabled]:pointer-events-none data-[disabled]:opacity-50'
+          'relative flex cursor-pointer select-none items-center outline-none transition-all duration-150',
+          'nsg-dropdown-menu-subtrigger',
         )}
         disabled={local.disabled}
       >
@@ -292,9 +302,8 @@ DropdownMenu.Menu = (props: MenuProps) => {
       <KobalteDropdownMenu.Portal>
         <KobalteDropdownMenu.SubContent
           class={cn(
-            'z-50 min-w-[10rem] overflow-hidden rounded-xl p-1.5',
-            'bg-surface-raised border border-border text-text',
-            'shadow-[0_4px_24px_-4px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.08)]',
+            'z-50',
+            'nsg-dropdown-menu-subcontent',
             'data-[expanded]:animate-scale-in',
             'origin-[var(--kb-menu-content-transform-origin)]',
             local.class
@@ -315,11 +324,8 @@ export function DropdownMenuExample() {
         <DropdownMenu.ActionItem onSelect={() => console.log('Duplicate')}>Duplicate</DropdownMenu.ActionItem>
       </DropdownMenu.Group>
       <DropdownMenu.Separator />
-      <DropdownMenu.ActionItem unstyled onSelect={() => console.log('Settings')}>
-        <div class="flex items-center gap-2 px-2 py-1 rounded-sm group-data-[highlighted]:bg-surface-sunken">
-          <span>Settings</span>
-          <kbd class="ml-auto text-xs text-text-muted">⌘,</kbd>
-        </div>
+      <DropdownMenu.ActionItem onSelect={() => console.log('Settings')}>
+        Settings
       </DropdownMenu.ActionItem>
       <DropdownMenu.Separator />
       <DropdownMenu.ActionItem variant="danger" onSelect={() => console.log('Delete')}>Delete</DropdownMenu.ActionItem>

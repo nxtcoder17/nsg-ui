@@ -9,6 +9,7 @@ export type TextProps = {
   color?: TextColor
   as?: TextElement
   class?: string
+  truncate?: boolean
   children: JSX.Element
 }
 

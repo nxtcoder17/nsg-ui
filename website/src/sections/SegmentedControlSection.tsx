@@ -32,15 +32,11 @@ export const SegmentedControlSection: Component = () => {
       <div class="grid gap-6">
         <DemoCard title="Basic" description="Simple toggle between options">
           <div class="space-y-4">
-            <SegmentedControl
-              value={view()}
-              onChange={setView}
-              options={[
-                { value: 'list', label: 'List' },
-                { value: 'grid', label: 'Grid' },
-                { value: 'table', label: 'Table' },
-              ]}
-            />
+            <SegmentedControl value={view()} onChange={setView}>
+              <SegmentedControl.Item value="list">List</SegmentedControl.Item>
+              <SegmentedControl.Item value="grid">Grid</SegmentedControl.Item>
+              <SegmentedControl.Item value="table">Table</SegmentedControl.Item>
+            </SegmentedControl>
             <div class="text-sm text-text-secondary">
               Selected: <span class="font-mono text-primary-500">{view()}</span>
             </div>
@@ -48,17 +44,12 @@ export const SegmentedControlSection: Component = () => {
         </DemoCard>
 
         <DemoCard title="With Label" description="Add context with a label">
-          <SegmentedControl
-            label="Size"
-            value={size()}
-            onChange={setSize}
-            options={[
-              { value: 'sm', label: 'S' },
-              { value: 'md', label: 'M' },
-              { value: 'lg', label: 'L' },
-              { value: 'xl', label: 'XL' },
-            ]}
-          />
+          <SegmentedControl label="Size" value={size()} onChange={setSize}>
+            <SegmentedControl.Item value="sm">S</SegmentedControl.Item>
+            <SegmentedControl.Item value="md">M</SegmentedControl.Item>
+            <SegmentedControl.Item value="lg">L</SegmentedControl.Item>
+            <SegmentedControl.Item value="xl">XL</SegmentedControl.Item>
+          </SegmentedControl>
         </DemoCard>
 
         <DemoCard title="With Description" description="Additional help text">
@@ -67,23 +58,19 @@ export const SegmentedControlSection: Component = () => {
             description="Choose your preferred color scheme"
             value={theme()}
             onChange={setTheme}
-            options={[
-              { value: 'light', label: 'Light' },
-              { value: 'dark', label: 'Dark' },
-              { value: 'system', label: 'System' },
-            ]}
-          />
+          >
+            <SegmentedControl.Item value="light">Light</SegmentedControl.Item>
+            <SegmentedControl.Item value="dark">Dark</SegmentedControl.Item>
+            <SegmentedControl.Item value="system">System</SegmentedControl.Item>
+          </SegmentedControl>
         </DemoCard>
 
         <DemoCard title="Disabled Options" description="Individual segments can be disabled">
-          <SegmentedControl
-            defaultValue="monthly"
-            options={[
-              { value: 'weekly', label: 'Weekly' },
-              { value: 'monthly', label: 'Monthly' },
-              { value: 'yearly', label: 'Yearly', disabled: true },
-            ]}
-          />
+          <SegmentedControl defaultValue="monthly">
+            <SegmentedControl.Item value="weekly">Weekly</SegmentedControl.Item>
+            <SegmentedControl.Item value="monthly">Monthly</SegmentedControl.Item>
+            <SegmentedControl.Item value="yearly" disabled>Yearly</SegmentedControl.Item>
+          </SegmentedControl>
         </DemoCard>
 
         <DemoCard title="Validation" description="Error state with message">
@@ -92,25 +79,19 @@ export const SegmentedControlSection: Component = () => {
             validationState="invalid"
             errorMessage="Please select a valid plan"
             defaultValue="free"
-            options={[
-              { value: 'free', label: 'Free' },
-              { value: 'pro', label: 'Pro' },
-              { value: 'enterprise', label: 'Enterprise' },
-            ]}
-          />
+          >
+            <SegmentedControl.Item value="free">Free</SegmentedControl.Item>
+            <SegmentedControl.Item value="pro">Pro</SegmentedControl.Item>
+            <SegmentedControl.Item value="enterprise">Enterprise</SegmentedControl.Item>
+          </SegmentedControl>
         </DemoCard>
 
         <DemoCard title="Disabled" description="Entire control disabled">
-          <SegmentedControl
-            label="Disabled control"
-            disabled
-            defaultValue="a"
-            options={[
-              { value: 'a', label: 'Option A' },
-              { value: 'b', label: 'Option B' },
-              { value: 'c', label: 'Option C' },
-            ]}
-          />
+          <SegmentedControl label="Disabled control" disabled defaultValue="a">
+            <SegmentedControl.Item value="a">Option A</SegmentedControl.Item>
+            <SegmentedControl.Item value="b">Option B</SegmentedControl.Item>
+            <SegmentedControl.Item value="c">Option C</SegmentedControl.Item>
+          </SegmentedControl>
         </DemoCard>
       </div>
     </section>

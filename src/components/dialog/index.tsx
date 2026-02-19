@@ -3,20 +3,27 @@ import { type JSX, splitProps, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
 import { Button, type ButtonOwnProps } from '../button'
 
+/** @deprecated Use @utility nsg-dialog-* in CSS instead */
+export const dialogStyles = {
+  overlay: 'nsg-dialog-overlay',
+  content: 'nsg-dialog-content',
+  title: 'nsg-dialog-title',
+  description: 'nsg-dialog-description',
+}
+
+// ============================================================================
+// Types
+// ============================================================================
+
 type DialogBaseProps = {
   show?: boolean
   onChange?: (show: boolean) => void
-  /** Trigger element. If omitted, dialog is controlled entirely via show/onChange */
   trigger?: JSX.Element
   description?: string
   children?: JSX.Element
-  /** Close dialog on Escape key (default: true) */
   closeOnEscape?: boolean
-  /** Close dialog on click outside (default: true) */
   closeOnClickOutside?: boolean
-  /** Position of the dialog: 'center' (default) or 'top' (command-bar style) */
   position?: 'center' | 'top'
-  /** Additional classes for the content container */
   contentClass?: string
 }
 
@@ -24,6 +31,10 @@ export type DialogProps = DialogBaseProps & (
   | { title: string; 'aria-label'?: string }
   | { title?: never; 'aria-label': string }
 )
+
+// ============================================================================
+// Component
+// ============================================================================
 
 export const Dialog = (props: DialogProps) => {
   const [local, others] = splitProps(props, [
@@ -57,11 +68,11 @@ export const Dialog = (props: DialogProps) => {
       <KobalteDialog.Portal>
         <KobalteDialog.Overlay
           class={cn(
-            'fixed inset-0 z-50 bg-black/50 backdrop-blur-sm',
+            'fixed inset-0 z-50',
+            'nsg-dialog-overlay',
             'data-[expanded]:animate-fade-in'
           )}
         />
-        {/* Flexbox wrapper avoids transform conflicts with animations */}
         <div
           class={cn(
             'fixed inset-0 z-50 flex justify-center pointer-events-none',
@@ -71,7 +82,7 @@ export const Dialog = (props: DialogProps) => {
           <KobalteDialog.Content
             class={cn(
               'pointer-events-auto w-full max-w-lg mx-4',
-              'bg-surface-raised text-text border border-border rounded-lg shadow-lg',
+              'nsg-dialog-content',
               position() === 'center'
                 ? 'data-[expanded]:animate-scale-in'
                 : 'data-[expanded]:animate-slide-up',
@@ -85,12 +96,12 @@ export const Dialog = (props: DialogProps) => {
             <Show when={local.title || local.description}>
               <div class="p-6 space-y-2">
                 <Show when={local.title}>
-                  <KobalteDialog.Title class="text-lg font-semibold text-text">
+                  <KobalteDialog.Title class="nsg-dialog-title">
                     {local.title}
                   </KobalteDialog.Title>
                 </Show>
                 <Show when={local.description}>
-                  <KobalteDialog.Description class="text-sm text-text-secondary">
+                  <KobalteDialog.Description class="nsg-dialog-description">
                     {local.description}
                   </KobalteDialog.Description>
                 </Show>
@@ -105,6 +116,10 @@ export const Dialog = (props: DialogProps) => {
   )
 }
 
-Dialog.CloseButton = (props: ButtonOwnProps) => {
-  return <KobalteDialog.CloseButton as={Button} variant="outline" {...props}/>
+Dialog.CloseButton = (props: ButtonOwnProps & { unstyled?: boolean }) => {
+  const [local, others] = splitProps(props, ['unstyled'])
+  if (local.unstyled) {
+    return <KobalteDialog.CloseButton {...others} />
+  }
+  return <KobalteDialog.CloseButton as={Button} variant="outline" {...others} />
 }
