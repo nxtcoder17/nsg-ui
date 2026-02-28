@@ -8,6 +8,7 @@
         "@kobalte/core": "^0.13.0",
         "clsx": "^2.1.1",
         "solid-js": "^1.9.9",
+        "solid-prism-editor": "^3.0.1",
         "tailwind-merge": "^2.6.0",
       },
       "devDependencies": {
@@ -374,6 +375,8 @@
     "solid-presence": ["solid-presence@0.1.8", "", { "dependencies": { "@corvu/utils": "~0.4.0" }, "peerDependencies": { "solid-js": "^1.8" } }, "sha512-pWGtXUFWYYUZNbg5YpG5vkQJyOtzn2KXhxYaMx/4I+lylTLYkITOLevaCwMRN+liCVk0pqB6EayLWojNqBFECA=="],
 
     "solid-prevent-scroll": ["solid-prevent-scroll@0.1.10", "", { "dependencies": { "@corvu/utils": "~0.4.1" }, "peerDependencies": { "solid-js": "^1.8" } }, "sha512-KplGPX2GHiWJLZ6AXYRql4M127PdYzfwvLJJXMkO+CMb8Np4VxqDAg5S8jLdwlEuBis/ia9DKw2M8dFx5u8Mhw=="],
+
+    "solid-prism-editor": ["solid-prism-editor@3.0.1", "", { "peerDependencies": { "solid-js": "*" } }, "sha512-lCYV+sTYf0zB9+OIvPrfHtzVRHncisB7zMKhYBm5R930bJi4IHyz7CBg6iXe0U67/prmhAR76w7YJ5qAlw+Dqw=="],
 
     "solid-refresh": ["solid-refresh@0.6.3", "", { "dependencies": { "@babel/generator": "7.28.3", "@babel/helper-module-imports": "7.27.1", "@babel/types": "7.28.4" }, "peerDependencies": { "solid-js": "1.9.9" } }, "sha512-F3aPsX6hVw9ttm5LYlth8Q15x6MlI/J3Dn+o3EQyRTtTxidepSTwAYdozt01/YA+7ObcciagGEyXIopGZzQtbA=="],
 

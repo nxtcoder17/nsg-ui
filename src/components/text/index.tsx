@@ -1,4 +1,4 @@
-import { splitProps, JSX, ValidComponent } from 'solid-js'
+import { splitProps, mergeProps, JSX, ValidComponent } from 'solid-js'
 import { Dynamic } from 'solid-js/web'
 import { cn } from '../../utils/cn'
 
@@ -13,26 +13,15 @@ export type TextProps = {
   children: JSX.Element
 }
 
-const colorStyles: Record<TextColor, string> = {
-  default: 'text-text',
-  muted: 'text-text-muted',
-  secondary: 'text-text-secondary',
-  primary: 'text-primary-500',
-  danger: 'text-danger-500',
-  success: 'text-success-500',
-  warning: 'text-warning-500',
-}
-
 export const Text = (props: TextProps) => {
-  const [local, others] = splitProps(props, ['color', 'as', 'class', 'children'])
+  const merged = mergeProps({ color: 'default' as TextColor, as: 'span' as TextElement }, props)
+  const [local, others] = splitProps(merged, ['color', 'as', 'class', 'children'])
 
   return (
     <Dynamic
-      component={(local.as ?? 'span') as ValidComponent}
-      class={cn(
-        colorStyles[local.color ?? 'default'],
-        local.class
-      )}
+      component={local.as as ValidComponent}
+      class={cn('nsg-text', local.class)}
+      data-color={local.color}
       {...others}
     >
       {local.children}

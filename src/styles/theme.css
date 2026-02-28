@@ -219,261 +219,534 @@
  *   @utility nsg-<component>-<part> { @apply ...; }
  * ============================================================================ */
 
+/* --- Button --- */
+
+@layer components {
+  .nsg-button {
+    @apply inline-flex items-center justify-center font-medium transition-colors;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+
+    &[data-variant="default"] {
+      @apply bg-primary-500 text-primary-50 hover:bg-primary-600;
+    }
+    &[data-variant="outline"] {
+      @apply border border-border bg-transparent text-text hover:bg-neutral-100;
+    }
+    &[data-variant="ghost"] {
+      @apply bg-transparent text-text hover:bg-neutral-100;
+    }
+    &[data-variant="danger"] {
+      @apply bg-danger-500 text-danger-50 hover:bg-danger-600;
+    }
+    &[data-variant="link"] {
+      @apply bg-transparent text-primary-600 underline-offset-4 hover:underline hover:text-primary-700;
+    }
+
+    &[data-size="sm"] {
+      @apply h-8 px-3 text-xs rounded-sm;
+    }
+    &[data-size="md"] {
+      @apply h-10 px-4 text-sm rounded-md;
+    }
+    &[data-size="lg"] {
+      @apply h-12 px-6 text-base rounded-lg;
+    }
+    &[data-size="icon"] {
+      @apply h-10 w-10 rounded-md;
+    }
+    &[data-size="icon-sm"] {
+      @apply h-6 w-6 rounded-sm;
+    }
+  }
+}
+
+/* --- Text --- */
+
+@layer components {
+  .nsg-text {
+    &[data-color="default"] {
+      @apply text-text;
+    }
+    &[data-color="muted"] {
+      @apply text-text-muted;
+    }
+    &[data-color="secondary"] {
+      @apply text-text-secondary;
+    }
+    &[data-color="primary"] {
+      @apply text-primary-500;
+    }
+    &[data-color="danger"] {
+      @apply text-danger-500;
+    }
+    &[data-color="success"] {
+      @apply text-success-500;
+    }
+    &[data-color="warning"] {
+      @apply text-warning-500;
+    }
+  }
+}
+
 /* --- SegmentedControl --- */
 
-@utility nsg-segmented-control-track {
-  @apply p-1 rounded-lg bg-surface-sunken;
-}
+@layer components {
+  .nsg-segmented-control {
+    @apply flex flex-col gap-1.5 max-w-fit;
+    &[data-disabled] { @apply opacity-50; }
 
-@utility nsg-segmented-control-indicator {
-  @apply bg-surface-raised rounded-md shadow-sm transition-all duration-200;
-}
+    [data-nsg-segmented-control="label"] {
+      @apply text-sm font-medium text-text;
+    }
 
-@utility nsg-segmented-control-item {
-  @apply rounded-sm text-text-secondary transition-colors;
-  @apply hover:text-text data-[checked]:text-text;
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
-}
+    [data-nsg-segmented-control="track"] {
+      @apply p-1 rounded-lg bg-surface-sunken;
+      /* No separator before first item (child 2 because Indicator is child 1) */
+      > *:nth-child(2)::before { display: none; }
+      /* No separator on item following the checked one */
+      > [data-checked] + *::before { opacity: 0; }
+    }
 
-@utility nsg-segmented-control-item-separator {
-  @apply before:absolute before:left-0 before:top-[25%] before:h-[50%] before:w-px before:bg-text-muted/40 before:content-[''] before:transition-opacity data-[checked]:before:opacity-0;
-}
+    [data-nsg-segmented-control="indicator"] {
+      @apply bg-surface-raised rounded-md shadow-sm transition-all duration-200;
+    }
 
-@utility nsg-segmented-control-label {
-  @apply text-sm font-medium text-text;
-}
+    [data-nsg-segmented-control="item"] {
+      @apply cursor-pointer flex items-center justify-center;
+      @apply rounded-sm text-text-secondary transition-colors;
+      @apply hover:text-text;
+      &[data-checked] { @apply text-text; }
+      @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring;
+      @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed;
+      /* Separator between items */
+      &::before {
+        @apply absolute left-0 top-[25%] h-[50%] w-px bg-text-muted/40 transition-opacity;
+        content: '';
+      }
+      &[data-checked]::before { opacity: 0; }
+    }
 
-@utility nsg-segmented-control-description {
-  @apply text-xs text-text-secondary;
-}
+    [data-nsg-segmented-control="item-label"] {
+      @apply gap-1.5 px-3 py-1.5;
+    }
 
-@utility nsg-segmented-control-error {
-  @apply text-xs text-danger-500;
+    [data-nsg-segmented-control="description"] {
+      @apply text-xs text-text-secondary;
+    }
+
+    [data-nsg-segmented-control="error"] {
+      @apply text-xs text-danger-500;
+    }
+
+    /* Orientation-specific layout */
+    &[data-orientation="horizontal"] {
+      [data-nsg-segmented-control="track"] { @apply flex-row; }
+      [data-nsg-segmented-control="indicator"] { @apply top-1 bottom-1; }
+    }
+
+    &[data-orientation="vertical"] {
+      [data-nsg-segmented-control="track"] { @apply flex-col; }
+      [data-nsg-segmented-control="indicator"] { @apply left-1 right-1; }
+    }
+  }
 }
 
 /* --- Accordion --- */
 
-@utility nsg-accordion-root {
-  @apply divide-y divide-border rounded-lg border border-border;
+@keyframes nsg-accordion-down {
+  from { height: 0; }
+  to { height: var(--kb-accordion-content-height); }
 }
 
-@utility nsg-accordion-trigger {
-  @apply px-4 py-3 text-sm font-medium text-text;
-  @apply hover:bg-neutral-50 transition-colors;
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset;
+@keyframes nsg-accordion-up {
+  from { height: var(--kb-accordion-content-height); }
+  to { height: 0; }
 }
 
-@utility nsg-accordion-icon {
-  @apply text-text-secondary transition-transform duration-200;
-}
+@layer components {
+  .nsg-accordion {
+    @apply divide-y divide-border rounded-lg border border-border;
 
-@utility nsg-accordion-content {
-  @apply text-sm text-text-secondary;
-}
+    [data-nsg-accordion="trigger"] {
+      @apply px-4 py-3 text-sm font-medium text-text;
+      @apply hover:bg-neutral-50 transition-colors;
+      @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset;
+      @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed;
+    }
 
-@utility nsg-accordion-content-inner {
-  @apply px-4 pb-4;
+    [data-nsg-accordion="trigger-icon"] {
+      @apply text-text-secondary transition-transform duration-200;
+    }
+
+    /* Rotate icon when item is expanded */
+    [data-expanded] [data-nsg-accordion="trigger-icon"] {
+      transform: rotate(180deg);
+    }
+
+    [data-nsg-accordion="content"] {
+      @apply text-sm text-text-secondary;
+      &[data-expanded] { animation: nsg-accordion-down 0.2s ease-out; }
+      &[data-closed] { animation: nsg-accordion-up 0.2s ease-out; }
+    }
+
+    [data-nsg-accordion="content-inner"] {
+      @apply px-4 pb-4;
+    }
+  }
 }
 
 /* --- DropdownMenu --- */
 
-@utility nsg-dropdown-menu-content {
-  @apply bg-surface-raised border border-border text-text p-1.5;
-  @apply shadow-[0_4px_24px_-4px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.08)];
-}
+@layer components {
+  .nsg-dropdown-menu {
+    &[data-nsg-dropdown-menu="content"],
+    &[data-nsg-dropdown-menu="subcontent"] {
+      @apply z-50 rounded-xl min-w-[10rem] overflow-hidden p-1.5;
+      @apply bg-surface-raised border border-border text-text;
+      @apply shadow-[0_4px_24px_-4px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.08)];
+      @apply origin-[var(--kb-menu-content-transform-origin)];
+      &[data-expanded] { animation: nsg-scale-in 0.2s ease-out; }
+    }
 
-@utility nsg-dropdown-menu-action {
-  @apply rounded-sm px-2 py-1 text-sm text-text;
-  @apply data-[highlighted]:bg-surface-sunken data-[highlighted]:text-text;
-}
+    [data-nsg-dropdown-menu="action"] {
+      @apply relative flex cursor-pointer select-none items-center outline-none transition-all duration-150;
+      @apply rounded-lg px-2 py-1.5 text-sm text-text;
+      @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+      @apply data-[highlighted]:bg-surface-sunken data-[highlighted]:text-text;
 
-@utility nsg-dropdown-menu-action-danger {
-  @apply rounded-sm px-2 py-1 text-sm text-danger;
-  @apply data-[highlighted]:bg-danger-100 data-[highlighted]:text-danger;
-}
+      &[data-variant="danger"] {
+        @apply text-danger;
+        @apply data-[highlighted]:bg-danger-100 data-[highlighted]:text-danger;
+      }
+    }
 
-@utility nsg-dropdown-menu-option {
-  @apply rounded-lg py-2 text-sm text-text;
-  @apply focus:bg-surface-sunken;
-  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
-}
+    [data-nsg-dropdown-menu="option"] {
+      @apply relative flex cursor-pointer select-none items-center outline-none transition-all duration-150;
+      @apply rounded-lg pl-9 pr-3 py-1.5 text-sm text-text;
+      @apply data-[highlighted]:bg-surface-sunken;
+      @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+      &[data-checked] { @apply bg-primary-50 text-primary-700; }
+      &[data-checked][data-highlighted] { @apply bg-primary-100 text-primary-700; }
 
-@utility nsg-dropdown-menu-separator {
-  @apply -mx-1.5 my-1.5 h-px bg-border;
-}
+      [data-nsg-dropdown-menu="option-indicator"] {
+        @apply absolute left-3 inline-flex items-center justify-center text-primary-500;
+      }
+    }
 
-@utility nsg-dropdown-menu-subtrigger {
-  @apply px-3 py-2 text-sm text-text;
-  @apply focus:bg-surface-sunken data-[expanded]:bg-surface-sunken;
-  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
-}
+    [data-nsg-dropdown-menu="separator"] {
+      @apply -mx-1.5 my-1.5 h-px bg-border;
+    }
 
-@utility nsg-dropdown-menu-subcontent {
-  @apply rounded-xl min-w-[10rem] overflow-hidden p-1.5;
-  @apply bg-surface-raised border border-border text-text;
-  @apply shadow-[0_4px_24px_-4px_rgba(0,0,0,0.15),0_1px_3px_rgba(0,0,0,0.08)];
+    [data-nsg-dropdown-menu="group-label"] {
+      @apply px-2 py-1.5 text-xs font-medium text-text-muted;
+    }
+
+    [data-nsg-dropdown-menu="submenu-trigger"] {
+      @apply relative flex cursor-pointer select-none items-center outline-none transition-all duration-150;
+      @apply rounded-lg px-2 py-1.5 text-sm text-text;
+      @apply data-[highlighted]:bg-surface-sunken data-[expanded]:bg-surface-sunken;
+      @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+
+      [data-nsg-dropdown-menu="submenu-trigger-icon"] {
+        @apply mr-2 flex-shrink-0;
+      }
+
+      [data-nsg-dropdown-menu="submenu-trigger-chevron"] {
+        @apply ml-auto;
+      }
+    }
+  }
 }
 
 /* --- ContextMenu --- */
 
-@utility nsg-context-menu-content {
-  @apply min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text p-1 shadow-lg;
-}
+@layer components {
+  .nsg-context-menu {
+    &[data-nsg-context-menu="content"],
+    &[data-nsg-context-menu="subcontent"] {
+      @apply z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text p-1 shadow-lg;
+      @apply origin-[var(--kb-menu-content-transform-origin)];
+      &[data-expanded] { animation: nsg-scale-in 0.2s ease-out; }
+    }
 
-@utility nsg-context-menu-action {
-  @apply rounded-sm px-2 py-1.5 text-sm text-text;
-  @apply focus:bg-surface-sunken;
-  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
-}
+    [data-nsg-context-menu="action"] {
+      @apply relative flex cursor-pointer select-none items-center outline-none transition-colors;
+      @apply rounded-sm px-2 py-1.5 text-sm text-text;
+      @apply data-[highlighted]:bg-surface-sunken;
+      @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 
-@utility nsg-context-menu-action-danger {
-  @apply rounded-sm px-2 py-1.5 text-sm text-danger;
-  @apply focus:bg-danger/10 focus:text-danger;
-  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
-}
+      &[data-variant="danger"] {
+        @apply text-danger;
+        @apply data-[highlighted]:bg-danger/10 data-[highlighted]:text-danger;
+      }
+    }
 
-@utility nsg-context-menu-option {
-  @apply rounded-sm py-1.5 text-sm text-text;
-  @apply focus:bg-surface-sunken;
-  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
-}
+    [data-nsg-context-menu="option"] {
+      @apply relative flex cursor-pointer select-none items-center outline-none transition-colors;
+      @apply rounded-sm pl-8 pr-2 py-1.5 text-sm text-text;
+      @apply data-[highlighted]:bg-surface-sunken;
+      @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+      &[data-checked] { @apply bg-primary-50 text-primary-700; }
+      &[data-checked][data-highlighted] { @apply bg-primary-100 text-primary-700; }
 
-@utility nsg-context-menu-separator {
-  @apply -mx-1 my-1 h-px bg-border;
-}
+      [data-nsg-context-menu="option-indicator"] {
+        @apply absolute left-2 inline-flex items-center justify-center;
+      }
+    }
 
-@utility nsg-context-menu-subtrigger {
-  @apply rounded-sm px-2 py-1.5 text-sm text-text;
-  @apply focus:bg-surface-sunken data-[expanded]:bg-surface-sunken;
-  @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
-}
+    [data-nsg-context-menu="separator"] {
+      @apply -mx-1 my-1 h-px bg-border;
+    }
 
-@utility nsg-context-menu-subcontent {
-  @apply min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text p-1 shadow-lg;
+    [data-nsg-context-menu="group-label"] {
+      @apply px-2 py-1.5 text-xs font-medium text-text-muted;
+    }
+
+    [data-nsg-context-menu="submenu-trigger"] {
+      @apply relative flex cursor-pointer select-none items-center outline-none transition-colors;
+      @apply rounded-sm px-2 py-1.5 text-sm text-text;
+      @apply data-[highlighted]:bg-surface-sunken data-[expanded]:bg-surface-sunken;
+      @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+
+      [data-nsg-context-menu="submenu-trigger-icon"] {
+        @apply mr-2 flex-shrink-0;
+      }
+
+      [data-nsg-context-menu="submenu-trigger-chevron"] {
+        @apply ml-auto;
+      }
+    }
+  }
 }
 
 /* --- Dialog --- */
 
-@utility nsg-dialog-overlay {
-  @apply bg-black/50 backdrop-blur-sm;
+@layer components {
+  .nsg-dialog {
+    &[data-nsg-dialog="overlay"] {
+      @apply fixed inset-0 z-50 bg-black/50 backdrop-blur-sm;
+      &[data-expanded] { animation: nsg-fade-in 0.2s ease-out; }
+    }
+
+    &[data-nsg-dialog="positioner"] {
+      @apply fixed inset-0 z-50 flex justify-center items-center pointer-events-none;
+    }
+
+    [data-nsg-dialog="content"] {
+      @apply bg-surface-raised text-text border border-border rounded-lg shadow-lg;
+      &[data-expanded] { animation: nsg-scale-in 0.2s ease-out; }
+    }
+
+    [data-nsg-dialog="title"] { @apply text-lg font-semibold text-text; }
+    [data-nsg-dialog="description"] { @apply text-sm text-text-secondary; }
+  }
 }
 
-@utility nsg-dialog-content {
-  @apply bg-surface-raised text-text border border-border rounded-lg shadow-lg;
-}
+/* --- Popover --- */
 
-@utility nsg-dialog-title {
-  @apply text-lg font-semibold text-text;
-}
+@layer components {
+  .nsg-popover {
+    &[data-nsg-popover="content"] {
+      @apply z-50 min-w-[8rem] rounded-md bg-surface text-text shadow-lg;
+      @apply origin-[var(--kb-popover-content-transform-origin)];
+      &[data-expanded] { animation: nsg-scale-in 0.2s ease-out; }
+    }
 
-@utility nsg-dialog-description {
-  @apply text-sm text-text-secondary;
+    [data-nsg-popover="arrow"] {
+      svg { display: none; }
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: var(--color-surface);
+        clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+      }
+    }
+
+    /* Arrow direction per placement */
+    &[data-placement^="top"] [data-nsg-popover="arrow"]::after {
+      clip-path: polygon(0% 0%, 100% 0%, 50% 100%);
+    }
+    &[data-placement^="left"] [data-nsg-popover="arrow"]::after {
+      clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+    }
+    &[data-placement^="right"] [data-nsg-popover="arrow"]::after {
+      clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+    }
+    [data-nsg-popover="inner"] { @apply p-4; }
+    [data-nsg-popover="header"] { @apply space-y-1 mb-2; }
+    [data-nsg-popover="title"] { @apply text-sm font-medium text-text; }
+    [data-nsg-popover="description"] { @apply text-sm text-text-secondary; }
+  }
 }
 
 /* --- Tabs --- */
 
-@utility nsg-tabs-list {
-  @apply border-b border-border;
-}
+@layer components {
+  .nsg-tabs {
+    @apply flex;
 
-@utility nsg-tabs-list-vertical {
-  @apply border-r border-border pr-4;
-}
+    [data-nsg-tabs="list"] {
+      @apply flex shrink-0;
+    }
 
-@utility nsg-tabs-trigger {
-  @apply px-4 py-2 text-sm font-medium transition-colors;
-  @apply text-text-secondary hover:text-text;
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1;
-  @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed;
+    [data-nsg-tabs="trigger"] {
+      @apply px-4 py-2 text-sm font-medium transition-colors;
+      @apply text-text-secondary hover:text-text;
+      @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1;
+      @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed;
+    }
+
+    [data-nsg-tabs="content"] {
+      @apply flex-1 outline-none;
+    }
+
+    &[data-orientation="horizontal"] {
+      @apply flex-col gap-3;
+
+      [data-nsg-tabs="list"] { @apply flex-row border-b border-border; }
+      [data-nsg-tabs="trigger"] {
+        @apply border-b-2 border-transparent -mb-px;
+        &[data-selected] { @apply border-b-primary-500 text-primary-500; }
+      }
+    }
+
+    &[data-orientation="vertical"] {
+      @apply flex-row gap-4;
+
+      [data-nsg-tabs="list"] { @apply flex-col border-r border-border pr-4; }
+      [data-nsg-tabs="trigger"] {
+        @apply text-left border-r-2 border-transparent -mr-px;
+        &[data-selected] { @apply border-r-primary-500 text-primary-500; }
+      }
+    }
+  }
 }
 
 /* --- RadioGroup --- */
 
-@utility nsg-radio-group-option {
-  @apply flex items-start gap-3;
-}
+@layer components {
+  .nsg-radio-group {
+    @apply flex flex-col gap-1;
 
-@utility nsg-radio-group-control {
-  @apply border-2 border-neutral-300 bg-surface-raised;
-  @apply group-hover:border-primary-400;
-  @apply data-[checked]:border-primary-500 data-[checked]:bg-primary-50;
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
-  @apply transition-colors;
-}
+    [data-nsg-radio-group="items"] {
+      @apply flex flex-col gap-2;
+    }
 
-@utility nsg-radio-group-label {
-  @apply text-sm font-medium text-text cursor-pointer;
-}
+    &[data-orientation="horizontal"] [data-nsg-radio-group="items"] {
+      @apply flex-row gap-4;
+    }
 
-@utility nsg-radio-group-description {
-  @apply text-xs text-text-secondary;
+    [data-nsg-radio-group="option"] {
+      @apply flex items-start gap-3;
+      @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed;
+
+      &:hover [data-nsg-radio-group="control"] {
+        @apply border-primary-400;
+      }
+    }
+
+    [data-nsg-radio-group="control"] {
+      @apply w-5 h-5 rounded-full flex items-center justify-center mt-px;
+      @apply border-2 border-neutral-300 bg-surface-raised;
+      @apply data-[checked]:border-primary-500 data-[checked]:bg-primary-50;
+      @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+      @apply transition-colors;
+    }
+
+    [data-nsg-radio-group="indicator"] {
+      @apply text-primary-500;
+    }
+
+    [data-nsg-radio-group="label"] {
+      @apply text-sm font-medium text-text cursor-pointer;
+    }
+
+    [data-nsg-radio-group="description"] {
+      @apply text-xs text-text-secondary;
+    }
+
+    [data-nsg-radio-group="error"] {
+      @apply text-xs text-danger-500;
+    }
+  }
 }
 
 /* --- CommandBar --- */
 
-@utility nsg-command-bar-input {
-  @apply flex-1 h-12 text-sm bg-transparent text-text placeholder:text-text-muted focus:outline-none;
-}
+@layer components {
+  .nsg-command-bar {
+    [data-nsg-command-bar="input"] {
+      @apply flex-1 h-12 text-sm bg-transparent text-text placeholder:text-text-muted focus:outline-none;
+    }
 
-@utility nsg-command-bar-group-header {
-  @apply px-3 pt-3 pb-1.5 text-xs font-semibold text-text-muted uppercase tracking-wider first:pt-1;
-}
+    [data-nsg-command-bar="group-header"] {
+      @apply px-3 pt-3 pb-1.5 text-xs font-semibold text-text-muted uppercase tracking-wider first:pt-1;
+    }
 
-@utility nsg-command-bar-item {
-  @apply w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-left transition-colors duration-75;
-}
+    [data-nsg-command-bar="item"] {
+      @apply w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-left transition-colors duration-75;
+      @apply text-text hover:bg-surface-sunken;
 
-@utility nsg-command-bar-item-highlighted {
-  @apply bg-primary-100 text-primary-900;
-}
+      &[data-highlighted] {
+        @apply bg-primary-100 text-primary-900;
+      }
+    }
 
-@utility nsg-command-bar-item-default {
-  @apply text-text hover:bg-surface-sunken;
-}
-
-@utility nsg-command-bar-footer {
-  @apply flex items-center gap-4 px-4 py-2.5 border-t border-border text-xs text-text-muted;
+    [data-nsg-command-bar="footer"] {
+      @apply flex items-center gap-4 px-4 py-2.5 border-t border-border text-xs text-text-muted;
+    }
+  }
 }
 
 /* --- ComboBox --- */
 
-@utility nsg-combo-box-control {
-  @apply flex items-center gap-2 h-10 px-3 rounded-md bg-surface-raised border border-border;
-  @apply focus-within:ring-2 focus-within:border-transparent focus-within:ring-ring;
-}
+@layer components {
+  .nsg-combo-box {
+    &[data-nsg-combo-box="root"] {
+      @apply flex flex-col gap-0.5;
+    }
 
-@utility nsg-combo-box-control-multi {
-  @apply flex items-start gap-2 min-h-10 px-2 py-1.5 rounded-md bg-surface-raised border border-border;
-  @apply focus-within:ring-2 focus-within:border-transparent focus-within:ring-ring;
-}
+    [data-nsg-combo-box="control"] {
+      @apply flex items-center gap-2 h-10 px-3 rounded-md bg-surface-raised border border-border;
+      @apply focus-within:ring-2 focus-within:border-transparent focus-within:ring-ring;
 
-@utility nsg-combo-box-control-invalid {
-  @apply border-danger-500 focus-within:ring-danger-200;
-}
+      &[data-variant="multiple"] {
+        @apply items-start gap-2 min-h-10 px-2 py-1.5;
+      }
 
-@utility nsg-combo-box-input {
-  @apply flex-1 h-full text-sm bg-transparent text-text placeholder:text-text-muted focus:outline-none disabled:cursor-not-allowed;
-}
+      &[data-invalid] {
+        @apply border-danger-500 focus-within:ring-danger-200;
+      }
+    }
 
-@utility nsg-combo-box-input-multi {
-  @apply flex-1 min-w-20 h-6 px-1 text-sm bg-transparent text-text placeholder:text-text-muted focus:outline-none;
-}
+    [data-nsg-combo-box="input"] {
+      @apply flex-1 h-full text-sm bg-transparent text-text placeholder:text-text-muted focus:outline-none disabled:cursor-not-allowed;
 
-@utility nsg-combo-box-content {
-  @apply min-w-[8rem] overflow-hidden rounded-lg bg-surface-raised text-text border border-border shadow-lg;
-  animation: nsg-slide-down 0.2s ease-out;
-}
+      &[data-variant="multiple"] {
+        @apply min-w-20 h-6 px-1;
+      }
+    }
 
-@utility nsg-combo-box-item {
-  @apply flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md cursor-pointer;
-  @apply text-text data-[highlighted]:bg-primary-100 data-[highlighted]:text-primary-900;
-  @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed outline-none;
-}
+    [data-nsg-combo-box="tag"] {
+      @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800;
+    }
 
-@utility nsg-combo-box-tag {
-  @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800;
-}
+    [data-nsg-combo-box="error"] {
+      @apply text-xs text-danger-500;
+    }
 
-@utility nsg-combo-box-error {
-  @apply text-xs text-danger-500;
+    &[data-nsg-combo-box="content"] {
+      @apply min-w-[8rem] overflow-hidden rounded-lg bg-surface-raised text-text border border-border shadow-lg;
+      animation: nsg-slide-down 0.2s ease-out;
+    }
+
+    [data-nsg-combo-box="item"] {
+      @apply flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md cursor-pointer;
+      @apply text-text data-[highlighted]:bg-primary-100 data-[highlighted]:text-primary-900;
+      @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed outline-none;
+    }
+  }
 }

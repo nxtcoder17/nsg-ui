@@ -1,7 +1,6 @@
 import { Popover as KobaltePopover } from '@kobalte/core/popover'
 import { type JSX, splitProps, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
-import { Button } from '../button'
 
 export interface PopoverProps {
   show?: boolean
@@ -18,13 +17,13 @@ export interface PopoverProps {
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end'
   /** Gap between popover and trigger */
   gutter?: number
-  /** Override inner content wrapper classes (default: "p-4") */
+  unstyled?: boolean
   class?: string
 }
 
 export function Popover(props: PopoverProps) {
   const [local, others] = splitProps(props, [
-    'show', 'onChange', 'trigger', 'triggerLabel', 'title', 'description', 'children', 'arrow', 'placement', 'gutter', 'class'
+    'show', 'onChange', 'trigger', 'triggerLabel', 'title', 'description', 'children', 'arrow', 'placement', 'gutter', 'unstyled', 'class'
   ])
 
   return (
@@ -39,26 +38,23 @@ export function Popover(props: PopoverProps) {
 
       <KobaltePopover.Portal>
         <KobaltePopover.Content
-          class={cn(
-            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-surface-raised text-text shadow-lg',
-            'data-[expanded]:animate-scale-in',
-            'origin-[var(--kb-popover-content-transform-origin)]'
-          )}
+          class={cn(!local.unstyled && 'nsg-popover')}
+          {...(!local.unstyled && { 'data-nsg-popover': 'content' })}
         >
           <Show when={local.arrow}>
-            <KobaltePopover.Arrow class="fill-surface-raised" />
+            <KobaltePopover.Arrow {...(!local.unstyled && { 'data-nsg-popover': 'arrow' })} size={18} />
           </Show>
 
-          <div class={cn("p-4", local.class)}>
+          <div class={local.class} {...(!local.unstyled && { 'data-nsg-popover': 'inner' })}>
             <Show when={local.title || local.description}>
-              <div class="space-y-1 mb-2">
+              <div {...(!local.unstyled && { 'data-nsg-popover': 'header' })}>
                 <Show when={local.title}>
-                  <KobaltePopover.Title class="text-sm font-medium text-text">
+                  <KobaltePopover.Title {...(!local.unstyled && { 'data-nsg-popover': 'title' })}>
                     {local.title}
                   </KobaltePopover.Title>
                 </Show>
                 <Show when={local.description}>
-                  <KobaltePopover.Description class="text-sm text-text-secondary">
+                  <KobaltePopover.Description {...(!local.unstyled && { 'data-nsg-popover': 'description' })}>
                     {local.description}
                   </KobaltePopover.Description>
                 </Show>
@@ -69,21 +65,5 @@ export function Popover(props: PopoverProps) {
         </KobaltePopover.Content>
       </KobaltePopover.Portal>
     </KobaltePopover>
-  )
-}
-
-/** Example usage - copy this pattern */
-export function PopoverExample() {
-  return (
-    <Popover
-      trigger={<Button variant="outline">Open Popover</Button>}
-      title="Popover Title"
-      description="This is a popover with some helpful information."
-      arrow
-    >
-      <div class="flex justify-end mt-2">
-        <Button variant="ghost" size="sm">Got it</Button>
-      </div>
-    </Popover>
   )
 }

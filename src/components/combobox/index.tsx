@@ -3,19 +3,6 @@ import { type JSX, splitProps, Show, For, createSignal, createEffect, on } from 
 import { cn } from '../../utils/cn'
 import { CheckIcon, SearchIcon, SpinnerIcon, XIcon } from '../../icons'
 
-/** @deprecated Use @utility nsg-combo-box-* in CSS instead */
-export const comboBoxStyles = {
-  control: 'nsg-combo-box-control',
-  controlInvalid: 'nsg-combo-box-control-invalid',
-  controlMultiple: 'nsg-combo-box-control-multi',
-  input: 'nsg-combo-box-input',
-  inputMultiple: 'nsg-combo-box-input-multi',
-  content: 'nsg-combo-box-content',
-  item: 'nsg-combo-box-item',
-  tag: 'nsg-combo-box-tag',
-  errorMessage: 'nsg-combo-box-error',
-}
-
 // ============================================================================
 // Types
 // ============================================================================
@@ -51,6 +38,7 @@ export type ComboBoxProps<T extends ComboBoxOption = ComboBoxOption> = {
   itemComponent?: (item: T, state: ComboBoxItemState) => JSX.Element
   prefix?: JSX.Element
   noResultComponent?: (inputValue: string) => JSX.Element
+  unstyled?: boolean
 }
 
 export type ComboBoxMultipleProps<T extends ComboBoxOption = ComboBoxOption> = Omit<ComboBoxProps<T>, 'value' | 'onChange' | 'multiple'> & {
@@ -108,6 +96,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
     'itemComponent',
     'prefix',
     'noResultComponent',
+    'unstyled',
   ])
 
   const isInvalid = () => !!local.errorMessage
@@ -198,7 +187,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const renderItemComponent = (itemProps: any) => (
     <KobalteSearch.Item
       item={itemProps.item}
-      class="nsg-combo-box-item"
+      {...(!local.unstyled && { 'data-nsg-combo-box': 'item' })}
     >
       {((state: { selected: () => boolean; highlighted: () => boolean; disabled: () => boolean } | undefined) => {
         if (!state) {
@@ -231,7 +220,8 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const renderContent = () => (
     <KobalteSearch.Portal>
       <KobalteSearch.Content
-        class={cn('z-50', 'nsg-combo-box-content')}
+        class={cn('z-50', !local.unstyled && 'nsg-combo-box')}
+        {...(!local.unstyled && { 'data-nsg-combo-box': 'content' })}
       >
         <KobalteSearch.Listbox class="p-1 max-h-60 overflow-auto" />
         <Show when={local.noResultComponent && inputValue().trim()}>
@@ -246,7 +236,10 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   // Single select
   if (!isMultiple()) {
     return (
-      <div class="flex flex-col gap-0.5">
+      <div
+        class={cn(!local.unstyled && 'nsg-combo-box')}
+        {...(!local.unstyled && { 'data-nsg-combo-box': 'root' })}
+      >
         <KobalteSearch<T>
           options={resolvedOptions()}
           onInputChange={handleInputChange}
@@ -266,18 +259,17 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
           {...others as any}
         >
           <KobalteSearch.Control
-            class={cn(
-              'nsg-combo-box-control',
-              isInvalid() && 'nsg-combo-box-control-invalid',
-              local.triggerClass
-            )}
+            class={cn(local.triggerClass)}
+            {...(!local.unstyled && { 'data-nsg-combo-box': 'control' })}
+            {...(isInvalid() && { 'data-invalid': true })}
           >
             <KobalteSearch.Icon class="text-text-muted shrink-0">
               {local.prefix ?? <SearchIcon />}
             </KobalteSearch.Icon>
             <KobalteSearch.Input
               onKeyDown={handleKeyDown}
-              class={cn('nsg-combo-box-input', local.inputClass)}
+              class={cn(local.inputClass)}
+              {...(!local.unstyled && { 'data-nsg-combo-box': 'input' })}
             />
             <KobalteSearch.Indicator class="text-text-muted shrink-0">
               <Show when={local.loading}>
@@ -288,7 +280,9 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
           {renderContent()}
         </KobalteSearch>
         <Show when={local.errorMessage}>
-          <span class="nsg-combo-box-error">{local.errorMessage}</span>
+          <span {...(!local.unstyled && { 'data-nsg-combo-box': 'error' })}>
+            {local.errorMessage}
+          </span>
         </Show>
       </div>
     )
@@ -297,7 +291,10 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   // Multiple select
   const multiProps = props as ComboBoxMultipleProps<T>
   return (
-    <div class="flex flex-col gap-0.5">
+    <div
+      class={cn(!local.unstyled && 'nsg-combo-box')}
+      {...(!local.unstyled && { 'data-nsg-combo-box': 'root' })}
+    >
       <KobalteSearch<T>
         multiple
         options={resolvedOptions()}
@@ -325,54 +322,57 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
         {...others as any}
       >
         <KobalteSearch.Control<T>
-          class={cn(
-            'nsg-combo-box-control-multi',
-            isInvalid() && 'nsg-combo-box-control-invalid',
-            local.triggerClass
-          )}
+          class={cn(local.triggerClass)}
+          {...(!local.unstyled && { 'data-nsg-combo-box': 'control' })}
+          data-variant="multiple"
+          {...(isInvalid() && { 'data-invalid': true })}
         >
-        {(_state) => (
-          <>
-            <div class="flex flex-wrap items-center gap-1.5 flex-1 min-w-0">
-              <For each={resolvedMultiValue()}>
-                {(option) => (
-                  <span
-                    class="nsg-combo-box-tag"
-                    onPointerDown={(e) => e.stopPropagation()}
-                  >
-                    {getOptionLabel(option)}
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const val = getOptionValue(option)
-                        const current = (props as ComboBoxMultipleProps<T>).value ?? []
-                        ;(props as ComboBoxMultipleProps<T>).onChange(current.filter((v) => v !== val))
-                      }}
-                      class="hover:bg-primary-200 rounded p-0.5"
+          {(_state) => (
+            <>
+              <div class="flex flex-wrap items-center gap-1.5 flex-1 min-w-0">
+                <For each={resolvedMultiValue()}>
+                  {(option) => (
+                    <span
+                      {...(!local.unstyled && { 'data-nsg-combo-box': 'tag' })}
+                      onPointerDown={(e) => e.stopPropagation()}
                     >
-                      <XIcon size="xs" />
-                    </button>
-                  </span>
-                )}
-              </For>
-              <KobalteSearch.Input
-                onKeyDown={handleKeyDown}
-                placeholder={resolvedMultiValue().length === 0 ? local.placeholder : undefined}
-                class={cn('nsg-combo-box-input-multi', local.inputClass)}
-              />
-            </div>
-            <KobalteSearch.Indicator class="text-text-muted shrink-0 self-center">
-              <Show when={local.loading}>
-                <SpinnerIcon />
-              </Show>
-            </KobalteSearch.Indicator>
-          </>
-        )}
-      </KobalteSearch.Control>
-      {renderContent()}
+                      {getOptionLabel(option)}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const val = getOptionValue(option)
+                          const current = (props as ComboBoxMultipleProps<T>).value ?? []
+                          ;(props as ComboBoxMultipleProps<T>).onChange(current.filter((v) => v !== val))
+                        }}
+                        class="hover:bg-primary-200 rounded p-0.5"
+                      >
+                        <XIcon size="xs" />
+                      </button>
+                    </span>
+                  )}
+                </For>
+                <KobalteSearch.Input
+                  onKeyDown={handleKeyDown}
+                  placeholder={resolvedMultiValue().length === 0 ? local.placeholder : undefined}
+                  class={cn(local.inputClass)}
+                  {...(!local.unstyled && { 'data-nsg-combo-box': 'input' })}
+                  data-variant="multiple"
+                />
+              </div>
+              <KobalteSearch.Indicator class="text-text-muted shrink-0 self-center">
+                <Show when={local.loading}>
+                  <SpinnerIcon />
+                </Show>
+              </KobalteSearch.Indicator>
+            </>
+          )}
+        </KobalteSearch.Control>
+        {renderContent()}
       </KobalteSearch>
       <Show when={local.errorMessage}>
-        <span class="nsg-combo-box-error">{local.errorMessage}</span>
+        <span {...(!local.unstyled && { 'data-nsg-combo-box': 'error' })}>
+          {local.errorMessage}
+        </span>
       </Show>
     </div>
   )

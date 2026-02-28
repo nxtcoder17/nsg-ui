@@ -1,17 +1,7 @@
 import { type JSX, splitProps, createSignal, createEffect, For, Show, onMount, onCleanup, createMemo, children } from 'solid-js'
+import { Dialog as KobalteDialog } from '@kobalte/core/dialog'
 import { cn } from '../../utils/cn'
 import { SearchIcon } from '../../icons'
-import { Dialog } from '../dialog'
-
-/** @deprecated Use @utility nsg-command-bar-* in CSS instead */
-export const commandBarStyles = {
-  input: 'nsg-command-bar-input',
-  groupHeader: 'nsg-command-bar-group-header',
-  item: 'nsg-command-bar-item',
-  itemHighlighted: 'nsg-command-bar-item-highlighted',
-  itemDefault: 'nsg-command-bar-item-default',
-  footer: 'nsg-command-bar-footer',
-}
 
 // ============================================================================
 // Sentinel types
@@ -264,108 +254,124 @@ function CommandBarRoot(props: CommandBarProps): JSX.Element {
   }
 
   return (
-    <Dialog
-      show={local.open}
-      onChange={local.onOpenChange}
-      position="top"
-      aria-label="Command bar"
-      contentClass={cn('shadow-xl', local.class)}
+    <KobalteDialog
+      open={local.open}
+      onOpenChange={local.onOpenChange}
+      modal
+      preventScroll
     >
-      {/* Search input */}
-      <div class="flex items-center gap-3 px-4 border-b border-border">
-        <SearchIcon class="w-5 h-5 text-text-muted shrink-0" />
-        <input
-          ref={inputRef}
-          type="text"
-          value={query()}
-          onInput={(e) => {
-            setQuery(e.currentTarget.value)
-            setHighlightedIndex(0)
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder={local.placeholder ?? 'Search...'}
-          class="nsg-command-bar-input"
-        />
-        <kbd class="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium text-text-muted bg-surface-sunken border border-border rounded">
-          esc
-        </kbd>
-      </div>
-
-      {/* Results list */}
-      <div ref={listRef} class="max-h-72 overflow-y-auto p-2">
-        <Show
-          when={filteredItems().length > 0}
-          fallback={
-            <div class="px-3 py-8 text-sm text-text-secondary text-center">
-              {local.noResultsMessage ?? 'No results found'}
+      <KobalteDialog.Portal>
+        <KobalteDialog.Overlay class="nsg-dialog" data-nsg-dialog="overlay" />
+        <div class="nsg-dialog fixed inset-0 z-50 flex justify-center items-start pt-[15vh] pointer-events-none" data-nsg-dialog="positioner">
+          <KobalteDialog.Content
+            class={cn(
+              'pointer-events-auto w-full max-w-lg mx-4',
+              'shadow-xl',
+              'data-[expanded]:animate-slide-up',
+              'focus:outline-none',
+              local.class
+            )}
+            data-nsg-dialog="content"
+            aria-label="Command bar"
+          >
+            {/* Search input */}
+            <div class="flex items-center gap-3 px-4 border-b border-border">
+              <SearchIcon class="w-5 h-5 text-text-muted shrink-0" />
+              <input
+                ref={inputRef}
+                type="text"
+                value={query()}
+                onInput={(e) => {
+                  setQuery(e.currentTarget.value)
+                  setHighlightedIndex(0)
+                }}
+                onKeyDown={handleKeyDown}
+                placeholder={local.placeholder ?? 'Search...'}
+                class="nsg-command-bar-input"
+              />
+              <kbd class="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium text-text-muted bg-surface-sunken border border-border rounded">
+                esc
+              </kbd>
             </div>
-          }
-        >
-          <For each={groupedEntries()}>
-            {(entry) => {
-              if (entry.type === 'header') {
-                return (
-                  <div class="nsg-command-bar-group-header">
-                    {entry.label}
+
+            {/* Results list */}
+            <div ref={listRef} class="max-h-72 overflow-y-auto p-2">
+              <Show
+                when={filteredItems().length > 0}
+                fallback={
+                  <div class="px-3 py-8 text-sm text-text-secondary text-center">
+                    {local.noResultsMessage ?? 'No results found'}
                   </div>
-                )
-              }
+                }
+              >
+                <For each={groupedEntries()}>
+                  {(entry) => {
+                    if (entry.type === 'header') {
+                      return (
+                        <div class="nsg-command-bar-group-header">
+                          {entry.label}
+                        </div>
+                      )
+                    }
 
-              const isHighlighted = () => entry.flatIndex === highlightedIndex()
-              const state = () => ({
-                highlighted: isHighlighted(),
-                disabled: entry.item.disabled ?? false,
-              })
+                    const isHighlighted = () => entry.flatIndex === highlightedIndex()
+                    const state = () => ({
+                      highlighted: isHighlighted(),
+                      disabled: entry.item.disabled ?? false,
+                    })
 
-              return (
-                <button
-                  type="button"
-                  data-index={entry.flatIndex}
-                  class={cn(
-                    'nsg-command-bar-item',
-                    isHighlighted()
-                      ? 'nsg-command-bar-item-highlighted'
-                      : 'nsg-command-bar-item-default',
-                  )}
-                  onMouseEnter={() => setHighlightedIndex(entry.flatIndex)}
-                  onClick={() => {
-                    local.onSelect(entry.item.id, entry.item.label)
-                    local.onOpenChange?.(false)
-                  }}
-                >
-                  <Show when={local.itemComponent} fallback={
-                    <>
-                      <Show when={entry.item.icon}>
-                        {(Icon) => {
-                          const IconComponent = Icon()
-                          return <IconComponent class={cn('w-5 h-5', isHighlighted() ? 'text-primary-600' : 'text-text-muted')} />
+                    return (
+                      <button
+                        type="button"
+                        data-index={entry.flatIndex}
+                        class={cn(
+                          'nsg-command-bar-item',
+                          isHighlighted()
+                            ? 'nsg-command-bar-item-highlighted'
+                            : 'nsg-command-bar-item-default',
+                        )}
+                        onMouseEnter={() => setHighlightedIndex(entry.flatIndex)}
+                        onClick={() => {
+                          local.onSelect(entry.item.id, entry.item.label)
+                          local.onOpenChange?.(false)
                         }}
-                      </Show>
-                      <span>{entry.item.label}</span>
-                    </>
-                  }>
-                    {local.itemComponent!(entry.item, state())}
-                  </Show>
-                </button>
-              )
-            }}
-          </For>
-        </Show>
-      </div>
+                      >
+                        <Show when={local.itemComponent} fallback={
+                          <>
+                            <Show when={entry.item.icon}>
+                              {(Icon) => {
+                                const IconComponent = Icon()
+                                return <IconComponent class={cn('w-5 h-5', isHighlighted() ? 'text-primary-600' : 'text-text-muted')} />
+                              }}
+                            </Show>
+                            <span>{entry.item.label}</span>
+                          </>
+                        }>
+                          {local.itemComponent!(entry.item, state())}
+                        </Show>
+                      </button>
+                    )
+                  }}
+                </For>
+              </Show>
+            </div>
 
-      {/* Footer */}
-      <div class="nsg-command-bar-footer">
-        <span class="flex items-center gap-1.5">
-          <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&uarr;</kbd>
-          <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&darr;</kbd>
-          <span>to navigate</span>
-        </span>
-        <span class="flex items-center gap-1.5">
-          <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&crarr;</kbd>
-          <span>to select</span>
-        </span>
-      </div>
-    </Dialog>
+            {/* Footer */}
+            <div class="nsg-command-bar-footer">
+              <span class="flex items-center gap-1.5">
+                <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&uarr;</kbd>
+                <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&darr;</kbd>
+                <span>to navigate</span>
+              </span>
+              <span class="flex items-center gap-1.5">
+                <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&crarr;</kbd>
+                <span>to select</span>
+              </span>
+            </div>
+          </KobalteDialog.Content>
+        </div>
+      </KobalteDialog.Portal>
+    </KobalteDialog>
   )
 }
 

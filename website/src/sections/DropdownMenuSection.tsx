@@ -1,143 +1,97 @@
 import { Component, createSignal } from 'solid-js'
-import { DropdownMenu, DropdownMenuExample } from 'nsg-ui/components/dropdown-menu'
+import { DropdownMenu } from 'nsg-ui/components/dropdown-menu'
 import { Button } from 'nsg-ui/components/button'
-import { Text } from 'nsg-ui/components/text'
 import { DemoCard } from '../components/DemoCard'
 import { MenuIcon, SettingsIcon, UserIcon, LogoutIcon } from '../icons'
+import { Section } from "../components/section"
 
-// Demo: Multiple selection (checkboxes)
 function MultiSelectDemo() {
   const [showGrid, setShowGrid] = createSignal(true)
   const [showRulers, setShowRulers] = createSignal(false)
 
   return (
     <DropdownMenu trigger={<Button variant="outline">View Options</Button>}>
-      <DropdownMenu.Select label="Display" multiple>
-        <DropdownMenu.Option label="Show Grid" checked={showGrid()} onChange={setShowGrid} />
-        <DropdownMenu.Option label="Show Rulers" checked={showRulers()} onChange={setShowRulers} />
-      </DropdownMenu.Select>
+      <DropdownMenu.MultiSelect label="Display">
+        <DropdownMenu.MultiSelectItem checked={showGrid()} onChange={setShowGrid}>Show Grid</DropdownMenu.MultiSelectItem>
+        <DropdownMenu.MultiSelectItem checked={showRulers()} onChange={setShowRulers}>Show Rulers</DropdownMenu.MultiSelectItem>
+      </DropdownMenu.MultiSelect>
     </DropdownMenu>
   )
 }
 
-// Demo: Custom rendering with render prop
-function CustomRenderDemo() {
-  const [selected, setSelected] = createSignal<string[]>(['grid'])
-
-  const toggle = (id: string) => {
-    setSelected(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id])
-  }
-
-  const optionClass = (checked: boolean) =>
-    `w-full px-2 py-1.5 rounded transition-colors ${checked ? 'bg-primary/15 text-primary font-medium' : ''}`
-
-  return (
-    <DropdownMenu trigger={<Button variant="outline">Display Settings</Button>}>
-      <DropdownMenu.Select label="Toggle Options" multiple>
-        <DropdownMenu.Option checked={selected().includes('grid')} onChange={() => toggle('grid')}>
-          {({ checked }) => <span class={optionClass(checked)}>Show Grid</span>}
-        </DropdownMenu.Option>
-        <DropdownMenu.Option checked={selected().includes('rulers')} onChange={() => toggle('rulers')}>
-          {({ checked }) => <span class={optionClass(checked)}>Show Rulers</span>}
-        </DropdownMenu.Option>
-        <DropdownMenu.Option checked={selected().includes('guides')} onChange={() => toggle('guides')}>
-          {({ checked }) => <span class={optionClass(checked)}>Show Guides</span>}
-        </DropdownMenu.Option>
-      </DropdownMenu.Select>
-    </DropdownMenu>
-  )
-}
-
-// Demo: Single selection (radio)
 function SingleSelectDemo() {
   const [theme, setTheme] = createSignal('system')
 
   return (
     <DropdownMenu trigger={<Button variant="outline">Theme: {theme()}</Button>}>
-      <DropdownMenu.Select label="Theme" value={theme()} onChange={setTheme}>
-        <DropdownMenu.Option value="light" label="Light" />
-        <DropdownMenu.Option value="dark" label="Dark" />
-        <DropdownMenu.Option value="system" label="System" />
-      </DropdownMenu.Select>
+      <DropdownMenu.SingleSelect label="Theme" value={theme()} onChange={setTheme}>
+        <DropdownMenu.SingleSelectItem value="light">Light</DropdownMenu.SingleSelectItem>
+        <DropdownMenu.SingleSelectItem value="dark">Dark</DropdownMenu.SingleSelectItem>
+        <DropdownMenu.SingleSelectItem value="system">System</DropdownMenu.SingleSelectItem>
+      </DropdownMenu.SingleSelect>
     </DropdownMenu>
   )
 }
 
 export const DropdownMenuSection: Component = () => {
   return (
-    <section id="dropdown-menu" class="scroll-mt-24 mb-20">
-      <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-            <MenuIcon class="w-4 h-4 text-primary" />
-          </div>
-          <h2 class="text-2xl font-bold text-text">Dropdown Menu</h2>
-        </div>
-        <p class="text-text-secondary ml-11">Versatile menu component with groups, checkboxes, and submenus.</p>
-      </div>
+    <Section
+      id="dropdown-menu"
+      header={{
+        title: "Dropdown Menu",
+        icon: MenuIcon,
+        description: "Versatile menu component with groups, checkboxes, and submenus.",
+      }}
+    >
+      <DemoCard title="Basic" description="Simple menu with actions and danger variant">
+        <DropdownMenu trigger={<Button variant="outline">Open Menu</Button>}>
+          <DropdownMenu.Group label="Actions">
+            <DropdownMenu.ActionItem onSelect={() => console.log('Edit')}>Edit</DropdownMenu.ActionItem>
+            <DropdownMenu.ActionItem onSelect={() => console.log('Duplicate')}>Duplicate</DropdownMenu.ActionItem>
+          </DropdownMenu.Group>
+          <DropdownMenu.Separator />
+          <DropdownMenu.ActionItem onSelect={() => console.log('Settings')}>Settings</DropdownMenu.ActionItem>
+          <DropdownMenu.Separator />
+          <DropdownMenu.ActionItem variant="danger" onSelect={() => console.log('Delete')}>Delete</DropdownMenu.ActionItem>
+        </DropdownMenu>
+      </DemoCard>
 
-      <div class="grid gap-6">
-        <DemoCard title="Library Example" description="Built-in example from the component">
-          <DropdownMenuExample />
-        </DemoCard>
+      <DemoCard title="With Icons" description="Enhanced visual hierarchy with icons">
+        <DropdownMenu trigger={<Button variant="outline"><SettingsIcon class="w-4 h-4 mr-2" />Settings</Button>}>
+          <DropdownMenu.ActionItem onSelect={() => console.log('Profile')}>
+            <UserIcon class="w-4 h-4 mr-2" /> Profile
+          </DropdownMenu.ActionItem>
+          <DropdownMenu.ActionItem onSelect={() => console.log('Settings')}>
+            <SettingsIcon class="w-4 h-4 mr-2" /> Settings
+          </DropdownMenu.ActionItem>
+          <DropdownMenu.Separator />
+          <DropdownMenu.ActionItem variant="danger" onSelect={() => console.log('Logout')}>
+            <LogoutIcon class="w-4 h-4 mr-2" /> Logout
+          </DropdownMenu.ActionItem>
+        </DropdownMenu>
+      </DemoCard>
 
-        <DemoCard title="With Icons" description="Enhanced visual hierarchy with icons">
-          <DropdownMenu trigger={<Button variant="outline"><SettingsIcon class="w-4 h-4 mr-2" />Settings</Button>}>
-            <DropdownMenu.ActionItem onSelect={() => console.log('Profile')}>
-              <Text class="flex flex-row place-items-baseline gap-2">
-                <UserIcon class="w-4 h-4" />
-                Profile
-              </Text>
-            </DropdownMenu.ActionItem>
+      <DemoCard title="Select (Multiple)" description="Toggle multiple options with checkmarks">
+        <MultiSelectDemo />
+      </DemoCard>
 
-            <DropdownMenu.ActionItem onSelect={() => console.log('Settings')}> 
-              <Text class="flex flex-row items-center gap-2">
-                <SettingsIcon class="w-4 h-4" />
-                Settings
-              </Text>
-            </DropdownMenu.ActionItem>
-            <DropdownMenu.Separator />
+      <DemoCard title="Select (Single)" description="Single selection from options">
+        <SingleSelectDemo />
+      </DemoCard>
 
-            <DropdownMenu.ActionItem variant="danger" onSelect={() => console.log('Logout')}>
-              <Text class="flex flex-row items-center gap-2">
-                <LogoutIcon class="w-4 h-4" />
-                Logout
-              </Text>
-            </DropdownMenu.ActionItem>
-          </DropdownMenu>
-        </DemoCard>
-
-        <DemoCard title="Select (Multiple)" description="Toggle multiple options with checkmarks">
-          <MultiSelectDemo />
-        </DemoCard>
-
-        <DemoCard title="Custom Render" description="Highlight background instead of checkmark">
-          <CustomRenderDemo />
-        </DemoCard>
-
-        <DemoCard title="Select (Single)" description="Single selection from options">
-          <SingleSelectDemo />
-        </DemoCard>
-
-        <DemoCard title="Nested Menu" description="Nested menu structure">
-          <DropdownMenu trigger={<Button>Share</Button>}>
-            <DropdownMenu.ActionItem label="Copy Link" onSelect={() => console.log('Copy Link')} />
-            <DropdownMenu.Menu label="Share to...">
-              <DropdownMenu.ActionItem onSelect={() => console.log('Twitter')}>
-                <Text class="flex flex-row items-center gap-2">
-                  Twitter
-                </Text>
-              </DropdownMenu.ActionItem>
-              <DropdownMenu.ActionItem label="Twitter" onSelect={() => console.log('Twitter')} />
-              <DropdownMenu.ActionItem label="Facebook" onSelect={() => console.log('Facebook')} />
-              <DropdownMenu.ActionItem label="LinkedIn" onSelect={() => console.log('LinkedIn')} />
-              <DropdownMenu.ActionItem label="Email" onSelect={() => console.log('Email')} />
-            </DropdownMenu.Menu>
-            <DropdownMenu.Separator />
-            <DropdownMenu.ActionItem label="Embed" onSelect={() => console.log('Embed')} />
-          </DropdownMenu>
-        </DemoCard>
-      </div>
-    </section>
+      <DemoCard title="Nested Menu" description="Nested menu structure">
+        <DropdownMenu trigger={<Button>Share</Button>}>
+          <DropdownMenu.ActionItem onSelect={() => console.log('Copy Link')}>Copy Link</DropdownMenu.ActionItem>
+          <DropdownMenu.Menu label="Share to...">
+            <DropdownMenu.ActionItem onSelect={() => console.log('Twitter')}>Twitter</DropdownMenu.ActionItem>
+            <DropdownMenu.ActionItem onSelect={() => console.log('Facebook')}>Facebook</DropdownMenu.ActionItem>
+            <DropdownMenu.ActionItem onSelect={() => console.log('LinkedIn')}>LinkedIn</DropdownMenu.ActionItem>
+            <DropdownMenu.ActionItem onSelect={() => console.log('Email')}>Email</DropdownMenu.ActionItem>
+          </DropdownMenu.Menu>
+          <DropdownMenu.Separator />
+          <DropdownMenu.ActionItem onSelect={() => console.log('Embed')}>Embed</DropdownMenu.ActionItem>
+        </DropdownMenu>
+      </DemoCard>
+    </Section>
   )
 }

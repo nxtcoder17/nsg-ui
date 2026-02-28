@@ -3,18 +3,6 @@ import { type JSX, splitProps, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
 import { DotIcon } from '../../icons'
 
-/** @deprecated Use @utility nsg-radio-group-* in CSS instead */
-export const radioGroupStyles = {
-  option: 'nsg-radio-group-option',
-  control: 'nsg-radio-group-control',
-  label: 'nsg-radio-group-label',
-  description: 'nsg-radio-group-description',
-}
-
-// ============================================================================
-// Types
-// ============================================================================
-
 export type RadioGroupProps = {
   value?: string
   defaultValue?: string
@@ -24,6 +12,7 @@ export type RadioGroupProps = {
   name?: string
   errorMessage?: string
   validationState?: 'valid' | 'invalid'
+  unstyled?: boolean
   class?: string
   children?: JSX.Element
 }
@@ -37,25 +26,12 @@ export type RadioOptionProps = {
   class?: string
 }
 
-// ============================================================================
-// RadioGroup Component
-// ============================================================================
-
-export const RadioGroup = (props: RadioGroupProps) => {
+const RadioGroupRoot = (props: RadioGroupProps) => {
   const [local, others] = splitProps(props, [
-    'value',
-    'defaultValue',
-    'onChange',
-    'orientation',
-    'disabled',
-    'name',
-    'errorMessage',
-    'validationState',
-    'class',
-    'children',
+    'value', 'defaultValue', 'onChange', 'orientation',
+    'disabled', 'name', 'errorMessage', 'validationState',
+    'unstyled', 'class', 'children',
   ])
-
-  const isInvalid = () => local.validationState === 'invalid'
 
   return (
     <KobalteRadioGroup
@@ -66,69 +42,55 @@ export const RadioGroup = (props: RadioGroupProps) => {
       validationState={local.validationState}
       disabled={local.disabled}
       name={local.name}
-      class={cn('flex flex-col gap-1', local.class)}
+      class={cn(!local.unstyled && 'nsg-radio-group', local.class)}
       {...others}
     >
-      <div
-        class={cn(
-          'flex',
-          local.orientation === 'horizontal' ? 'flex-row gap-4' : 'flex-col gap-2'
-        )}
-      >
+      <div {...(!local.unstyled && { 'data-nsg-radio-group': 'items' })}>
         {local.children}
       </div>
       <Show when={local.errorMessage}>
-        <div class={cn('text-xs text-danger-500', !isInvalid() && 'invisible')}>
+        <span {...(!local.unstyled && { 'data-nsg-radio-group': 'error' })}>
           {local.errorMessage}
-        </div>
+        </span>
       </Show>
     </KobalteRadioGroup>
   )
 }
 
-// ============================================================================
-// RadioGroup.Option Component
-// ============================================================================
-
 const Option = (props: RadioOptionProps) => {
   const [local, others] = splitProps(props, [
-    'value',
-    'label',
-    'description',
-    'disabled',
-    'unstyled',
-    'class',
+    'value', 'label', 'description', 'disabled', 'unstyled', 'class',
   ])
 
   return (
     <KobalteRadioGroup.Item
       value={local.value}
       disabled={local.disabled}
-      class={cn(
-        'group',
-        !local.unstyled && 'nsg-radio-group-option',
-        local.disabled && 'opacity-50 cursor-not-allowed',
-        local.class
-      )}
+      class={cn(local.class)}
+      {...(!local.unstyled && { 'data-nsg-radio-group': 'option' })}
       {...others}
     >
       <KobalteRadioGroup.ItemInput class="sr-only" />
       <KobalteRadioGroup.ItemControl
-        class={cn(
-          'w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-px',
-          !local.unstyled && 'nsg-radio-group-control',
-        )}
+        class="shrink-0"
+        {...(!local.unstyled && { 'data-nsg-radio-group': 'control' })}
       >
-        <KobalteRadioGroup.ItemIndicator>
-          <DotIcon size="xs" class="text-primary-500" />
+        <KobalteRadioGroup.ItemIndicator
+          {...(!local.unstyled && { 'data-nsg-radio-group': 'indicator' })}
+        >
+          <DotIcon size="xs" />
         </KobalteRadioGroup.ItemIndicator>
       </KobalteRadioGroup.ItemControl>
       <div class="flex flex-col gap-0.5">
-        <KobalteRadioGroup.ItemLabel class={cn(!local.unstyled && 'nsg-radio-group-label')}>
+        <KobalteRadioGroup.ItemLabel
+          {...(!local.unstyled && { 'data-nsg-radio-group': 'label' })}
+        >
           {local.label}
         </KobalteRadioGroup.ItemLabel>
         <Show when={local.description}>
-          <KobalteRadioGroup.ItemDescription class={cn(!local.unstyled && 'nsg-radio-group-description')}>
+          <KobalteRadioGroup.ItemDescription
+            {...(!local.unstyled && { 'data-nsg-radio-group': 'description' })}
+          >
             {local.description}
           </KobalteRadioGroup.ItemDescription>
         </Show>
@@ -137,4 +99,4 @@ const Option = (props: RadioOptionProps) => {
   )
 }
 
-RadioGroup.Option = Option
+export const RadioGroup = Object.assign(RadioGroupRoot, { Option })

@@ -2,6 +2,7 @@ import type { JSX } from 'solid-js'
 import { cn } from '../utils/cn'
 
 export type IconSize = 'xs' | 'sm' | 'md' | 'lg'
+export type Icon = import('solid-js').Component<JSX.HTMLAttributes<SVGSVGElement>>
 
 type IconProps = {
   class?: string
