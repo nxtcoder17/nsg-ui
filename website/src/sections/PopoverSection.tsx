@@ -1,25 +1,31 @@
 import { Component } from 'solid-js'
 import { Button } from 'nsg-ui'
-import { Popover, PopoverExample } from 'nsg-ui/components/popover'
+import { Popover } from 'nsg-ui/components/popover'
 import { DemoCard } from '../components/DemoCard'
 import { PopoverIcon, InfoIcon } from '../icons'
+import { Section } from '../components/section'
 
 export const PopoverSection: Component = () => {
   return (
-    <section id="popover" class="scroll-mt-24 mb-20">
-      <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-            <PopoverIcon class="w-4 h-4 text-primary" />
-          </div>
-          <h2 class="text-2xl font-bold text-text">Popover</h2>
-        </div>
-        <p class="text-text-secondary ml-11">Floating content panel anchored to a trigger element.</p>
-      </div>
-
-      <div class="grid gap-6">
-        <DemoCard title="Library Example" description="Built-in example from the component">
-          <PopoverExample />
+    <Section
+      id="popover"
+      header={{
+        title: "Popover",
+        icon: PopoverIcon,
+        description: "Floating content panel anchored to a trigger element."
+      }}
+    >
+        <DemoCard title="Basic" description="Popover with title, description, and action">
+          <Popover
+            trigger={<Button variant="outline">Open Popover</Button>}
+            title="Popover Title"
+            description="This is a popover with some helpful information."
+            arrow
+          >
+            <div class="flex justify-end mt-2">
+              <Button variant="ghost" size="sm">Got it</Button>
+            </div>
+          </Popover>
         </DemoCard>
 
         <DemoCard title="Placements" description="Position the popover relative to the trigger">
@@ -84,7 +90,6 @@ export const PopoverSection: Component = () => {
             </div>
           </Popover>
         </DemoCard>
-      </div>
-    </section>
+    </Section>
   )
 }

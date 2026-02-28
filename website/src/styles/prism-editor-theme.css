@@ -1,0 +1,36 @@
+/* Light theme (default) */
+@import 'solid-prism-editor/themes/vs-code-light.css';
+
+/* Dark theme - scoped under .dark */
+.dark .prism-code-editor{--pce-cursor: #aeafad;--pce-bg: #1e1e1e;--pce-widget-border: #444;--pce-widget-bg: #1e1e1e;--pce-widget-color: #ccc;--pce-widget-color-active: #fff;--pce-widget-color-options: #aaa;--pce-widget-bg-input: #262626;--pce-widget-bg-hover: #2e2e2e;--pce-widget-bg-active: #336699;--pce-widget-focus: #5299e0;--pce-search-match: #eb5e0054;--pce-widget-bg-error: #4d1919;--pce-widget-error: #cc0000;--pce-border-highlight: 2px solid #282828;--pce-selection-match: #add6ff26;--pce-line-number: #888;--pce-scrollbar: 0, 0%, 50%;--pce-bg-fold: #c5c5c5;--pce-guide-indent: #9994;--pce-ac-icon-class: #ee9d28;--pce-ac-icon-enum: #ee9d28;--pce-ac-icon-event: #ee9d28;--pce-ac-icon-function: #b180d7;--pce-ac-icon-interface: #75beff;--pce-ac-icon-variable: #75beff;--pce-selection: #264f78;color-scheme:dark}
+.dark .match-highlight{--pce-bg-highlight: #282828}
+.dark .pce-match{--pce-search-match: #675451}
+.dark .active-line{--pce-line-number: #ccc}
+.dark .active-indent{--pce-guide-indent: #eee6}
+.dark [class*=language-],.dark .token.url{color:#9cdcfe}
+.dark .pce-tooltip,.dark .token.punctuation,.dark .token.attr-equals,.dark .token.operator,.dark .token.combinator,.dark .token.plain-text{color:#d4d4d4}
+.dark .token.comment,.dark .token.prolog,.dark .token.blockquote{color:#6a9955}
+.dark .token.number,.dark .token.symbol,.dark .token.inserted,.dark .token.unit{color:#b5cea8}
+.dark .token.regex,.dark .language-regex,.dark .token.regex .punctuation,.dark .token.group,.dark .token.string,.dark .token.string-property.property,.dark .token.char,.dark .token.deleted,.dark .token.attr-value,.dark .token.attr-value:not(.script):not(.style)>.punctuation,.dark .token.color{color:#ce9178}
+.dark .token.doctype,.dark .token.operator.arrow,.dark .token.keyword,.dark .token.important,.dark .token.boolean,.dark .token.tag,.dark .token.entity,.dark .token.regex-flags{color:#569cd6}
+.dark .token.atrule .token.rule{color:#c586c0}
+.dark .token.function,.dark .token.alternation{color:#dcdcaa}
+.dark .token.class-name,.dark .token.builtin,.dark .token.maybe-class-name{color:#4ec9b0}
+.dark .token.doctype .name,.dark .token.atrule,.dark .token.atrule .url,.dark .token.property,.dark .token.variable,.dark .token.parameter,.dark .token.interpolation,.dark .token.attr-name{color:#9cdcfe}
+.dark .token.selector,.dark .token.escape{color:#d7ba7d}
+.dark .token.tag>.punctuation,.dark .token.doctype>.punctuation,.dark .token.cdata{color:gray}
+.dark .token.namespace{color:#4ec9b0}
+.dark .token.constant{color:#4fc1ff}
+.dark .token.char-set,.dark .token.regex .operator{color:#d16969}
+.dark .token.important.title .punctuation,.dark .token.list,.dark .token.bold *{color:#569cd6}
+.dark .language-markup,.dark .language-markdown,.dark .language-md,.dark .language-html,.dark .language-xml,.dark .language-svg,.dark .language-text,.dark .language-vue,.dark .language-svelte,.dark .language-astro,.dark .language-css,.dark .language-sass,.dark .language-scss,.dark .token.code.keyword,.dark .language-markdown .token.url{color:#d4d4d4}
+.dark .token.token.url>.content,.dark .token.code.code-snippet,.dark .token.url-reference .variable{color:#ce9178}
+.dark .token.quantifier{color:#d7ba7d}
+.dark .token.block>.keyword,.dark .token.keyword.module,.dark .token.keyword.control-flow,.dark .token.keyword-if,.dark .token.keyword-else,.dark .token.keyword-return,.dark .token.keyword-switch,.dark .token.keyword-case,.dark .token.keyword-default,.dark .token.keyword-import,.dark .token.keyword-from,.dark .token.keyword-export,.dark .token.keyword-as,.dark .token.keyword-for,.dark .token.keyword-while,.dark .token.keyword-break,.dark .token.keyword-continue,.dark .token.keyword-try,.dark .token.keyword-catch,.dark .token.keyword-finally,.dark .token.keyword-throw,.dark .token.keyword-yield,.dark .token.keyword-await{color:#c586c0}
+.dark .token.bracket-level-0,.dark .token.bracket-level-3,.dark .token.bracket-level-6,.dark .token.bracket-level-9{color:gold}
+.dark .token.bracket-level-1,.dark .token.bracket-level-4,.dark .token.bracket-level-7,.dark .token.bracket-level-10{color:orchid}
+.dark .token.bracket-level-2,.dark .token.bracket-level-5,.dark .token.bracket-level-8,.dark .token.bracket-level-11{color:#179fff}
+.dark .token.interpolation-punctuation{color:#569cd6}
+.dark .token.bracket-error{color:#ff1212cc}
+.dark .active-bracket{box-shadow:inset 0 0 0 1px #888,inset 0 0 0 9in #0064001a}
+.dark .active-tagname,.dark .word-matches span{background:#575757b8}

@@ -1,30 +1,23 @@
 import { Tabs as KobalteTabs } from '@kobalte/core/tabs'
-import { splitProps, JSX, For, children } from 'solid-js'
+import { splitProps, JSX, For, createContext, useContext, onMount, onCleanup, createSignal } from 'solid-js'
 import { cn } from '../../utils/cn'
 
-/** @deprecated Use @utility nsg-tabs-* in CSS instead */
-export const tabsStyles = {
-  list: 'nsg-tabs-list',
-  listVertical: 'nsg-tabs-list-vertical',
-  trigger: 'nsg-tabs-trigger',
-  triggerSelected: 'data-[selected]:text-primary-500',
-  triggerSelectedBorderBottom: 'border-b-2 border-transparent -mb-px data-[selected]:border-b-primary-500',
-  triggerSelectedBorderRight: 'text-left border-r-2 border-transparent -mr-px data-[selected]:border-r-primary-500',
-}
-
-// ============================================================================
-// Types
-// ============================================================================
-
 type TabItemData = {
-  $$tabItem: true
+  ref: HTMLSpanElement
   value: string
   trigger: JSX.Element
   disabled?: boolean
   content: JSX.Element
 }
 
-type TabItemProps = {
+type TabsContextValue = {
+  register: (item: TabItemData) => void
+  unregister: (value: string) => void
+}
+
+const TabsContext = createContext<TabsContextValue>()
+
+export type TabItemProps = {
   value: string
   trigger: JSX.Element
   disabled?: boolean
@@ -36,26 +29,30 @@ export type TabsProps = {
   defaultValue?: string
   onChange?: (value: string) => void
   orientation?: 'horizontal' | 'vertical'
-  indicatorColor?: string
   navigationOnly?: boolean
-  listClass?: string
-  triggerClass?: string
+  unstyled?: boolean
   class?: string
   children: JSX.Element
 }
 
-// ============================================================================
-// Components
-// ============================================================================
+function Item(props: TabItemProps) {
+  const ctx = useContext(TabsContext)
+  let ref!: HTMLSpanElement
 
-const Item = (props: TabItemProps): JSX.Element => {
-  return {
-    $$tabItem: true,
-    get value() { return props.value },
-    get trigger() { return props.trigger },
-    get disabled() { return props.disabled },
-    get content() { return props.children },
-  } as unknown as JSX.Element
+  onMount(() => {
+    ctx?.register({
+      ref,
+      get value() { return props.value },
+      get trigger() { return props.trigger },
+      get disabled() { return props.disabled },
+      get content() { return props.children },
+    })
+  })
+
+  onCleanup(() => ctx?.unregister(props.value))
+
+  // Hidden marker — its DOM position determines tab order
+  return <span ref={ref} data-tabs-item-marker style="display:none" />
 }
 
 const TabsRoot = (props: TabsProps) => {
@@ -64,91 +61,73 @@ const TabsRoot = (props: TabsProps) => {
     'defaultValue',
     'onChange',
     'orientation',
-    'indicatorColor',
     'navigationOnly',
-    'listClass',
-    'triggerClass',
+    'unstyled',
     'class',
     'children',
   ])
 
-  const resolved = children(() => local.children)
-  const items = () =>
-    resolved.toArray().filter((c: any) => c?.$$tabItem) as unknown as TabItemData[]
+  const [items, setItems] = createSignal<TabItemData[]>([])
 
-  const isVertical = () => local.orientation === 'vertical'
+  const ctx: TabsContextValue = {
+    register: (item) => {
+      setItems(prev => {
+        const all = [...prev, item]
+        // Sort by current DOM position — correct even when Show inserts mid-list
+        const markers = Array.from(
+          item.ref.parentElement?.querySelectorAll('[data-tabs-item-marker]') ?? []
+        )
+        return all.sort((a, b) => markers.indexOf(a.ref) - markers.indexOf(b.ref))
+      })
+    },
+    unregister: (value) =>
+      setItems(prev => prev.filter(i => i.value !== value)),
+  }
 
   return (
-    <KobalteTabs
-      value={local.value}
-      defaultValue={local.defaultValue}
-      onChange={local.onChange}
-      orientation={local.orientation}
-      class={cn(
-        'flex',
-        isVertical() ? 'flex-row gap-4' : 'flex-col gap-3',
-        local.class
-      )}
-      {...others}
-    >
-      <KobalteTabs.List
-        class={cn(
-          'flex shrink-0',
-          isVertical() ? 'flex-col' : 'flex-row',
-          !local.listClass && (isVertical()
-            ? 'nsg-tabs-list-vertical'
-            : 'nsg-tabs-list'),
-          local.listClass
-        )}
+    <TabsContext.Provider value={ctx}>
+      {/* Hidden container — Items render markers here to establish DOM order */}
+      <div data-tabs-items style="display:none">
+        {local.children}
+      </div>
+      <KobalteTabs
+        value={local.value}
+        defaultValue={local.defaultValue}
+        onChange={local.onChange}
+        orientation={local.orientation}
+        class={cn(!local.unstyled && 'nsg-tabs', local.class)}
+        {...others}
       >
-        <For each={items()}>
-          {(item) => (
-            <KobalteTabs.Trigger
-              value={item.value}
-              disabled={item.disabled}
-              class={cn(
-                !local.triggerClass && 'nsg-tabs-trigger',
-                'transition-colors',
-                'text-text-secondary hover:text-text',
-                'data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed',
-                local.indicatorColor
-                  ? 'data-[selected]:text-[var(--indicator-color)]'
-                  : tabsStyles.triggerSelected,
-                isVertical()
-                  ? cn(
-                      'text-left border-r-2 border-transparent -mr-px',
-                      local.indicatorColor
-                        ? 'data-[selected]:border-r-[var(--indicator-color)]'
-                        : 'data-[selected]:border-r-primary-500'
-                    )
-                  : cn(
-                      'border-b-2 border-transparent -mb-px',
-                      local.indicatorColor
-                        ? 'data-[selected]:border-b-[var(--indicator-color)]'
-                        : 'data-[selected]:border-b-primary-500'
-                    ),
-                local.triggerClass
-              )}
-              style={local.indicatorColor ? {
-                '--indicator-color': local.indicatorColor,
-              } as any : undefined}
-            >
-              {item.trigger}
-            </KobalteTabs.Trigger>
-          )}
-        </For>
-      </KobalteTabs.List>
+        <KobalteTabs.List
+          {...(!local.unstyled && { 'data-nsg-tabs': 'list' })}
+        >
+          <For each={items()}>
+            {(item) => (
+              <KobalteTabs.Trigger
+                value={item.value}
+                disabled={item.disabled}
+                {...(!local.unstyled && { 'data-nsg-tabs': 'trigger' })}
+              >
+                {item.trigger}
+              </KobalteTabs.Trigger>
+            )}
+          </For>
+        </KobalteTabs.List>
 
-      {!local.navigationOnly && (
-        <For each={items()}>
-          {(item) => (
-            <KobalteTabs.Content value={item.value} class="flex-1 outline-none">
-              {item.content}
-            </KobalteTabs.Content>
-          )}
-        </For>
-      )}
-    </KobalteTabs>
+        {!local.navigationOnly && (
+          <For each={items()}>
+            {(item) => (
+              <KobalteTabs.Content
+                value={item.value}
+                {...(!local.unstyled && { 'data-nsg-tabs': 'content' })}
+              >
+                {item.content}
+              </KobalteTabs.Content>
+            )}
+          </For>
+        )}
+      </KobalteTabs>
+    </TabsContext.Provider>
   )
 }
 

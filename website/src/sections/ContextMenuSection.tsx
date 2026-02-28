@@ -1,5 +1,6 @@
 import { Component, createSignal } from 'solid-js'
 import { ContextMenu } from 'nsg-ui/components/context-menu'
+import { Section } from '../components/section'
 import { DemoCard } from '../components/DemoCard'
 import { SettingsIcon, UserIcon, LogoutIcon } from '../icons'
 
@@ -24,16 +25,16 @@ function MultiSelectDemo() {
 
   return (
     <ContextMenu
-      content={
-        <ContextMenu.Select label="Display" multiple>
-          <ContextMenu.Option label="Show Grid" checked={showGrid()} onChange={setShowGrid} />
-          <ContextMenu.Option label="Show Rulers" checked={showRulers()} onChange={setShowRulers} />
-        </ContextMenu.Select>
+      trigger={
+        <div class="p-8 border border-dashed border-border rounded-lg text-center text-text-secondary cursor-context-menu">
+          Right-click here for view options
+        </div>
       }
     >
-      <div class="p-8 border border-dashed border-border rounded-lg text-center text-text-secondary cursor-context-menu">
-        Right-click here for view options
-      </div>
+      <ContextMenu.MultiSelect label="Display">
+        <ContextMenu.MultiSelectItem checked={showGrid()} onChange={setShowGrid}>Show Grid</ContextMenu.MultiSelectItem>
+        <ContextMenu.MultiSelectItem checked={showRulers()} onChange={setShowRulers}>Show Rulers</ContextMenu.MultiSelectItem>
+      </ContextMenu.MultiSelect>
     </ContextMenu>
   )
 }
@@ -44,82 +45,78 @@ function SingleSelectDemo() {
 
   return (
     <ContextMenu
-      content={
-        <ContextMenu.Select label="Theme" value={theme()} onChange={setTheme}>
-          <ContextMenu.Option value="light" label="Light" />
-          <ContextMenu.Option value="dark" label="Dark" />
-          <ContextMenu.Option value="system" label="System" />
-        </ContextMenu.Select>
+      trigger={
+        <div class="p-8 border border-dashed border-border rounded-lg text-center text-text-secondary cursor-context-menu">
+          Right-click to select theme (current: {theme()})
+        </div>
       }
     >
-      <div class="p-8 border border-dashed border-border rounded-lg text-center text-text-secondary cursor-context-menu">
-        Right-click to select theme (current: {theme()})
-      </div>
+      <ContextMenu.SingleSelect label="Theme" value={theme()} onChange={setTheme}>
+        <ContextMenu.SingleSelectItem value="light">Light</ContextMenu.SingleSelectItem>
+        <ContextMenu.SingleSelectItem value="dark">Dark</ContextMenu.SingleSelectItem>
+        <ContextMenu.SingleSelectItem value="system">System</ContextMenu.SingleSelectItem>
+      </ContextMenu.SingleSelect>
     </ContextMenu>
   )
 }
 
 export const ContextMenuSection: Component = () => {
   return (
-    <section id="context-menu" class="scroll-mt-24 mb-20">
-      <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-            <ContextMenuIcon class="w-4 h-4 text-primary" />
-          </div>
-          <h2 class="text-2xl font-bold text-text">Context Menu</h2>
-        </div>
-        <p class="text-text-secondary ml-11">Right-click triggered menu with groups, checkboxes, and submenus.</p>
-      </div>
-
-      <div class="grid gap-6">
-        <DemoCard title="Basic Actions" description="Simple action items with icons">
-          <ContextMenu
-            content={
-              <>
-                <ContextMenu.ActionItem label="Profile" icon={<UserIcon class="w-4 h-4" />} onSelect={() => console.log('Profile')} />
-                <ContextMenu.ActionItem label="Settings" icon={<SettingsIcon class="w-4 h-4" />} onSelect={() => console.log('Settings')} />
-                <ContextMenu.Separator />
-                <ContextMenu.ActionItem label="Logout" variant="danger" icon={<LogoutIcon class="w-4 h-4" />} onSelect={() => console.log('Logout')} />
-              </>
-            }
-          >
+    <Section id="context-menu"
+      header={{
+        title: "Context Menu",
+        icon: ContextMenuIcon,
+        description: "Right-click triggered menu with groups, checkboxes, and submenus."
+      }}
+    >
+      <DemoCard title="Basic Actions" description="Simple action items with icons">
+        <ContextMenu
+          trigger={
             <div class="p-8 border border-dashed border-border rounded-lg text-center text-text-secondary cursor-context-menu">
               Right-click for actions
             </div>
-          </ContextMenu>
-        </DemoCard>
+          }
+        >
+          <ContextMenu.ActionItem onSelect={() => console.log('Profile')}>
+            <UserIcon class="w-4 h-4 mr-2" /> Profile
+          </ContextMenu.ActionItem>
+          <ContextMenu.ActionItem onSelect={() => console.log('Settings')}>
+            <SettingsIcon class="w-4 h-4 mr-2" /> Settings
+          </ContextMenu.ActionItem>
+          <ContextMenu.Separator />
+          <ContextMenu.ActionItem variant="danger" onSelect={() => console.log('Logout')}>
+            <LogoutIcon class="w-4 h-4 mr-2" /> Logout
+          </ContextMenu.ActionItem>
+        </ContextMenu>
+      </DemoCard>
 
-        <DemoCard title="Select (Multiple)" description="Toggle multiple options with checkmarks">
-          <MultiSelectDemo />
-        </DemoCard>
+      <DemoCard title="Select (Multiple)" description="Toggle multiple options with checkmarks">
+        <MultiSelectDemo />
+      </DemoCard>
 
-        <DemoCard title="Select (Single)" description="Single selection from options">
-          <SingleSelectDemo />
-        </DemoCard>
+      <DemoCard title="Select (Single)" description="Single selection from options">
+        <SingleSelectDemo />
+      </DemoCard>
 
-        <DemoCard title="Nested Menu" description="Submenus for organized options">
-          <ContextMenu
-            content={
-              <>
-                <ContextMenu.ActionItem label="Copy" onSelect={() => console.log('Copy')} />
-                <ContextMenu.ActionItem label="Paste" onSelect={() => console.log('Paste')} />
-                <ContextMenu.Menu label="Share to...">
-                  <ContextMenu.ActionItem label="Twitter" onSelect={() => console.log('Twitter')} />
-                  <ContextMenu.ActionItem label="Facebook" onSelect={() => console.log('Facebook')} />
-                  <ContextMenu.ActionItem label="Email" onSelect={() => console.log('Email')} />
-                </ContextMenu.Menu>
-                <ContextMenu.Separator />
-                <ContextMenu.ActionItem label="Delete" variant="danger" onSelect={() => console.log('Delete')} />
-              </>
-            }
-          >
+      <DemoCard title="Nested Menu" description="Submenus for organized options">
+        <ContextMenu
+          trigger={
             <div class="p-8 border border-dashed border-border rounded-lg text-center text-text-secondary cursor-context-menu">
               Right-click for nested menu
             </div>
-          </ContextMenu>
-        </DemoCard>
-      </div>
-    </section>
+          }
+        >
+          <ContextMenu.ActionItem onSelect={() => console.log('Copy')}>Copy</ContextMenu.ActionItem>
+          <ContextMenu.ActionItem onSelect={() => console.log('Paste')}>Paste</ContextMenu.ActionItem>
+          <ContextMenu.Menu label="Share to...">
+            <ContextMenu.ActionItem onSelect={() => console.log('Twitter')}>Twitter</ContextMenu.ActionItem>
+            <ContextMenu.ActionItem onSelect={() => console.log('Facebook')}>Facebook</ContextMenu.ActionItem>
+            <ContextMenu.ActionItem onSelect={() => console.log('Email')}>Email</ContextMenu.ActionItem>
+          </ContextMenu.Menu>
+          <ContextMenu.Separator />
+          <ContextMenu.ActionItem variant="danger" onSelect={() => console.log('Delete')}>Delete</ContextMenu.ActionItem>
+        </ContextMenu>
+      </DemoCard>
+    </Section>
   )
 }
