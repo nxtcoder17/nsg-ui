@@ -58,6 +58,7 @@ export const ComboBoxSection: Component = () => {
   // Object options
   const [country, setCountry] = createSignal('')
   // Multiple selection
+  const [frameworkOptions, setFrameworkOptions] = createSignal(frameworks)
   const [selectedFrameworks, setSelectedFrameworks] = createSignal<string[]>([])
 
   // Client-side filtering (search-style)
@@ -185,15 +186,22 @@ export const ComboBoxSection: Component = () => {
             <div class="w-80">
               <ComboBox
                 multiple
-                options={frameworks}
+                options={frameworkOptions()}
                 value={selectedFrameworks()}
                 onChange={setSelectedFrameworks}
                 placeholder="Select frameworks..."
-                noResultComponent={(inputValue) => (
+                noResultComponent={(inputValue, clear) => (
                   <button
                     type="button"
                     class="w-full text-left text-sm text-primary-600 hover:text-primary-700 px-1 py-1 rounded hover:bg-primary-50"
-                    onClick={() => setSelectedFrameworks([...selectedFrameworks(), inputValue])}
+                    onClick={() => {
+                      const val = inputValue.trim()
+                      if (val && !selectedFrameworks().includes(val)) {
+                        setFrameworkOptions(prev => [...prev, { value: val, label: val }])
+                        setSelectedFrameworks(prev => [...prev, val])
+                      }
+                      clear()
+                    }}
                   >
                     + Add "{inputValue}"
                   </button>
@@ -284,11 +292,11 @@ export const ComboBoxSection: Component = () => {
               placeholder="Search or add tags..."
               noResultsMessage="No matching tags"
               prefix={<SearchIcon />}
-              noResultComponent={(inputValue) => (
+              noResultComponent={(inputValue, clear) => (
                 <button
                   type="button"
                   class="w-full text-left text-sm text-primary-600 hover:text-primary-700 px-1 py-1 rounded hover:bg-primary-50"
-                  onClick={() => addTag(inputValue)}
+                  onClick={() => { addTag(inputValue); clear() }}
                 >
                   + Add "{inputValue}"
                 </button>

@@ -276,7 +276,7 @@ export const utilityRegistry: UtilityGroup[] = [
     utilities: [
       {
         name: '.nsg-combo-box [data-nsg-combo-box="control"]',
-        defaults: `.nsg-combo-box {\n  [data-nsg-combo-box="control"] {\n    @apply flex items-center gap-2 h-10 px-3 rounded-md bg-surface-raised border border-border;\n    @apply focus-within:ring-2 focus-within:border-transparent focus-within:ring-ring;\n    &[data-variant="multiple"] {\n      @apply items-start gap-2 min-h-10 px-2 py-1.5;\n    }\n    &[data-invalid] {\n      @apply border-danger-500 focus-within:ring-danger-200;\n    }\n  }\n}`,
+        defaults: `.nsg-combo-box {\n  [data-nsg-combo-box="control"] {\n    @apply flex items-center gap-2 h-10 px-3 rounded-md bg-surface-raised border border-border;\n    @apply focus-within:ring-2 focus-within:border-transparent focus-within:ring-ring;\n    &[data-variant="multiple"] {\n      @apply items-start gap-2 h-auto min-h-10 px-2 py-1.5;\n    }\n    &[data-invalid] {\n      @apply border-danger-500 focus-within:ring-danger-200;\n    }\n  }\n}`,
       },
       {
         name: '.nsg-combo-box [data-nsg-combo-box="input"]',
