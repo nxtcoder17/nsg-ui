@@ -3,10 +3,6 @@ import { type JSX, splitProps, Show, For, createSignal, createEffect, on } from 
 import { cn } from '../../utils/cn'
 import { CheckIcon, SearchIcon, SpinnerIcon, XIcon } from '../../icons'
 
-// ============================================================================
-// Types
-// ============================================================================
-
 export type ComboBoxOption = string | { value: string; label: string; disabled?: boolean }
 
 export type ComboBoxItemState = {
@@ -37,7 +33,7 @@ export type ComboBoxProps<T extends ComboBoxOption = ComboBoxOption> = {
   optionDisabled?: keyof T | ((option: T) => boolean)
   itemComponent?: (item: T, state: ComboBoxItemState) => JSX.Element
   prefix?: JSX.Element
-  noResultComponent?: (inputValue: string) => JSX.Element
+  noResultComponent?: (inputValue: string, clear: () => void) => JSX.Element
   unstyled?: boolean
 }
 
@@ -46,10 +42,6 @@ export type ComboBoxMultipleProps<T extends ComboBoxOption = ComboBoxOption> = O
   value: string[]
   onChange: (value: string[]) => void
 }
-
-// ============================================================================
-// Helper Functions
-// ============================================================================
 
 const getOptionValue = <T extends ComboBoxOption>(option: T): string => {
   if (typeof option === 'string') return option
@@ -65,10 +57,6 @@ const getOptionDisabled = <T extends ComboBoxOption>(option: T): boolean => {
   if (typeof option === 'string') return false
   return option.disabled ?? false
 }
-
-// ============================================================================
-// Component
-// ============================================================================
 
 export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T>): JSX.Element
 export function ComboBox<T extends ComboBoxOption>(props: ComboBoxMultipleProps<T>): JSX.Element
@@ -102,6 +90,8 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const isInvalid = () => !!local.errorMessage
   const isMultiple = () => (props as ComboBoxMultipleProps<T>).multiple === true
 
+  let inputEl: HTMLInputElement | undefined
+
   const [inputValue, setInputValue] = createSignal('')
   const [internalOptions, setInternalOptions] = createSignal<T[]>(local.options)
 
@@ -110,6 +100,12 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
       setInternalOptions(() => opts)
     }
   }))
+
+  const clearInput = () => {
+    if (inputEl) inputEl.value = ''
+    handleInputChange('')
+    inputEl?.focus()
+  }
 
   const hasExternalFilter = () => !!local.onInputChange
   const resolvedTriggerMode = () => local.triggerMode ?? 'focus'
@@ -223,10 +219,10 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
         class={cn('z-50', !local.unstyled && 'nsg-combo-box')}
         {...(!local.unstyled && { 'data-nsg-combo-box': 'content' })}
       >
-        <KobalteSearch.Listbox class="p-1 max-h-60 overflow-auto" />
+        <KobalteSearch.Listbox class="p-1 max-h-60 overflow-auto empty:hidden" />
         <Show when={local.noResultComponent && inputValue().trim()}>
-          <KobalteSearch.NoResult class="px-3 py-6 text-sm text-text-secondary text-center">
-            {local.noResultComponent!(inputValue().trim())}
+          <KobalteSearch.NoResult class="px-3 py-2 text-sm text-text-secondary">
+            {local.noResultComponent!(inputValue().trim(), clearInput)}
           </KobalteSearch.NoResult>
         </Show>
       </KobalteSearch.Content>
@@ -267,6 +263,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
               {local.prefix ?? <SearchIcon />}
             </KobalteSearch.Icon>
             <KobalteSearch.Input
+              ref={(el) => { inputEl = el }}
               onKeyDown={handleKeyDown}
               class={cn(local.inputClass)}
               {...(!local.unstyled && { 'data-nsg-combo-box': 'input' })}
@@ -352,6 +349,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
                   )}
                 </For>
                 <KobalteSearch.Input
+                  ref={(el) => { inputEl = el }}
                   onKeyDown={handleKeyDown}
                   placeholder={resolvedMultiValue().length === 0 ? local.placeholder : undefined}
                   class={cn(local.inputClass)}

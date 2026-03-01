@@ -714,7 +714,7 @@
       @apply focus-within:ring-2 focus-within:border-transparent focus-within:ring-ring;
 
       &[data-variant="multiple"] {
-        @apply items-start gap-2 min-h-10 px-2 py-1.5;
+        @apply items-start gap-2 h-auto min-h-10 px-2 py-1.5;
       }
 
       &[data-invalid] {
