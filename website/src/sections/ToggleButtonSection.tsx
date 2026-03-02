@@ -1,6 +1,7 @@
 import { Component, createSignal } from 'solid-js'
 import { ToggleButton } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'
+import { Section } from '../components/section'
 
 export function ToggleButtonIcon(props: { class?: string }) {
   return (
@@ -53,18 +54,14 @@ export const ToggleButtonSection: Component = () => {
   const [liked, setLiked] = createSignal(false)
 
   return (
-    <section id="toggle-button" class="scroll-mt-24 mb-20">
-      <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-            <ToggleButtonIcon class="w-4 h-4 text-primary" />
-          </div>
-          <h2 class="text-2xl font-bold text-text">Toggle Button</h2>
-        </div>
-        <p class="text-text-secondary ml-11">Two-state button that can be on (pressed) or off.</p>
-      </div>
-
-      <div class="grid gap-6">
+    <Section
+      id="toggle-button"
+      header={{
+        title: "Toggle Button",
+        icon: ToggleButtonIcon,
+        description: "Two-state button that can be on (pressed) or off.",
+      }}
+    >
         <DemoCard title="Basic" description="Simple toggle with text">
           <div class="flex gap-3">
             <ToggleButton pressed={bold()} onChange={setBold}>
@@ -161,7 +158,6 @@ export const ToggleButtonSection: Component = () => {
             <ToggleButton disabled defaultPressed>Disabled On</ToggleButton>
           </div>
         </DemoCard>
-      </div>
-    </section>
+    </Section>
   )
 }

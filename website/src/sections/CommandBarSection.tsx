@@ -3,6 +3,7 @@ import { CommandBar } from 'nsg-ui'
 import { Button } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'
 import { sections } from '../components/Sidebar'
+import { Section }  from '../components/section';
 
 function CommandBarIcon(props: { class?: string }) {
   return (
@@ -25,18 +26,14 @@ export const CommandBarSection: Component = () => {
   }
 
   return (
-    <section id="command-bar" class="scroll-mt-24 mb-20">
-      <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-            <CommandBarIcon class="w-4 h-4 text-primary" />
-          </div>
-          <h2 class="text-2xl font-bold text-text">CommandBar</h2>
-        </div>
-        <p class="text-text-secondary ml-11">Spotlight-style command palette for quick navigation and actions.</p>
-      </div>
-
-      <div class="grid gap-6">
+    <Section 
+      id="command-bar"
+      header={{
+        title: "CommandBar",
+        icon: CommandBarIcon,
+        description: "Spotlight-style command palette for quick navigation and actions.",
+      }}
+    >
         <DemoCard title="Global Shortcut" description="Press Cmd+K (Mac) or Ctrl+K (Windows/Linux) anywhere on this page">
           <div class="space-y-4">
             <div class="flex items-center gap-4">
@@ -87,7 +84,6 @@ export const CommandBarSection: Component = () => {
             <p><strong class="text-text">Customizable:</strong> Custom item rendering, filter function, and styling</p>
           </div>
         </DemoCard>
-      </div>
-    </section>
+    </Section>
   )
 }

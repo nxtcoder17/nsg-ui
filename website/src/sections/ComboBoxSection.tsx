@@ -2,6 +2,7 @@ import { Component, createSignal } from 'solid-js'
 import { ComboBox } from 'nsg-ui'
 import { SearchIcon } from 'nsg-ui/icons'
 import { DemoCard } from '../components/DemoCard'
+import { Section } from "../components/section";
 
 export function ComboBoxIcon(props: { class?: string }) {
   return (
@@ -134,19 +135,14 @@ export const ComboBoxSection: Component = () => {
   }
 
   return (
-    <section id="combobox" class="scroll-mt-24 mb-20">
-      <div class="mb-8">
-        <div class="flex items-center gap-3 mb-2">
-          <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-            <ComboBoxIcon class="w-4 h-4 text-primary" />
-          </div>
-          <h2 class="text-2xl font-bold text-text">ComboBox</h2>
-        </div>
-        <p class="text-text-secondary ml-11">Searchable dropdown with filtering, multi-select, and extensible content.</p>
-      </div>
-
-      <div class="grid gap-6">
-        {/* Basic string options */}
+    <Section
+      id="text"
+      header={{
+        title: "ComboBox",
+        icon: ComboBoxIcon,
+        description: "Searchable dropdown with filtering, multi-select, and extensible content.",
+      }}
+    >
         <DemoCard title="String Options" description="Simple array of strings">
           <div class="flex items-start gap-8">
             <div class="w-64">
@@ -333,7 +329,6 @@ export const ComboBoxSection: Component = () => {
             />
           </div>
         </DemoCard>
-      </div>
-    </section>
+    </Section>
   )
 }

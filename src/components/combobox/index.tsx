@@ -91,6 +91,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const isMultiple = () => (props as ComboBoxMultipleProps<T>).multiple === true
 
   let inputEl: HTMLInputElement | undefined
+  let noResultEl: HTMLElement | undefined
 
   const [inputValue, setInputValue] = createSignal('')
   const [internalOptions, setInternalOptions] = createSignal<T[]>(local.options)
@@ -102,9 +103,12 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   }))
 
   const clearInput = () => {
-    if (inputEl) inputEl.value = ''
     handleInputChange('')
-    inputEl?.focus()
+    if (inputEl) {
+      inputEl.value = ''
+      inputEl.dispatchEvent(new InputEvent('input', { bubbles: true }))
+      inputEl.focus()
+    }
   }
 
   const hasExternalFilter = () => !!local.onInputChange
@@ -162,7 +166,14 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
 
     const opts = resolvedOptions()
     const firstEnabled = opts.find((opt) => !getOptionDisabled(opt))
-    if (!firstEnabled) return
+    if (!firstEnabled) {
+      if (local.noResultComponent && inputValue().trim() && noResultEl) {
+        e.preventDefault()
+        const btn = noResultEl.querySelector<HTMLElement>('button, [role="button"]')
+        btn?.click()
+      }
+      return
+    }
     e.preventDefault()
 
     if (isMultiple()) {
@@ -221,7 +232,10 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
       >
         <KobalteSearch.Listbox class="p-1 max-h-60 overflow-auto empty:hidden" />
         <Show when={local.noResultComponent && inputValue().trim()}>
-          <KobalteSearch.NoResult class="px-3 py-2 text-sm text-text-secondary">
+          <KobalteSearch.NoResult
+            ref={(el) => { noResultEl = el }}
+            class="px-3 py-2 text-sm text-text-secondary"
+          >
             {local.noResultComponent!(inputValue().trim(), clearInput)}
           </KobalteSearch.NoResult>
         </Show>
