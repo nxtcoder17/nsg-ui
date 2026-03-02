@@ -265,7 +265,7 @@ function CommandBarRoot(props: CommandBarProps): JSX.Element {
         <div class="nsg-dialog fixed inset-0 z-50 flex justify-center items-start pt-[15vh] pointer-events-none" data-nsg-dialog="positioner">
           <KobalteDialog.Content
             class={cn(
-              'pointer-events-auto w-full max-w-lg mx-4',
+              'nsg-command-bar pointer-events-auto w-full max-w-lg mx-4',
               'shadow-xl',
               'data-[expanded]:animate-slide-up',
               'focus:outline-none',
@@ -287,7 +287,7 @@ function CommandBarRoot(props: CommandBarProps): JSX.Element {
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder={local.placeholder ?? 'Search...'}
-                class="nsg-command-bar-input"
+                data-nsg-command-bar="input"
               />
               <kbd class="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium text-text-muted bg-surface-sunken border border-border rounded">
                 esc
@@ -308,7 +308,7 @@ function CommandBarRoot(props: CommandBarProps): JSX.Element {
                   {(entry) => {
                     if (entry.type === 'header') {
                       return (
-                        <div class="nsg-command-bar-group-header">
+                        <div data-nsg-command-bar="group-header">
                           {entry.label}
                         </div>
                       )
@@ -324,12 +324,8 @@ function CommandBarRoot(props: CommandBarProps): JSX.Element {
                       <button
                         type="button"
                         data-index={entry.flatIndex}
-                        class={cn(
-                          'nsg-command-bar-item',
-                          isHighlighted()
-                            ? 'nsg-command-bar-item-highlighted'
-                            : 'nsg-command-bar-item-default',
-                        )}
+                        data-nsg-command-bar="item"
+                        {...(isHighlighted() ? { 'data-highlighted': '' } : {})}
                         onMouseEnter={() => setHighlightedIndex(entry.flatIndex)}
                         onClick={() => {
                           local.onSelect(entry.item.id, entry.item.label)
@@ -357,7 +353,7 @@ function CommandBarRoot(props: CommandBarProps): JSX.Element {
             </div>
 
             {/* Footer */}
-            <div class="nsg-command-bar-footer">
+            <div data-nsg-command-bar="footer">
               <span class="flex items-center gap-1.5">
                 <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&uarr;</kbd>
                 <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&darr;</kbd>
