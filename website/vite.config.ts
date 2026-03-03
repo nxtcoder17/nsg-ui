@@ -17,6 +17,7 @@ export default defineConfig({
     target: 'esnext',
   },
   resolve: {
+    dedupe: ['solid-js', '@kobalte/core'],
     alias: {
       'nsg-ui/theme.css': resolve(__dirname, '../dist/theme.css'),
       'nsg-ui/icons': resolve(__dirname, '../src/icons'),
