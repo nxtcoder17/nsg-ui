@@ -82,10 +82,11 @@ export type SegmentedControlItemProps = {
   unstyled?: boolean
   class?: string
   children?: JSX.Element
+  'aria-label'?: string
 }
 
 const Item = (props: SegmentedControlItemProps) => {
-  const [local, others] = splitProps(props, ['value', 'disabled', 'unstyled', 'class', 'children'])
+  const [local, others] = splitProps(props, ['value', 'disabled', 'unstyled', 'class', 'children', 'aria-label'])
 
   return (
     <KobalteSegmentedControl.Item
@@ -95,7 +96,7 @@ const Item = (props: SegmentedControlItemProps) => {
       {...(!local.unstyled && { 'data-nsg-segmented-control': 'item' })}
       {...others}
     >
-      <KobalteSegmentedControl.ItemInput class="sr-only" />
+      <KobalteSegmentedControl.ItemInput class="sr-only" aria-label={local['aria-label']} />
       <KobalteSegmentedControl.ItemLabel
         class="flex items-center justify-center w-full h-full"
         {...(!local.unstyled && { 'data-nsg-segmented-control': 'item-label' })}

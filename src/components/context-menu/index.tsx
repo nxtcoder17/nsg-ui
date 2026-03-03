@@ -1,5 +1,6 @@
 import { ContextMenu as KobalteContextMenu } from '@kobalte/core/context-menu'
 import { type JSX, splitProps, Show } from 'solid-js'
+import { Dynamic } from 'solid-js/web'
 import { cn } from '../../utils/cn'
 import { CheckIcon, DotIcon, ChevronRightIcon, type Icon } from '../../icons'
 
@@ -216,7 +217,7 @@ function Menu(props: MenuProps) {
         disabled={local.disabled}
       >
         <Show when={local.icon}>
-          <local.icon {...(!local.unstyled && { 'data-nsg-context-menu': 'submenu-trigger-icon' })} />
+          <Dynamic component={local.icon} {...(!local.unstyled && { 'data-nsg-context-menu': 'submenu-trigger-icon' })} />
         </Show>
         {local.label}
         <ChevronRightIcon {...(!local.unstyled && { 'data-nsg-context-menu': 'submenu-trigger-chevron' })} />

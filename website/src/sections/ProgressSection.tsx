@@ -36,10 +36,10 @@ export const ProgressSection: Component = () => {
       <div class="grid gap-6">
         <DemoCard title="Basic" description="Simple progress bar">
           <div class="max-w-md space-y-4">
-            <Progress value={25} />
-            <Progress value={50} />
-            <Progress value={75} />
-            <Progress value={100} />
+            <Progress value={25} aria-label="25% complete" />
+            <Progress value={50} aria-label="50% complete" />
+            <Progress value={75} aria-label="75% complete" />
+            <Progress value={100} aria-label="100% complete" />
           </div>
         </DemoCard>
 
@@ -75,16 +75,16 @@ export const ProgressSection: Component = () => {
 
         <DemoCard title="Sizes" description="Different track heights">
           <div class="max-w-md space-y-4">
-            <Progress value={60} size="sm" />
-            <Progress value={60} size="md" />
-            <Progress value={60} size="lg" />
+            <Progress value={60} size="sm" aria-label="Small progress, 60% complete" />
+            <Progress value={60} size="md" aria-label="Medium progress, 60% complete" />
+            <Progress value={60} size="lg" aria-label="Large progress, 60% complete" />
           </div>
         </DemoCard>
 
         <DemoCard title="Indeterminate" description="Unknown duration loading state">
           <div class="max-w-md space-y-4">
             <Progress indeterminate label="Loading..." />
-            <Progress indeterminate variant="success" />
+            <Progress indeterminate variant="success" aria-label="Loading" />
           </div>
         </DemoCard>
       </div>

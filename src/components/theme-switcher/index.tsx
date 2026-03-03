@@ -64,17 +64,17 @@ export const ThemeSwitcher = (props: ThemeSwitcherProps) => {
       onChange={(v) => setTheme(v as Theme)}
       class={cn(props.class)}
     >
-      <SegmentedControl.Item value="light">
+      <SegmentedControl.Item value="light" aria-label="Light theme">
         <SunIcon size="sm" />
         <Show when={props.withLabels}>Light</Show>
       </SegmentedControl.Item>
 
-      <SegmentedControl.Item value="dark">
+      <SegmentedControl.Item value="dark" aria-label="Dark theme">
         <MoonIcon size="sm" />
         <Show when={props.withLabels}>Dark</Show>
       </SegmentedControl.Item>
 
-      <SegmentedControl.Item value="system">
+      <SegmentedControl.Item value="system" aria-label="System theme">
         <MonitorIcon size="sm" />
         <Show when={props.withLabels}>System</Show>
       </SegmentedControl.Item>

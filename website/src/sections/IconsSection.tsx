@@ -109,7 +109,7 @@ export const IconsSection: Component = () => {
             <span class="font-mono text-xs text-text-muted">lg + w-5</span>
           </div>
           <div class="flex flex-col items-center gap-2">
-            <Button size="icon">
+            <Button size="icon" aria-label="Confirm">
               <CheckIcon class="w-5 h-5" />
             </Button>
             <span class="font-mono text-xs text-text-muted">icon + w-5</span>

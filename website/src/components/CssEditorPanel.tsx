@@ -90,7 +90,7 @@ export const CssEditorPanel: Component = () => {
     <>
       <button
         onClick={toggleOpen}
-        class="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full bg-primary-600 text-white shadow-lg hover:bg-primary-700 transition-colors text-sm font-medium"
+        class="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full bg-primary-600 dark:bg-primary-400 text-white shadow-lg hover:bg-primary-700 dark:hover:bg-primary-500 transition-colors text-sm font-medium"
       >
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />

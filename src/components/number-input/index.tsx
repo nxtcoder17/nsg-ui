@@ -99,7 +99,7 @@ export const NumberInput = (props: NumberInputProps) => {
 
       <div class={wrapperStyles()}>
         <Show when={local.showButtons}>
-          <NumberField.DecrementTrigger class={buttonStyles}>
+          <NumberField.DecrementTrigger class={buttonStyles} aria-label="Decrease value">
             <MinusIcon size="sm" />
           </NumberField.DecrementTrigger>
         </Show>
@@ -119,7 +119,7 @@ export const NumberInput = (props: NumberInputProps) => {
         </Show>
 
         <Show when={local.showButtons}>
-          <NumberField.IncrementTrigger class={buttonStyles}>
+          <NumberField.IncrementTrigger class={buttonStyles} aria-label="Increase value">
             <PlusIcon size="sm" />
           </NumberField.IncrementTrigger>
         </Show>

@@ -100,6 +100,7 @@ export const ToggleButtonSection: Component = () => {
                   variant="ghost"
                   size="icon"
                   class="rounded-r-none"
+                  aria-label="Bold"
                 >
                   <BoldIcon />
                 </ToggleButton>
@@ -109,6 +110,7 @@ export const ToggleButtonSection: Component = () => {
                   variant="ghost"
                   size="icon"
                   class="rounded-none border-x border-border"
+                  aria-label="Italic"
                 >
                   <ItalicIcon />
                 </ToggleButton>
@@ -118,6 +120,7 @@ export const ToggleButtonSection: Component = () => {
                   variant="ghost"
                   size="icon"
                   class="rounded-l-none"
+                  aria-label="Underline"
                 >
                   <UnderlineIcon />
                 </ToggleButton>
@@ -132,6 +135,7 @@ export const ToggleButtonSection: Component = () => {
                 variant="ghost"
                 size="icon"
                 class="text-warning-500"
+                aria-label="Favorite"
               >
                 <StarIcon filled={starred()} />
               </ToggleButton>
@@ -145,6 +149,7 @@ export const ToggleButtonSection: Component = () => {
                 variant="ghost"
                 size="icon"
                 class="text-danger-500"
+                aria-label="Like"
               >
                 <HeartIcon filled={liked()} />
               </ToggleButton>

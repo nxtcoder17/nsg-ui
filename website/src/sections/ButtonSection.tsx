@@ -43,7 +43,7 @@ export const ButtonSection: Component = () => {
           <Button size="sm">Small</Button>
           <Button size="md">Medium</Button>
           <Button size="lg">Large</Button>
-          <Button size="icon">
+          <Button size="icon" aria-label="Add">
             <PlusIcon class="w-5 h-5" />
           </Button>
         </div>
