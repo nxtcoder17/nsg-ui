@@ -100,3 +100,39 @@ jobs:
           jq --arg v "$VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
           echo "Publishing Package version: $VERSION"
           bunx npm publish --provenance --access public
+
+      - name: Write job summary
+        if: always()
+        env:
+          IS_TAG: ${{ needs.github-release.outputs.is_tag }}
+          SEMVER: ${{ needs.github-release.outputs.semver }}
+          COMMIT_SLUG: ${{ needs.github-release.outputs.commit_slug }}
+        run: |
+          PKG_NAME=$(jq -r '.name' package.json)
+          if [ "$IS_TAG" = "true" ]; then
+            VERSION="$SEMVER"
+            TAG="latest"
+          else
+            VERSION="$SEMVER.$COMMIT_SLUG"
+            TAG="nightly"
+          fi
+          cat >> "$GITHUB_STEP_SUMMARY" <<EOF
+          ## 📦 NPM Publish Summary
+
+          | Field    | Value |
+          | -------- | ----- |
+          | Package  | \`$PKG_NAME\` |
+          | Version  | \`$VERSION\` |
+          | Tag      | \`$TAG\` |
+          | Commit   | \`${{ github.sha }}\` |
+          | Registry | [npmjs.com/$PKG_NAME](https://www.npmjs.com/package/$PKG_NAME) |
+
+          ### Install
+          \`\`\`sh
+          # npm
+          npm install $PKG_NAME@$VERSION
+
+          # bun
+          bun add $PKG_NAME@$VERSION
+          \`\`\`
+          EOF
