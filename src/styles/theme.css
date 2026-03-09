@@ -40,11 +40,11 @@
   --color-success-200: oklch(88% 0.08 145);
   --color-success-300: oklch(78% 0.12 145);
   --color-success-400: oklch(68% 0.16 145);
-  --color-success-500: oklch(55% 0.17 145);
-  --color-success-600: oklch(48% 0.16 145);
-  --color-success-700: oklch(40% 0.14 145);
-  --color-success-800: oklch(32% 0.11 145);
-  --color-success-900: oklch(25% 0.08 145);
+  --color-success-500: oklch(50% 0.17 145);
+  --color-success-600: oklch(45% 0.16 145);
+  --color-success-700: oklch(38% 0.14 145);
+  --color-success-800: oklch(30% 0.11 145);
+  --color-success-900: oklch(24% 0.08 145);
   --color-success-950: oklch(18% 0.05 145);
 
   --color-warning-50: oklch(98% 0.02 75);
@@ -52,12 +52,12 @@
   --color-warning-200: oklch(90% 0.1 75);
   --color-warning-300: oklch(85% 0.14 75);
   --color-warning-400: oklch(78% 0.16 75);
-  --color-warning-500: oklch(70% 0.17 75);
-  --color-warning-600: oklch(60% 0.16 75);
-  --color-warning-700: oklch(50% 0.14 75);
-  --color-warning-800: oklch(40% 0.11 75);
-  --color-warning-900: oklch(30% 0.08 75);
-  --color-warning-950: oklch(20% 0.05 75);
+  --color-warning-500: oklch(55% 0.17 75);
+  --color-warning-600: oklch(48% 0.16 75);
+  --color-warning-700: oklch(40% 0.14 75);
+  --color-warning-800: oklch(32% 0.11 75);
+  --color-warning-900: oklch(25% 0.08 75);
+  --color-warning-950: oklch(18% 0.05 75);
 
   --color-surface: oklch(98% 0.005 50);
   --color-surface-raised: oklch(100% 0 0);
@@ -72,8 +72,8 @@
   --color-primary-hover: oklch(45% 0.2 260);
   --color-danger: oklch(55% 0.2 25);
   --color-danger-hover: oklch(48% 0.2 25);
-  --color-success: oklch(55% 0.17 145);
-  --color-warning: oklch(70% 0.17 75);
+  --color-success: oklch(50% 0.17 145);
+  --color-warning: oklch(55% 0.17 75);
 
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -111,7 +111,7 @@
   --color-danger-200: oklch(32% 0.1 25);
   --color-danger-300: oklch(42% 0.13 25);
   --color-danger-400: oklch(55% 0.15 25);
-  --color-danger-500: oklch(62% 0.16 25);
+  --color-danger-500: oklch(66% 0.16 25);
   --color-danger-600: oklch(70% 0.14 25);
   --color-danger-700: oklch(78% 0.1 25);
   --color-danger-800: oklch(85% 0.06 25);
