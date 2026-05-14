@@ -1,5 +1,5 @@
-import { Component, createSignal, onMount, onCleanup } from 'solid-js'
-import { Sidebar, SectionId, sections } from './components/Sidebar'
+import { type Component, createSignal, onMount, onCleanup } from 'solid-js'
+import { Sidebar, type SectionId, sections } from './components/Sidebar'
 import { Header } from './components/Header'
 import { ColorPaletteSection } from './sections/ColorPaletteSection'
 import { ButtonSection } from './sections/ButtonSection'
@@ -15,6 +15,7 @@ import { TextInputSection } from './sections/TextInputSection'
 import { NumberInputSection } from './sections/NumberInputSection'
 import { TabsSection } from './sections/TabsSection'
 import { SegmentedControlSection } from './sections/SegmentedControlSection'
+import { ThemeSwitcherSection } from './sections/ThemeSwitcherSection'
 import { BadgeSection } from './sections/BadgeSection'
 import { LinkSection } from './sections/LinkSection'
 import { SeparatorSection } from './sections/SeparatorSection'
@@ -92,6 +93,7 @@ const App: Component = () => {
           <NumberInputSection />
           <TabsSection />
           <SegmentedControlSection />
+          <ThemeSwitcherSection />
           <BadgeSection />
           <LinkSection />
           <SeparatorSection />

@@ -1,4 +1,4 @@
-import { Component, For } from 'solid-js'
+import { type Component, For } from 'solid-js'
 import { Section } from "../components/section";
 
 const colorScales = [

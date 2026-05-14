@@ -1,4 +1,4 @@
-import { Component } from 'solid-js'
+import type { Component } from 'solid-js'
 import { Button } from 'nsg-ui'
 import { Popover } from 'nsg-ui/components/popover'
 import { DemoCard } from '../components/DemoCard'

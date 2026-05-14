@@ -1,4 +1,4 @@
-import { Component, createSignal } from 'solid-js'
+import { type Component, createSignal } from 'solid-js'
 import { CommandBar } from 'nsg-ui'
 import { Button } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'

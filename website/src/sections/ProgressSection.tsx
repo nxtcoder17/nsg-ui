@@ -1,4 +1,4 @@
-import { Component, createSignal, onCleanup } from 'solid-js'
+import { type Component, createSignal, onCleanup } from 'solid-js'
 import { Progress } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'
 

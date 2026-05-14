@@ -1,4 +1,4 @@
-import { Component, For } from 'solid-js'
+import { type Component, For } from 'solid-js'
 import { Button } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'
 import { DemoWithCode } from '../components/CodeBlock'

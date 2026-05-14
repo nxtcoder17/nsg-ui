@@ -2,3 +2,5 @@ node_modules/
 dist/
 .secrets/
 tsup.config.bundled_*
+.nixy
+nixy.local.yml

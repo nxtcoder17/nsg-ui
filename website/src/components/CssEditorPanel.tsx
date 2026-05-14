@@ -1,4 +1,4 @@
-import { Component, createSignal, onMount, For, Show } from 'solid-js'
+import { type Component, createSignal, onMount, For, Show } from 'solid-js'
 import { Editor } from 'solid-prism-editor'
 import { basicSetup } from 'solid-prism-editor/setups'
 import 'solid-prism-editor/prism/languages/css'

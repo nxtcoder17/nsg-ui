@@ -1,4 +1,4 @@
-import { Component } from 'solid-js'
+import type { Component } from 'solid-js'
 import { Text } from 'nsg-ui'
 import { DemoWithCode } from '../components/CodeBlock'
 import {Section} from '../components/section'

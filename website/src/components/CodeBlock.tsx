@@ -1,5 +1,9 @@
-import { Component, createSignal, Show } from 'solid-js'
+import { type Component, createSignal, Show } from 'solid-js'
 import { Card } from 'nsg-ui'
+import { Editor } from 'solid-prism-editor'
+import 'solid-prism-editor/prism/languages/tsx'
+import 'solid-prism-editor/layout.css'
+import '../styles/prism-editor-theme.css'
 
 interface CodeBlockProps {
   code: string
@@ -17,12 +21,18 @@ export const CodeBlock: Component<CodeBlockProps> = (props) => {
 
   return (
     <div class="relative group">
-      <pre class="bg-neutral-900 text-neutral-100 rounded-lg p-4 overflow-x-auto text-sm font-mono">
-        <code>{props.code}</code>
-      </pre>
+      <div class="rounded-lg overflow-hidden [&_.prism-code-editor]:!text-sm [&_.prism-code-editor]:!p-4">
+        <Editor
+          language={props.language ?? 'tsx'}
+          value={props.code}
+          readOnly
+          tabSize={2}
+          insertSpaces
+        />
+      </div>
       <button
         onClick={copyToClipboard}
-        class="absolute top-2 right-2 px-2 py-1 rounded text-xs bg-neutral-700 text-neutral-300 hover:bg-neutral-600 opacity-0 group-hover:opacity-100 transition-opacity"
+        class="absolute top-2 right-2 px-2 py-1 rounded text-xs bg-neutral-700/80 text-neutral-300 hover:bg-neutral-600 opacity-0 group-hover:opacity-100 transition-opacity z-10"
       >
         {copied() ? 'Copied!' : 'Copy'}
       </button>

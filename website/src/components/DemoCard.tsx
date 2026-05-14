@@ -1,4 +1,4 @@
-import { JSX } from 'solid-js'
+import type { JSX } from 'solid-js'
 import { Card } from 'nsg-ui'
 
 interface DemoCardProps {

@@ -1,4 +1,4 @@
-import { For, JSX, Component } from 'solid-js'
+import { For, JSX, type Component } from 'solid-js'
 import { ButtonIcon, DialogIcon, PopoverIcon, MenuIcon, LayersIcon } from '../icons'
 import { IconsIcon } from '../sections/IconsSection'
 import { ToastIcon } from '../sections/ToastSection'
@@ -9,6 +9,7 @@ import { TextInputIcon } from '../sections/TextInputSection'
 import { NumberInputIcon } from '../sections/NumberInputSection'
 import { TabsIcon } from '../sections/TabsSection'
 import { SegmentedControlIcon } from '../sections/SegmentedControlSection'
+import { ThemeSwitcherIcon } from '../sections/ThemeSwitcherSection'
 import { BadgeIcon } from '../sections/BadgeSection'
 import { LinkIcon } from '../sections/LinkSection'
 import { SeparatorIcon } from '../sections/SeparatorSection'
@@ -55,6 +56,7 @@ export const sections = [
   { id: 'number-input', label: 'NumberInput', icon: NumberInputIcon },
   { id: 'tabs', label: 'Tabs', icon: TabsIcon },
   { id: 'segmented-control', label: 'Segmented Control', icon: SegmentedControlIcon },
+  { id: 'theme-switcher', label: 'Theme Switcher', icon: ThemeSwitcherIcon },
   { id: 'badge', label: 'Badge', icon: BadgeIcon },
   { id: 'link', label: 'Link', icon: LinkIcon },
   { id: 'separator', label: 'Separator', icon: SeparatorIcon },

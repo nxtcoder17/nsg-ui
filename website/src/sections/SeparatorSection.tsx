@@ -1,4 +1,4 @@
-import { Component } from 'solid-js'
+import type { Component } from 'solid-js'
 import { Separator } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'
 
