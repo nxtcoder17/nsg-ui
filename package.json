@@ -8,14 +8,14 @@
   "types": "./dist/index/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index/index.d.ts",
       "solid": "./dist/index/index.jsx",
-      "import": "./dist/index/index.js",
-      "types": "./dist/index/index.d.ts"
+      "import": "./dist/index/index.js"
     },
     "./icons": {
+      "types": "./dist/icons/index.d.ts",
       "solid": "./dist/icons/index.jsx",
-      "import": "./dist/icons/index.js",
-      "types": "./dist/icons/index.d.ts"
+      "import": "./dist/icons/index.js"
     },
     "./theme.css": "./dist/theme.css"
   },
@@ -29,19 +29,19 @@
     "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
-    "@kobalte/core": "^0.13.0",
-    "solid-js": "^1.8.0"
+    "@kobalte/core": "^0.13.11",
+    "solid-js": "^1.9.13"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^2.6.0"
+    "clsx": "2.1.1",
+    "tailwind-merge": "2.6.1"
   },
   "devDependencies": {
-    "@kobalte/core": "^0.13.7",
-    "solid-js": "^1.9.4",
-    "tsup": "^8.3.5",
-    "tsup-preset-solid": "^2.2.0",
-    "typescript": "^5.7.3"
+    "@kobalte/core": "0.13.11",
+    "solid-js": "1.9.13",
+    "tsup": "8.3.5",
+    "tsup-preset-solid": "2.2.0",
+    "typescript": "6.0.3"
   },
   "keywords": [
     "solid",
