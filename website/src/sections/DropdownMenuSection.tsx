@@ -10,7 +10,7 @@ function MultiSelectDemo() {
   const [showRulers, setShowRulers] = createSignal(false)
 
   return (
-    <DropdownMenu trigger={<Button variant="outline">View Options</Button>}>
+    <DropdownMenu trigger={<Button kind="outline">View Options</Button>}>
       <DropdownMenu.MultiSelect label="Display">
         <DropdownMenu.MultiSelectItem checked={showGrid()} onChange={setShowGrid}>Show Grid</DropdownMenu.MultiSelectItem>
         <DropdownMenu.MultiSelectItem checked={showRulers()} onChange={setShowRulers}>Show Rulers</DropdownMenu.MultiSelectItem>
@@ -23,7 +23,7 @@ function SingleSelectDemo() {
   const [theme, setTheme] = createSignal('system')
 
   return (
-    <DropdownMenu trigger={<Button variant="outline">Theme: {theme()}</Button>}>
+    <DropdownMenu trigger={<Button kind="outline">Theme: {theme()}</Button>}>
       <DropdownMenu.SingleSelect label="Theme" value={theme()} onChange={setTheme}>
         <DropdownMenu.SingleSelectItem value="light">Light</DropdownMenu.SingleSelectItem>
         <DropdownMenu.SingleSelectItem value="dark">Dark</DropdownMenu.SingleSelectItem>
@@ -44,7 +44,7 @@ export const DropdownMenuSection: Component = () => {
       }}
     >
       <DemoCard title="Basic" description="Simple menu with actions and danger variant">
-        <DropdownMenu trigger={<Button variant="outline">Open Menu</Button>}>
+        <DropdownMenu trigger={<Button kind="outline">Open Menu</Button>}>
           <DropdownMenu.Group label="Actions">
             <DropdownMenu.ActionItem onSelect={() => console.log('Edit')}>Edit</DropdownMenu.ActionItem>
             <DropdownMenu.ActionItem onSelect={() => console.log('Duplicate')}>Duplicate</DropdownMenu.ActionItem>
@@ -52,12 +52,12 @@ export const DropdownMenuSection: Component = () => {
           <DropdownMenu.Separator />
           <DropdownMenu.ActionItem onSelect={() => console.log('Settings')}>Settings</DropdownMenu.ActionItem>
           <DropdownMenu.Separator />
-          <DropdownMenu.ActionItem variant="danger" onSelect={() => console.log('Delete')}>Delete</DropdownMenu.ActionItem>
+          <DropdownMenu.ActionItem kind="danger" onSelect={() => console.log('Delete')}>Delete</DropdownMenu.ActionItem>
         </DropdownMenu>
       </DemoCard>
 
       <DemoCard title="With Icons" description="Enhanced visual hierarchy with icons">
-        <DropdownMenu trigger={<Button variant="outline"><SettingsIcon class="w-4 h-4 mr-2" />Settings</Button>}>
+        <DropdownMenu trigger={<Button kind="outline"><SettingsIcon class="w-4 h-4 mr-2" />Settings</Button>}>
           <DropdownMenu.ActionItem onSelect={() => console.log('Profile')}>
             <UserIcon class="w-4 h-4 mr-2" /> Profile
           </DropdownMenu.ActionItem>
@@ -65,7 +65,7 @@ export const DropdownMenuSection: Component = () => {
             <SettingsIcon class="w-4 h-4 mr-2" /> Settings
           </DropdownMenu.ActionItem>
           <DropdownMenu.Separator />
-          <DropdownMenu.ActionItem variant="danger" onSelect={() => console.log('Logout')}>
+          <DropdownMenu.ActionItem kind="danger" onSelect={() => console.log('Logout')}>
             <LogoutIcon class="w-4 h-4 mr-2" /> Logout
           </DropdownMenu.ActionItem>
         </DropdownMenu>

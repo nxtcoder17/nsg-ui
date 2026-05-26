@@ -75,9 +75,9 @@ export const ToggleButtonSection: Component = () => {
 
         <DemoCard title="Variants" description="Different visual styles">
           <div class="flex gap-3">
-            <ToggleButton variant="default">Default</ToggleButton>
-            <ToggleButton variant="outline">Outline</ToggleButton>
-            <ToggleButton variant="ghost">Ghost</ToggleButton>
+            <ToggleButton kind="default">Default</ToggleButton>
+            <ToggleButton kind="outline">Outline</ToggleButton>
+            <ToggleButton kind="ghost">Ghost</ToggleButton>
           </div>
         </DemoCard>
 
@@ -97,7 +97,7 @@ export const ToggleButtonSection: Component = () => {
                 <ToggleButton
                   pressed={bold()}
                   onChange={setBold}
-                  variant="ghost"
+                  kind="ghost"
                   size="icon"
                   class="rounded-r-none"
                   aria-label="Bold"
@@ -107,7 +107,7 @@ export const ToggleButtonSection: Component = () => {
                 <ToggleButton
                   pressed={italic()}
                   onChange={setItalic}
-                  variant="ghost"
+                  kind="ghost"
                   size="icon"
                   class="rounded-none border-x border-border"
                   aria-label="Italic"
@@ -117,7 +117,7 @@ export const ToggleButtonSection: Component = () => {
                 <ToggleButton
                   pressed={underline()}
                   onChange={setUnderline}
-                  variant="ghost"
+                  kind="ghost"
                   size="icon"
                   class="rounded-l-none"
                   aria-label="Underline"
@@ -132,7 +132,7 @@ export const ToggleButtonSection: Component = () => {
               <ToggleButton
                 pressed={starred()}
                 onChange={setStarred}
-                variant="ghost"
+                kind="ghost"
                 size="icon"
                 class="text-warning-500"
                 aria-label="Favorite"
@@ -146,7 +146,7 @@ export const ToggleButtonSection: Component = () => {
               <ToggleButton
                 pressed={liked()}
                 onChange={setLiked}
-                variant="ghost"
+                kind="ghost"
                 size="icon"
                 class="text-danger-500"
                 aria-label="Like"

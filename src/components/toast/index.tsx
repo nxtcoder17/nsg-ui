@@ -7,7 +7,7 @@ import { cn } from '../../utils/cn'
 // Types
 // ============================================================================
 
-export type ToastVariant = 'info' | 'success' | 'warning' | 'danger'
+export type ToastKind = 'info' | 'success' | 'warning' | 'danger'
 
 export type ToastPayload = {
   title: string
@@ -27,7 +27,7 @@ export type ToastRegionProps = {
 }
 
 type ToastData = ToastPayload & {
-  variant: ToastVariant
+  kind: ToastKind
 }
 
 // ============================================================================
@@ -113,10 +113,10 @@ const AlertCircleIcon = (props: { class?: string }): JSX.Element => (
 )
 
 // ============================================================================
-// Variant Styles
+// Kind Styles
 // ============================================================================
 
-const variantStyles: Record<ToastVariant, { container: string; icon: string }> = {
+const kindStyles: Record<ToastKind, { container: string; icon: string }> = {
   info: {
     container: 'border-primary-200 bg-primary-50',
     icon: 'text-primary-500',
@@ -135,7 +135,7 @@ const variantStyles: Record<ToastVariant, { container: string; icon: string }> =
   },
 }
 
-const variantIcons: Record<ToastVariant, (props: { class?: string }) => JSX.Element> = {
+const kindIcons: Record<ToastKind, (props: { class?: string }) => JSX.Element> = {
   info: InfoIcon,
   success: CheckCircleIcon,
   warning: AlertTriangleIcon,
@@ -165,8 +165,8 @@ type ToastItemProps = {
 }
 
 const ToastItem = (props: ToastItemProps) => {
-  const Icon = variantIcons[props.data.variant]
-  const styles = variantStyles[props.data.variant]
+  const Icon = kindIcons[props.data.kind]
+  const styles = kindStyles[props.data.kind]
   const showCloseIcon = props.data.withCloseIcon !== false
 
   return (
@@ -260,12 +260,12 @@ const ensureRegion = () => {
 // Toast API
 // ============================================================================
 
-const showToast = (variant: ToastVariant, payload: ToastPayload): number => {
+const showToast = (kind: ToastKind, payload: ToastPayload): number => {
   ensureRegion()
 
   const data: ToastData = {
     ...payload,
-    variant,
+    kind,
     withCloseIcon: payload.withCloseIcon !== false,
   }
 
@@ -282,13 +282,13 @@ export const toast = {
   warning: (payload: ToastPayload): number => showToast('warning', payload),
   danger: (payload: ToastPayload): number => showToast('danger', payload),
 
-  update: (id: number, payload: Partial<ToastPayload> & { variant?: ToastVariant }): void => {
-    const variant = payload.variant ?? 'info'
+  update: (id: number, payload: Partial<ToastPayload> & { kind?: ToastKind }): void => {
+    const kind = payload.kind ?? 'info'
     const data: ToastData = {
       title: payload.title ?? '',
       description: payload.description,
       withCloseIcon: payload.withCloseIcon !== false,
-      variant,
+      kind,
     }
 
     kobalteToaster.update(id, (props) => (

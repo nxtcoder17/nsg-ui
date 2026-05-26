@@ -90,7 +90,7 @@ function CloseButton(props: ButtonOwnProps & { unstyled?: boolean }) {
   if (local.unstyled) {
     return <KobalteDialog.CloseButton {...others} />
   }
-  return <KobalteDialog.CloseButton as={Button} variant="ghost" {...others} />
+  return <KobalteDialog.CloseButton as={Button} kind="ghost" {...others} />
 }
 
 Dialog.CloseButton = CloseButton;

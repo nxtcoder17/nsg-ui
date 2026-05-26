@@ -2,7 +2,7 @@ import { Progress as KobalteProgress } from '@kobalte/core/progress'
 import { splitProps, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
 
-export type ProgressVariant = 'default' | 'success' | 'warning' | 'danger'
+export type ProgressKind = 'default' | 'success' | 'warning' | 'danger'
 
 export type ProgressProps = {
   value?: number
@@ -11,14 +11,14 @@ export type ProgressProps = {
   indeterminate?: boolean
   label?: string
   showValue?: boolean
-  variant?: ProgressVariant
-  /** Custom fill color (CSS color string). Overrides variant when set. */
+  kind?: ProgressKind
+  /** Custom fill color (CSS color string). Overrides kind when set. */
   color?: string
   size?: 'sm' | 'md' | 'lg'
   class?: string
 }
 
-const variantStyles: Record<ProgressVariant, string> = {
+const kindStyles: Record<ProgressKind, string> = {
   default: 'bg-primary-500',
   success: 'bg-success-500',
   warning: 'bg-warning-500',
@@ -39,7 +39,7 @@ export const Progress = (props: ProgressProps) => {
     'indeterminate',
     'label',
     'showValue',
-    'variant',
+    'kind',
     'color',
     'size',
     'class',
@@ -85,7 +85,7 @@ export const Progress = (props: ProgressProps) => {
         <KobalteProgress.Fill
           class={cn(
             'h-full rounded-full transition-all duration-300',
-            !local.color && variantStyles[local.variant ?? 'default'],
+            !local.color && kindStyles[local.kind ?? 'default'],
             local.indeterminate && 'animate-progress-indeterminate w-1/3'
           )}
           style={{

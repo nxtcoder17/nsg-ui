@@ -6,11 +6,11 @@ import { cn } from '../../utils/cn'
 // Types
 // ============================================================================
 
-export type LinkVariant = 'default' | 'muted' | 'danger'
+export type LinkKind = 'default' | 'muted' | 'danger'
 
 export type LinkProps = {
   href?: string
-  variant?: LinkVariant
+  kind?: LinkKind
   disabled?: boolean
   external?: boolean
   class?: string
@@ -21,7 +21,7 @@ export type LinkProps = {
 // Styles
 // ============================================================================
 
-const variantStyles: Record<LinkVariant, string> = {
+const kindStyles: Record<LinkKind, string> = {
   default: 'text-primary-500 hover:text-primary-600',
   muted: 'text-text-secondary hover:text-text',
   danger: 'text-danger-500 hover:text-danger-600',
@@ -34,7 +34,7 @@ const variantStyles: Record<LinkVariant, string> = {
 export const Link = (props: LinkProps) => {
   const [local, others] = splitProps(props, [
     'href',
-    'variant',
+    'kind',
     'disabled',
     'external',
     'class',
@@ -50,7 +50,7 @@ export const Link = (props: LinkProps) => {
       class={cn(
         'underline underline-offset-2 transition-colors',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 rounded-sm',
-        variantStyles[local.variant ?? 'default'],
+        kindStyles[local.kind ?? 'default'],
         local.disabled && 'opacity-50 cursor-not-allowed no-underline',
         local.class
       )}

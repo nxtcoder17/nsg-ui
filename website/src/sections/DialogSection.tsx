@@ -14,11 +14,11 @@ function DeleteItemDialog() {
         description: "This action cannot be undone.",
         withCloseIcon: true
       }}
-      trigger={<Button variant="danger">Delete Item</Button>}
+      trigger={<Button kind="danger">Delete Item</Button>}
     >
       <div class="flex justify-end gap-2 p-4 border-t border-border">
         <Dialog.CloseButton>Cancel</Dialog.CloseButton>
-        <Button variant="danger">Delete</Button>
+        <Button kind="danger">Delete</Button>
       </div>
     </Dialog>
   )
@@ -34,7 +34,7 @@ function ConfirmationDialogDemo() {
       header={{ title: "Save changes?", description: "Your changes will be permanently saved. This action cannot be undone." }}
     >
       <div class="flex justify-end gap-2 p-4 border-t border-border">
-        <Button variant="ghost" onClick={() => setShow(false)}>Cancel</Button>
+        <Button kind="ghost" onClick={() => setShow(false)}>Cancel</Button>
         <Button onClick={() => setShow(false)}>Save</Button>
       </div>
     </Dialog>
@@ -47,7 +47,7 @@ function FormDialogDemo() {
     <Dialog
       show={show()}
       onChange={setShow}
-      trigger={<Button variant="outline">Edit Profile</Button>}
+      trigger={<Button kind="outline">Edit Profile</Button>}
       header={{ title: "Edit Profile" }}
       closeOnClickOutside={false}
     >
@@ -70,7 +70,7 @@ function FormDialogDemo() {
         </div>
       </div>
       <div class="flex justify-end gap-2 p-4 border-t border-border">
-        <Button variant="ghost" onClick={() => setShow(false)}>Cancel</Button>
+        <Button kind="ghost" onClick={() => setShow(false)}>Cancel</Button>
         <Button onClick={() => setShow(false)}>Save Changes</Button>
       </div>
     </Dialog>

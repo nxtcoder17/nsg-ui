@@ -17,29 +17,29 @@ export const PopoverSection: Component = () => {
     >
         <DemoCard title="Basic" description="Popover with title, description, and action">
           <Popover
-            trigger={<Button variant="outline">Open Popover</Button>}
+            trigger={<Button kind="outline">Open Popover</Button>}
             title="Popover Title"
             description="This is a popover with some helpful information."
             arrow
           >
             <div class="flex justify-end mt-2">
-              <Button variant="ghost" size="sm">Got it</Button>
+              <Button kind="ghost" size="sm">Got it</Button>
             </div>
           </Popover>
         </DemoCard>
 
         <DemoCard title="Placements" description="Position the popover relative to the trigger">
           <div class="flex flex-wrap gap-3">
-            <Popover trigger={<Button variant="outline" size="sm">Top</Button>} placement="top" arrow>
+            <Popover trigger={<Button kind="outline" size="sm">Top</Button>} placement="top" arrow>
               <p class="text-sm text-text">Popover on top</p>
             </Popover>
-            <Popover trigger={<Button variant="outline" size="sm">Bottom</Button>} placement="bottom" arrow>
+            <Popover trigger={<Button kind="outline" size="sm">Bottom</Button>} placement="bottom" arrow>
               <p class="text-sm text-text">Popover on bottom</p>
             </Popover>
-            <Popover trigger={<Button variant="outline" size="sm">Left</Button>} placement="left" arrow>
+            <Popover trigger={<Button kind="outline" size="sm">Left</Button>} placement="left" arrow>
               <p class="text-sm text-text">Popover on left</p>
             </Popover>
-            <Popover trigger={<Button variant="outline" size="sm">Right</Button>} placement="right" arrow>
+            <Popover trigger={<Button kind="outline" size="sm">Right</Button>} placement="right" arrow>
               <p class="text-sm text-text">Popover on right</p>
             </Popover>
           </div>
@@ -48,7 +48,7 @@ export const PopoverSection: Component = () => {
         <DemoCard title="Info Popover" description="Contextual help and information">
           <Popover
             trigger={
-              <Button variant="ghost" size="icon" aria-label="Show helpful information">
+              <Button kind="ghost" size="icon" aria-label="Show helpful information">
                 <InfoIcon class="w-5 h-5" />
               </Button>
             }
@@ -84,7 +84,7 @@ export const PopoverSection: Component = () => {
                 </div>
               </div>
               <div class="flex gap-2">
-                <Button size="sm" variant="outline">View Profile</Button>
+                <Button size="sm" kind="outline">View Profile</Button>
                 <Button size="sm">Message</Button>
               </div>
             </div>

@@ -80,19 +80,19 @@ export const utilityRegistry: UtilityGroup[] = [
       },
       {
         name: 'nsg-accordion-trigger',
-        defaults: `@utility nsg-accordion-trigger {\n  @apply px-4 py-3 text-sm font-medium text-text;\n  @apply hover:bg-neutral-50 transition-colors;\n  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset;\n}`,
+        defaults: `@utility nsg-accordion-trigger {\n  @apply flex w-full items-center justify-between text-left;\n  @apply px-4 py-3 text-sm font-medium text-text;\n  @apply hover:bg-neutral-50 transition-colors;\n  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset;\n}`,
       },
       {
         name: 'nsg-accordion-icon',
         defaults: `@utility nsg-accordion-icon {\n  @apply text-text-secondary transition-transform duration-200;\n}`,
       },
       {
-        name: 'nsg-accordion-content',
-        defaults: `@utility nsg-accordion-content {\n  @apply text-sm text-text-secondary;\n}`,
+        name: 'nsg-accordion-content-wrapper',
+        defaults: `@utility nsg-accordion-content-wrapper {\n  @apply text-sm text-text-secondary;\n}`,
       },
       {
-        name: 'nsg-accordion-content-inner',
-        defaults: `@utility nsg-accordion-content-inner {\n  @apply px-4 pb-4;\n}`,
+        name: 'nsg-accordion-content',
+        defaults: `@utility nsg-accordion-content {\n  @apply px-4 pb-4;\n}`,
       },
     ],
   },
@@ -105,7 +105,7 @@ export const utilityRegistry: UtilityGroup[] = [
       },
       {
         name: '.nsg-dropdown-menu [data-nsg-dropdown-menu="action"]',
-        defaults: `.nsg-dropdown-menu {\n  [data-nsg-dropdown-menu="action"] {\n    @apply rounded-sm px-2 py-1 text-sm text-text;\n    @apply data-[highlighted]:bg-surface-sunken data-[highlighted]:text-text;\n    &[data-variant="danger"] {\n      @apply text-danger data-[highlighted]:bg-danger-100 data-[highlighted]:text-danger;\n    }\n  }\n}`,
+        defaults: `.nsg-dropdown-menu {\n  [data-nsg-dropdown-menu="action"] {\n    @apply rounded-sm px-2 py-1 text-sm text-text;\n    @apply data-[highlighted]:bg-surface-sunken data-[highlighted]:text-text;\n    &[data-kind="danger"] {\n      @apply text-danger data-[highlighted]:bg-danger-100 data-[highlighted]:text-danger;\n    }\n  }\n}`,
       },
       {
         name: '.nsg-dropdown-menu [data-nsg-dropdown-menu="option"]',
@@ -134,7 +134,7 @@ export const utilityRegistry: UtilityGroup[] = [
       },
       {
         name: '.nsg-context-menu [data-nsg-context-menu="action"]',
-        defaults: `.nsg-context-menu {\n  [data-nsg-context-menu="action"] {\n    @apply rounded-sm px-2 py-1.5 text-sm text-text;\n    @apply data-[highlighted]:bg-surface-sunken;\n    @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;\n    &[data-variant="danger"] {\n      @apply text-danger data-[highlighted]:bg-danger/10 data-[highlighted]:text-danger;\n    }\n  }\n}`,
+        defaults: `.nsg-context-menu {\n  [data-nsg-context-menu="action"] {\n    @apply rounded-sm px-2 py-1.5 text-sm text-text;\n    @apply data-[highlighted]:bg-surface-sunken;\n    @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;\n    &[data-kind="danger"] {\n      @apply text-danger data-[highlighted]:bg-danger/10 data-[highlighted]:text-danger;\n    }\n  }\n}`,
       },
       {
         name: '.nsg-context-menu [data-nsg-context-menu="option"]',

@@ -58,7 +58,7 @@ export const ToastSection: Component = () => {
       toast.update(id, {
         title: 'Updated!',
         description: 'Toast content was updated',
-        variant: 'success'
+        kind: 'success'
       })
     }
   }
@@ -82,29 +82,29 @@ export const ToastSection: Component = () => {
     >
       <DemoCard title="Variants" description="Info, success, warning, and danger styles">
         <div class="flex flex-wrap gap-3">
-          <Button variant="outline" onClick={showInfo}>Info</Button>
-          <Button variant="outline" onClick={showSuccess}>Success</Button>
-          <Button variant="outline" onClick={showWarning}>Warning</Button>
-          <Button variant="danger" onClick={showDanger}>Danger</Button>
+          <Button kind="outline" onClick={showInfo}>Info</Button>
+          <Button kind="outline" onClick={showSuccess}>Success</Button>
+          <Button kind="outline" onClick={showWarning}>Warning</Button>
+          <Button kind="danger" onClick={showDanger}>Danger</Button>
         </div>
       </DemoCard>
 
-      <DemoCard title="Options" description="Persistent toasts and hiding the close button">
+      <DemoCard title="Options" description="Persistent and non-closeable notifications">
         <div class="flex flex-wrap gap-3">
-          <Button variant="outline" onClick={showPersistent}>Persistent (no auto-dismiss)</Button>
-          <Button variant="outline" onClick={showNoClose}>No close icon</Button>
+          <Button kind="outline" onClick={showPersistent}>Persistent (no auto-dismiss)</Button>
+          <Button kind="outline" onClick={showNoClose}>No close icon</Button>
         </div>
       </DemoCard>
 
       <DemoCard title="Programmatic Control" description="Update, dismiss, or clear toasts via API">
         <div class="flex flex-wrap gap-3">
-          <Button variant="outline" onClick={updateLast} disabled={lastId() === null}>
-            Update last toast
+          <Button kind="outline" onClick={updateLast} disabled={lastId() === null}>
+            Update Last Toast
           </Button>
-          <Button variant="outline" onClick={dismissLast} disabled={lastId() === null}>
-            Dismiss last toast
+          <Button kind="outline" onClick={dismissLast} disabled={lastId() === null}>
+            Dismiss Last Toast
           </Button>
-          <Button variant="ghost" onClick={() => toast.clear()}>
+          <Button kind="ghost" onClick={() => toast.clear()}>
             Clear all
           </Button>
         </div>
@@ -117,7 +117,7 @@ export const ToastSection: Component = () => {
           <p><span class="text-warning-500">toast.warning</span>({'{ ... }'})</p>
           <p><span class="text-danger-500">toast.danger</span>({'{ ... }'})</p>
           <p class="pt-2 border-t border-border">
-            <span class="text-text">toast.update</span>(id, {'{ title?, description?, variant? }'})
+            <span class="text-text">toast.update</span>(id, {'{ title?, description?, kind? }'})
           </p>
           <p><span class="text-text">toast.dismiss</span>(id)</p>
           <p><span class="text-text">toast.clear</span>()</p>

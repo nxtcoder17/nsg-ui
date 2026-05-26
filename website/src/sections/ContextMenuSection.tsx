@@ -84,7 +84,7 @@ export const ContextMenuSection: Component = () => {
             <SettingsIcon class="w-4 h-4 mr-2" /> Settings
           </ContextMenu.ActionItem>
           <ContextMenu.Separator />
-          <ContextMenu.ActionItem variant="danger" onSelect={() => console.log('Logout')}>
+          <ContextMenu.ActionItem kind="danger" onSelect={() => console.log('Logout')}>
             <LogoutIcon class="w-4 h-4 mr-2" /> Logout
           </ContextMenu.ActionItem>
         </ContextMenu>
@@ -114,7 +114,7 @@ export const ContextMenuSection: Component = () => {
             <ContextMenu.ActionItem onSelect={() => console.log('Email')}>Email</ContextMenu.ActionItem>
           </ContextMenu.Menu>
           <ContextMenu.Separator />
-          <ContextMenu.ActionItem variant="danger" onSelect={() => console.log('Delete')}>Delete</ContextMenu.ActionItem>
+          <ContextMenu.ActionItem kind="danger" onSelect={() => console.log('Delete')}>Delete</ContextMenu.ActionItem>
         </ContextMenu>
       </DemoCard>
     </Section>

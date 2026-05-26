@@ -24,8 +24,8 @@ export const LinkSection: Component = () => {
       <DemoCard title="Variants" description="Different visual styles">
         <div class="flex flex-wrap gap-6">
           <Link href="#">Default link</Link>
-          <Link href="#" variant="muted">Muted link</Link>
-          <Link href="#" variant="danger">Danger link</Link>
+          <Link href="#" kind="muted">Muted link</Link>
+          <Link href="#" kind="danger">Danger link</Link>
         </div>
       </DemoCard>
 
@@ -60,7 +60,7 @@ export const LinkSection: Component = () => {
       <DemoCard title="Disabled" description="Non-interactive link state">
         <div class="flex flex-wrap gap-6">
           <Link href="#" disabled>Disabled link</Link>
-          <Link href="#" variant="muted" disabled>Disabled muted</Link>
+          <Link href="#" kind="muted" disabled>Disabled muted</Link>
         </div>
       </DemoCard>
     </Section>

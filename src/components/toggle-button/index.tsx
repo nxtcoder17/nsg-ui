@@ -2,14 +2,14 @@ import { ToggleButton as KobalteToggleButton } from '@kobalte/core/toggle-button
 import { splitProps, JSX } from 'solid-js'
 import { cn } from '../../utils/cn'
 
-export type ToggleButtonVariant = 'default' | 'outline' | 'ghost'
+export type ToggleButtonKind = 'default' | 'outline' | 'ghost'
 export type ToggleButtonSize = 'sm' | 'md' | 'lg' | 'icon'
 
 export type ToggleButtonProps = {
   pressed?: boolean
   defaultPressed?: boolean
   onChange?: (pressed: boolean) => void
-  variant?: ToggleButtonVariant
+  kind?: ToggleButtonKind
   size?: ToggleButtonSize
   disabled?: boolean
   class?: string
@@ -22,7 +22,7 @@ const baseStyles = cn(
   'disabled:opacity-50 disabled:cursor-not-allowed'
 )
 
-const variantStyles: Record<ToggleButtonVariant, string> = {
+const kindStyles: Record<ToggleButtonKind, string> = {
   default: cn(
     'bg-neutral-100 text-text-secondary',
     'hover:bg-neutral-200',
@@ -52,7 +52,7 @@ export const ToggleButton = (props: ToggleButtonProps) => {
     'pressed',
     'defaultPressed',
     'onChange',
-    'variant',
+    'kind',
     'size',
     'disabled',
     'class',
@@ -67,7 +67,7 @@ export const ToggleButton = (props: ToggleButtonProps) => {
       disabled={local.disabled}
       class={cn(
         baseStyles,
-        variantStyles[local.variant ?? 'default'],
+        kindStyles[local.kind ?? 'default'],
         sizeStyles[local.size ?? 'md'],
         local.class
       )}

@@ -220,26 +220,25 @@
  * ============================================================================ */
 
 /* --- Button --- */
-
 @layer components {
   .nsg-button {
     @apply inline-flex items-center justify-center font-medium transition-colors;
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
     @apply disabled:pointer-events-none disabled:opacity-50;
 
-    &[data-variant="default"] {
+    &[data-kind="default"] {
       @apply bg-primary-500 text-primary-50 hover:bg-primary-600;
     }
-    &[data-variant="outline"] {
+    &[data-kind="outline"] {
       @apply border border-border bg-transparent text-text hover:bg-neutral-100;
     }
-    &[data-variant="ghost"] {
+    &[data-kind="ghost"] {
       @apply bg-transparent text-text hover:bg-neutral-100;
     }
-    &[data-variant="danger"] {
+    &[data-kind="danger"] {
       @apply bg-danger-500 text-danger-50 hover:bg-danger-600;
     }
-    &[data-variant="link"] {
+    &[data-kind="link"] {
       @apply bg-transparent text-primary-600 underline-offset-4 hover:underline hover:text-primary-700;
     }
 
@@ -257,6 +256,38 @@
     }
     &[data-size="icon-sm"] {
       @apply h-6 w-6 rounded-sm;
+    }
+  }
+}
+
+/* --- Badge --- */
+@layer components {
+  .nsg-badge {
+    @apply inline-flex items-center font-medium rounded-full;
+
+    &[data-kind="neutral"] { @apply bg-neutral-100 text-neutral-700; }
+    &[data-kind="info"] { @apply bg-primary-100 text-primary-700; }
+    &[data-kind="success"] { @apply bg-success-100 text-success-700; }
+    &[data-kind="warning"] { @apply bg-warning-100 text-warning-700; }
+    &[data-kind="danger"] { @apply bg-danger-100 text-danger-700; }
+
+    &.nsg-badge-outline {
+      @apply bg-transparent border;
+      &[data-kind="neutral"] { @apply border-neutral-300; }
+      &[data-kind="info"] { @apply border-primary-300; }
+      &[data-kind="success"] { @apply border-success-300; }
+      &[data-kind="warning"] { @apply border-warning-300; }
+      &[data-kind="danger"] { @apply border-danger-300; }
+    }
+
+    &[data-size="sm"] {
+      @apply px-1.5 py-0.5 text-[10px];
+    }
+    &[data-size="md"] {
+      @apply px-2 py-0.5 text-xs;
+    }
+    &[data-size="lg"] {
+      @apply px-2.5 py-1 text-sm;
     }
   }
 }
@@ -369,7 +400,8 @@
     @apply divide-y divide-border rounded-lg border border-border;
 
     [data-nsg-accordion="trigger"] {
-      @apply px-4 py-3 text-sm font-medium text-text;
+      @apply flex w-full items-center justify-between text-left;
+      @apply px-4 py-3 text-text text-sm font-medium;
       @apply hover:bg-neutral-50 transition-colors;
       @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset;
       @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed;
@@ -377,21 +409,25 @@
 
     [data-nsg-accordion="trigger-icon"] {
       @apply text-text-secondary transition-transform duration-200;
+
+      /* Rotate icon when item is expanded */
+      [data-expanded] & {
+        transform: rotate(90deg);
+      }
     }
 
-    /* Rotate icon when item is expanded */
-    [data-expanded] [data-nsg-accordion="trigger-icon"] {
-      transform: rotate(180deg);
+    [data-nsg-accordion="content-wrapper"] {
+      @apply text-sm text-text-secondary;
+      &[data-expanded] {
+        animation: nsg-accordion-down 0.2s ease-out;
+      }
+      &[data-closed] { 
+        animation: nsg-accordion-up 0.2s ease-out; 
+      }
     }
 
     [data-nsg-accordion="content"] {
-      @apply text-sm text-text-secondary;
-      &[data-expanded] { animation: nsg-accordion-down 0.2s ease-out; }
-      &[data-closed] { animation: nsg-accordion-up 0.2s ease-out; }
-    }
-
-    [data-nsg-accordion="content-inner"] {
-      @apply px-4 pb-4;
+      @apply px-4 py-2;
     }
   }
 }
@@ -415,7 +451,7 @@
       @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
       @apply data-[highlighted]:bg-surface-sunken data-[highlighted]:text-text;
 
-      &[data-variant="danger"] {
+      &[data-kind="danger"] {
         @apply text-danger;
         @apply data-[highlighted]:bg-danger-100 data-[highlighted]:text-danger;
       }
@@ -476,7 +512,7 @@
       @apply data-[highlighted]:bg-surface-sunken;
       @apply data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 
-      &[data-variant="danger"] {
+      &[data-kind="danger"] {
         @apply text-danger;
         @apply data-[highlighted]:bg-danger/10 data-[highlighted]:text-danger;
       }

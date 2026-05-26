@@ -47,7 +47,7 @@ function DropdownMenuRoot(props: DropdownMenuProps) {
 }
 
 export interface ActionItemProps {
-  variant?: 'default' | 'danger'
+  kind?: 'default' | 'danger'
   disabled?: boolean
   onSelect?: () => void
   class?: string
@@ -56,13 +56,13 @@ export interface ActionItemProps {
 }
 
 function ActionItem(props: ActionItemProps) {
-  const [local, others] = splitProps(props, ['variant', 'disabled', 'onSelect', 'class', 'unstyled', 'children'])
+  const [local, others] = splitProps(props, ['kind', 'disabled', 'onSelect', 'class', 'unstyled', 'children'])
 
   return (
     <KobalteDropdownMenu.Item
       class={cn(local.class)}
       {...(!local.unstyled && { 'data-nsg-dropdown-menu': 'action' })}
-      {...(!local.unstyled && local.variant === 'danger' && { 'data-variant': 'danger' })}
+      {...(!local.unstyled && local.kind === 'danger' && { 'data-kind': 'danger' })}
       disabled={local.disabled}
       onSelect={local.onSelect}
       {...others}
