@@ -5,11 +5,16 @@ import { DemoWithCode } from '../components/CodeBlock'
 import { ButtonIcon, PlusIcon } from '../icons'
 import { Section } from '../components/section'
 
-const kindsCode = `<Button kind="default">Default</Button>
-// <Button kind="outline">Outline</Button>
+const kindsCode = `<Button kind="primary">Primary</Button>
+<Button kind="secondary">Secondary</Button>
 <Button kind="ghost">Ghost</Button>
 <Button kind="danger">Danger</Button>
-<Button kind="link">Link</Button>`
+<Button kind="link">Link</Button>
+
+// Outlined versions:
+<Button kind="primary" outline>Primary Outline</Button>
+<Button kind="secondary" outline>Secondary Outline</Button>
+<Button kind="danger" outline>Danger Outline</Button>`
 
 const sizesCode = `<Button size="sm">Small</Button>
 <Button size="md">Medium</Button>
@@ -30,13 +35,21 @@ export const ButtonSection: Component = () => {
     >
       <DemoWithCode title="Kinds" description="Different visual styles for different contexts" code={kindsCode}>
         <div class="flex flex-wrap gap-3">
-          <Button class="">Default</Button>
-          <Button kind="outline">Outline</Button>
+          <Button>Primary</Button>
+          <Button kind="secondary">Secondary</Button>
           <Button kind="ghost">Ghost</Button>
           <Button kind="danger">Danger</Button>
           <Button kind="link">Link</Button>
         </div>
       </DemoWithCode>
+
+      <DemoCard title="Outlined" description="Outlined variants for all semantic kinds">
+        <div class="flex flex-wrap gap-3">
+          <Button kind="primary" outline>Primary Outline</Button>
+          <Button kind="secondary" outline>Secondary Outline</Button>
+          <Button kind="danger" outline>Danger Outline</Button>
+        </div>
+      </DemoCard>
 
       <DemoWithCode title="Sizes" description="Small, medium, large, and icon sizes" code={sizesCode}>
         <div class="flex flex-wrap items-center gap-3">
@@ -52,14 +65,14 @@ export const ButtonSection: Component = () => {
       <DemoCard title="States" description="Disabled state reduces opacity and prevents interaction">
         <div class="flex flex-wrap gap-3">
           <Button disabled>Disabled Default</Button>
-          <Button kind="outline" disabled>Disabled Outline</Button>
+          <Button kind="secondary" outline disabled>Disabled Outline</Button>
           <Button kind="danger" disabled>Disabled Danger</Button>
         </div>
       </DemoCard>
 
       <DemoCard title="All Combinations" description="Complete matrix of variants and sizes">
         <div class="space-y-4">
-          <For each={['default', 'outline', 'ghost', 'danger', 'link'] as const}>
+          <For each={['primary', 'secondary', 'ghost', 'danger', 'link'] as const}>
             {(kind) => (
               <div class="flex items-center gap-4">
                 <span class={`w-20 text-sm capitalize font-mono ${kind === 'danger' ? 'text-danger-600' : 'text-primary-600'}`}>{kind}</span>

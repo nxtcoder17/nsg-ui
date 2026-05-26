@@ -226,11 +226,11 @@
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
     @apply disabled:pointer-events-none disabled:opacity-50;
 
-    &[data-kind="default"] {
+    &[data-kind="primary"] {
       @apply bg-primary-500 text-primary-50 hover:bg-primary-600;
     }
-    &[data-kind="outline"] {
-      @apply border border-border bg-transparent text-text hover:bg-neutral-100;
+    &[data-kind="secondary"] {
+      @apply bg-neutral-100 text-neutral-800 hover:bg-neutral-200;
     }
     &[data-kind="ghost"] {
       @apply bg-transparent text-text hover:bg-neutral-100;
@@ -240,6 +240,19 @@
     }
     &[data-kind="link"] {
       @apply bg-transparent text-primary-600 underline-offset-4 hover:underline hover:text-primary-700;
+    }
+
+    &.nsg-button-outline {
+      @apply bg-transparent border;
+      &[data-kind="primary"] {
+        @apply border-primary-500 text-primary-600 hover:bg-primary-50;
+      }
+      &[data-kind="secondary"] {
+        @apply border-border text-text hover:bg-neutral-100;
+      }
+      &[data-kind="danger"] {
+        @apply border-danger-500 text-danger-600 hover:bg-danger-50;
+      }
     }
 
     &[data-size="sm"] {

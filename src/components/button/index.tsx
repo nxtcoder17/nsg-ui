@@ -3,8 +3,9 @@ import { type JSX, splitProps, mergeProps, type ValidComponent, type ComponentPr
 import { cn } from '../../utils/cn'
 
 export interface ButtonOwnProps {
-  kind?: 'default' | 'outline' | 'ghost' | 'danger' | 'link'
+  kind?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
   size?: 'sm' | 'md' | 'lg' | 'icon' | 'icon-sm'
+  outline?: boolean
   as?: ValidComponent
   class?: string
   children?: JSX.Element
@@ -13,10 +14,11 @@ export interface ButtonOwnProps {
 export type ButtonProps = ButtonOwnProps & Omit<ComponentProps<'button'>, keyof ButtonOwnProps>
 
 export const Button = (props: ButtonProps) => {
-  const merged = mergeProps({ kind: 'default', size: 'md' } as const, props)
+  const merged = mergeProps({ kind: 'primary', size: 'md' } as const, props)
   const [local, others] = splitProps(merged, [
     'kind',
     'size',
+    'outline',
     'as',
     'class',
     'children',
@@ -25,7 +27,11 @@ export const Button = (props: ButtonProps) => {
   return (
     <KobalteButton
       as={local.as}
-      class={cn('nsg-button', local.class)}
+      class={cn(
+        'nsg-button',
+        local.outline && 'nsg-button-outline',
+        local.class
+      )}
       data-kind={local.kind}
       data-size={local.size}
       {...others}

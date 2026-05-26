@@ -47,7 +47,7 @@ function FormDialogDemo() {
     <Dialog
       show={show()}
       onChange={setShow}
-      trigger={<Button kind="outline">Edit Profile</Button>}
+      trigger={<Button kind="secondary" outline>Edit Profile</Button>}
       header={{ title: "Edit Profile" }}
       closeOnClickOutside={false}
     >

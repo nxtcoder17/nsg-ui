@@ -17,7 +17,7 @@ export const PopoverSection: Component = () => {
     >
         <DemoCard title="Basic" description="Popover with title, description, and action">
           <Popover
-            trigger={<Button kind="outline">Open Popover</Button>}
+            trigger={<Button kind="secondary" outline>Open Popover</Button>}
             title="Popover Title"
             description="This is a popover with some helpful information."
             arrow
@@ -30,16 +30,16 @@ export const PopoverSection: Component = () => {
 
         <DemoCard title="Placements" description="Position the popover relative to the trigger">
           <div class="flex flex-wrap gap-3">
-            <Popover trigger={<Button kind="outline" size="sm">Top</Button>} placement="top" arrow>
+            <Popover trigger={<Button kind="secondary" outline size="sm">Top</Button>} placement="top" arrow>
               <p class="text-sm text-text">Popover on top</p>
             </Popover>
-            <Popover trigger={<Button kind="outline" size="sm">Bottom</Button>} placement="bottom" arrow>
+            <Popover trigger={<Button kind="secondary" outline size="sm">Bottom</Button>} placement="bottom" arrow>
               <p class="text-sm text-text">Popover on bottom</p>
             </Popover>
-            <Popover trigger={<Button kind="outline" size="sm">Left</Button>} placement="left" arrow>
+            <Popover trigger={<Button kind="secondary" outline size="sm">Left</Button>} placement="left" arrow>
               <p class="text-sm text-text">Popover on left</p>
             </Popover>
-            <Popover trigger={<Button kind="outline" size="sm">Right</Button>} placement="right" arrow>
+            <Popover trigger={<Button kind="secondary" outline size="sm">Right</Button>} placement="right" arrow>
               <p class="text-sm text-text">Popover on right</p>
             </Popover>
           </div>
@@ -84,7 +84,7 @@ export const PopoverSection: Component = () => {
                 </div>
               </div>
               <div class="flex gap-2">
-                <Button size="sm" kind="outline">View Profile</Button>
+                <Button size="sm" kind="secondary" outline>View Profile</Button>
                 <Button size="sm">Message</Button>
               </div>
             </div>
