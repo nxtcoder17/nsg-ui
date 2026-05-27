@@ -321,4 +321,21 @@ export const utilityRegistry: UtilityGroup[] = [
       },
     ],
   },
+  {
+    component: 'Checkbox',
+    utilities: [
+      {
+        name: '.nsg-checkbox [data-nsg-checkbox="control"]',
+        defaults: `.nsg-checkbox {\n  [data-nsg-checkbox="control"] {\n    @apply w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-px;\n    @apply bg-surface-raised border-neutral-300;\n    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;\n    @apply transition-colors;\n    &[data-checked], &[data-indeterminate] {\n      @apply border-primary-500 bg-primary-500 text-white;\n    }\n  }\n}`,
+      },
+      {
+        name: '.nsg-checkbox [data-nsg-checkbox="label"]',
+        defaults: `.nsg-checkbox {\n  [data-nsg-checkbox="label"] {\n    @apply text-sm font-medium text-text cursor-pointer leading-5;\n  }\n}`,
+      },
+      {
+        name: '.nsg-checkbox [data-nsg-checkbox="description"]',
+        defaults: `.nsg-checkbox {\n  [data-nsg-checkbox="description"] {\n    @apply text-xs text-text-secondary;\n  }\n}`,
+      },
+    ],
+  },
 ]

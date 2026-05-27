@@ -721,6 +721,63 @@
   }
 }
 
+/* --- Checkbox --- */
+
+@layer components {
+  .nsg-checkbox {
+    @apply block w-fit;
+    @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed;
+
+    [data-nsg-checkbox="wrapper"] {
+      @apply flex items-start gap-3;
+    }
+
+    [data-nsg-checkbox="control"] {
+      @apply w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-px;
+      @apply bg-surface-raised border-neutral-300;
+      @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+      @apply transition-colors;
+
+      &[data-checked], &[data-indeterminate] {
+        @apply border-primary-500 bg-primary-500 text-white;
+      }
+    }
+
+    &:hover [data-nsg-checkbox="control"] {
+      @apply border-primary-400;
+    }
+
+    &[data-invalid] {
+      [data-nsg-checkbox="control"] {
+        @apply border-danger-500;
+      }
+      &:hover [data-nsg-checkbox="control"] {
+        @apply border-danger-600;
+      }
+    }
+
+    [data-nsg-checkbox="indicator"] {
+      @apply flex items-center justify-center text-white;
+    }
+
+    [data-nsg-checkbox="content"] {
+      @apply flex flex-col gap-0.5;
+    }
+
+    [data-nsg-checkbox="label"] {
+      @apply text-sm font-medium text-text cursor-pointer leading-5;
+    }
+
+    [data-nsg-checkbox="description"] {
+      @apply text-xs text-text-secondary;
+    }
+
+    [data-nsg-checkbox="error"] {
+      @apply text-xs text-danger-500;
+    }
+  }
+}
+
 /* --- CommandBar --- */
 
 @layer components {
