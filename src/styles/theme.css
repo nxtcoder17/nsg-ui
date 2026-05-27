@@ -305,6 +305,23 @@
   }
 }
 
+/* --- Card --- */
+@layer components {
+  .nsg-card {
+    @apply rounded-xl border border-border text-text transition-shadow;
+
+    &[data-kind="raised"] {
+      @apply bg-surface-raised shadow-[var(--shadow-card)];
+    }
+    &[data-kind="flat"] {
+      @apply bg-surface;
+    }
+    &[data-kind="sunken"] {
+      @apply bg-surface-sunken;
+    }
+  }
+}
+
 /* --- Text --- */
 
 @layer components {

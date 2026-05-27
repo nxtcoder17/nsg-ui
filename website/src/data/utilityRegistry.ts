@@ -300,4 +300,25 @@ export const utilityRegistry: UtilityGroup[] = [
       },
     ],
   },
+  {
+    component: 'Card',
+    utilities: [
+      {
+        name: 'nsg-card',
+        defaults: `@utility nsg-card {\n  @apply rounded-xl border border-border text-text transition-shadow;\n}`,
+      },
+      {
+        name: 'nsg-card-raised',
+        defaults: `@utility nsg-card-raised {\n  @apply bg-surface-raised shadow-[var(--shadow-card)];\n}`,
+      },
+      {
+        name: 'nsg-card-flat',
+        defaults: `@utility nsg-card-flat {\n  @apply bg-surface;\n}`,
+      },
+      {
+        name: 'nsg-card-sunken',
+        defaults: `@utility nsg-card-sunken {\n  @apply bg-surface-sunken;\n}`,
+      },
+    ],
+  },
 ]

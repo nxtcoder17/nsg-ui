@@ -17,6 +17,7 @@ import { TabsSection } from "./sections/TabsSection";
 import { SegmentedControlSection } from "./sections/SegmentedControlSection";
 import { ThemeSwitcherSection } from "./sections/ThemeSwitcherSection";
 import { BadgeSection } from "./sections/BadgeSection";
+import { CardSection } from "./sections/CardSection";
 import { LinkSection } from "./sections/LinkSection";
 import { SeparatorSection } from "./sections/SeparatorSection";
 import { ImageSection } from "./sections/ImageSection";
@@ -100,6 +101,7 @@ const App: Component = () => {
 					<SegmentedControlSection />
 					<ThemeSwitcherSection />
 					<BadgeSection />
+					<CardSection />
 					<LinkSection />
 					<SeparatorSection />
 					<ImageSection />

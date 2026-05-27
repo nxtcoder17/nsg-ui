@@ -41,6 +41,8 @@ function PaletteIcon(props: { class?: string }) {
   )
 }
 
+import { CardIcon } from '../sections/CardSection'
+
 export const sections = [
   { id: 'text', label: 'Text', icon: TextIcon },
   { id: 'button', label: 'Button', icon: ButtonIcon },
@@ -58,6 +60,7 @@ export const sections = [
   { id: 'segmented-control', label: 'Segmented Control', icon: SegmentedControlIcon },
   { id: 'theme-switcher', label: 'Theme Switcher', icon: ThemeSwitcherIcon },
   { id: 'badge', label: 'Badge', icon: BadgeIcon },
+  { id: 'card', label: 'Card', icon: CardIcon },
   { id: 'link', label: 'Link', icon: LinkIcon },
   { id: 'separator', label: 'Separator', icon: SeparatorIcon },
   { id: 'image', label: 'Image', icon: ImageIcon },
