@@ -1,5 +1,5 @@
 import { Checkbox as KobalteCheckbox } from '@kobalte/core/checkbox'
-import { splitProps, Show } from 'solid-js'
+import { splitProps, Show, JSX } from 'solid-js'
 import { cn } from '../../utils/cn'
 import { CheckIcon, MinusIcon } from '../../icons'
 
@@ -8,9 +8,9 @@ export type CheckboxProps = {
   defaultChecked?: boolean
   onChange?: (checked: boolean) => void
   indeterminate?: boolean
-  label?: string
-  description?: string
-  errorMessage?: string
+  label: JSX.Element
+  description?: JSX.Element
+  errorMessage?: JSX.Element
   validationState?: 'valid' | 'invalid'
   disabled?: boolean
   name?: string
@@ -59,7 +59,6 @@ export const Checkbox = (props: CheckboxProps) => {
               </Show>
             </KobalteCheckbox.Indicator>
           </KobalteCheckbox.Control>
-          
           <Show when={local.label || local.description || local.errorMessage}>
             <div data-nsg-checkbox="content">
               <Show when={local.label}>
@@ -82,7 +81,6 @@ export const Checkbox = (props: CheckboxProps) => {
               </Show>
             </div>
           </Show>
-
         </div>
       )}
     </KobalteCheckbox>

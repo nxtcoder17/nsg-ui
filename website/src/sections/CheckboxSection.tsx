@@ -134,6 +134,45 @@ export const CheckboxSection: Component = () => {
           />
         </div>
       </DemoCard>
+
+      <DemoCard title="Customized Rich Elements" description="Showcase custom elements passed to label, description, and errorMessage.">
+        <div class="space-y-6">
+          <Checkbox
+            label={
+              <span class="flex items-center gap-2 font-semibold text-primary-500">
+                🔒 Secure Login Consent
+              </span>
+            }
+            description={
+              <span class="text-xs text-success-600 font-mono flex items-center gap-1">
+                ✔ Verification server active. Enabled endpoint token storage.
+              </span>
+            }
+          />
+          <Checkbox
+            label={
+              <span class="flex items-center gap-2">
+                <span>Enterprise Tier Billing</span>
+                <span class="px-1.5 py-0.5 text-[10px] font-bold bg-danger-100 text-danger-800 rounded uppercase">
+                  Important
+                </span>
+              </span>
+            }
+            description={
+              <span class="text-xs text-text-secondary block max-w-md">
+                Standard terms apply. For customizable invoice scheduling options, visit our{' '}
+                <a href="#" class="text-primary-500 hover:underline">Billing Portal</a>.
+              </span>
+            }
+            validationState="invalid"
+            errorMessage={
+              <span class="flex items-center gap-1.5 text-danger-500 font-bold bg-danger-50 px-2 py-1 rounded border border-danger-200 w-fit mt-1">
+                ⚠️ Verification Required: Please review terms first.
+              </span>
+            }
+          />
+        </div>
+      </DemoCard>
     </Section>
   )
 }
