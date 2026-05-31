@@ -27,7 +27,6 @@ import { ToggleButtonSection } from "./sections/ToggleButtonSection";
 import { CommandBarSection } from "./sections/CommandBarSection";
 import { IconsSection } from "./sections/IconsSection";
 import { TextSection } from "./sections/TextSection";
-import { CssEditorPanel } from "./components/CssEditorPanel";
 
 const App: Component = () => {
 	const [activeSection, setActiveSection] = createSignal<SectionId>("colors");
@@ -80,7 +79,6 @@ const App: Component = () => {
 				onSectionClick={handleSectionClick}
 			/>
 
-			<CssEditorPanel />
 			<main class="ml-64 min-h-screen gradient-mesh">
 				<Header />
 
