@@ -24,6 +24,8 @@ export default defineConfig({
       'nsg-ui/theme.css': resolve(__dirname, '../dist/theme.css'),
       'nsg-ui/icons': resolve(__dirname, '../src/icons'),
       'nsg-ui': resolve(__dirname, '../src'),
+      '@utils': resolve(__dirname, '../src/utils'),
+      '@icons': resolve(__dirname, '../src/icons'),
     },
   },
 });

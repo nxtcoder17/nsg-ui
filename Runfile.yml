@@ -1,0 +1,8 @@
+tasks:
+  dev:
+    watch:
+      enabled: true
+      dirs:
+        - ./src
+    cmd:
+      - bun run build

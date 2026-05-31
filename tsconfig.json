@@ -16,7 +16,9 @@
     "ignoreDeprecations": "6.0",
     "paths": {
       "~/*": ["src/*"],
-      "@utils": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@icons": ["src/icons/index.tsx"],
+      "@icons/*": ["src/icons/*"]
     }
   },
   "include": ["src/**/*"],
