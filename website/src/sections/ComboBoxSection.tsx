@@ -1,5 +1,5 @@
 import { type Component, createSignal } from 'solid-js'
-import { ComboBox } from 'nsg-ui'
+import { ComboBox, ComboBoxSearchFilters } from 'nsg-ui'
 import { SearchIcon } from 'nsg-ui/icons'
 import { DemoCard } from '../components/DemoCard'
 import { Section } from "../components/section";
@@ -86,9 +86,7 @@ export const ComboBoxSection: Component = () => {
       setFilteredFruits([])
       return
     }
-    setFilteredFruits(
-      allFruits.filter(f => f.toLowerCase().includes(value.toLowerCase()))
-    )
+    setFilteredFruits(ComboBoxSearchFilters.contains(allFruits, value))
   }
 
   const handleUserSearch = (value: string) => {
@@ -123,7 +121,7 @@ export const ComboBoxSection: Component = () => {
       setFilteredTags(tags())
       return
     }
-    setFilteredTags(tags().filter(t => t.toLowerCase().includes(value.toLowerCase())))
+    setFilteredTags(ComboBoxSearchFilters.contains(tags(), value))
   }
 
   const addTag = (name: string) => {
@@ -217,9 +215,9 @@ export const ComboBoxSection: Component = () => {
               options={filteredFruits()}
               value={selectedFruit()}
               onChange={setSelectedFruit}
-              onInputChange={handleFruitSearch}
+              onSearch={handleFruitSearch}
               placeholder="Search fruits..."
-              noResultsMessage="No fruits found"
+              noResultsFallback={<span>No fruits found</span>}
               prefix={<SearchIcon />}
             />
             <div class="text-sm text-text-secondary">
@@ -237,7 +235,7 @@ export const ComboBoxSection: Component = () => {
               options={filteredUsers()}
               value={selectedUser()}
               onChange={setSelectedUser}
-              onInputChange={handleUserSearch}
+              onSearch={handleUserSearch}
               placeholder="Search users..."
               prefix={<SearchIcon />}
               itemComponent={(user, state) => (
@@ -264,12 +262,12 @@ export const ComboBoxSection: Component = () => {
               options={asyncResults()}
               value=""
               onChange={() => {}}
-              onInputChange={handleAsyncSearch}
+              onSearch={handleAsyncSearch}
               placeholder="Search with delay..."
               loading={loading()}
               debounce={300}
               prefix={<SearchIcon />}
-              noResultsMessage="No results"
+              noResultsFallback={<span>No results</span>}
             />
             <p class="text-xs text-text-secondary">
               Simulates a 500ms API delay. Try typing "apple" or "berry".
@@ -284,9 +282,9 @@ export const ComboBoxSection: Component = () => {
               options={filteredTags()}
               value={selectedTag()}
               onChange={setSelectedTag}
-              onInputChange={handleTagSearch}
+              onSearch={handleTagSearch}
               placeholder="Search or add tags..."
-              noResultsMessage="No matching tags"
+              noResultsFallback={<span>No matching tags</span>}
               prefix={<SearchIcon />}
               noResultComponent={(inputValue, clear) => (
                 <button

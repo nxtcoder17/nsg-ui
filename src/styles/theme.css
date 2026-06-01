@@ -808,16 +808,16 @@
 /* --- ComboBox --- */
 
 @layer components {
-  .nsg-combo-box {
-    &[data-nsg-combo-box="root"] {
+  .nsg-combobox {
+    &[data-nsg-combobox="root"] {
       @apply flex flex-col gap-0.5;
     }
 
-    [data-nsg-combo-box="control"] {
+    [data-nsg-combobox="control"] {
       @apply flex items-center gap-2 h-10 px-3 rounded-md bg-surface-raised border border-border;
       @apply focus-within:ring-2 focus-within:border-transparent focus-within:ring-ring;
 
-      &[data-variant="multiple"] {
+      &[data-multiple] {
         @apply items-start gap-2 h-auto min-h-10 px-2 py-1.5;
       }
 
@@ -826,28 +826,28 @@
       }
     }
 
-    [data-nsg-combo-box="input"] {
+    [data-nsg-combobox="input"] {
       @apply flex-1 h-full text-sm bg-transparent text-text placeholder:text-text-muted focus:outline-none disabled:cursor-not-allowed;
 
-      &[data-variant="multiple"] {
+      &[data-multiple] {
         @apply min-w-20 h-6 px-1;
       }
     }
 
-    [data-nsg-combo-box="tag"] {
+    [data-nsg-combobox="tag"] {
       @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-primary-100 text-primary-800;
     }
 
-    [data-nsg-combo-box="error"] {
+    [data-nsg-combobox="error"] {
       @apply text-xs text-danger-500;
     }
 
-    &[data-nsg-combo-box="content"] {
+    &[data-nsg-combobox="content"] {
       @apply min-w-[8rem] overflow-hidden rounded-lg bg-surface-raised text-text border border-border shadow-lg;
       animation: nsg-slide-down 0.2s ease-out;
     }
 
-    [data-nsg-combo-box="item"] {
+    [data-nsg-combobox="item"] {
       @apply flex items-center justify-between gap-2 px-3 py-2 text-sm rounded-md cursor-pointer;
       @apply text-text data-[highlighted]:bg-primary-100 data-[highlighted]:text-primary-900;
       @apply data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed outline-none;

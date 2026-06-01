@@ -11,80 +11,110 @@ export type ComboBoxItemState = {
   disabled: boolean
 }
 
-export type ComboBoxProps<T extends ComboBoxOption = ComboBoxOption> = {
+export type ComboBoxBaseProps<T extends ComboBoxOption = ComboBoxOption> = {
   options: T[]
-  value: T extends string ? string : string
-  onChange: (value: T extends string ? string : string) => void
-  onInputChange?: (value: string) => void
-  multiple?: boolean
   placeholder?: string
   loading?: boolean
-  noResultsMessage?: string
+  noResultsFallback?: JSX.Element
   disabled?: boolean
   name?: string
   errorMessage?: string
-  containerClass?: string
-  inputClass?: string
-  triggerClass?: string
+  class?: string
   debounce?: number
   triggerMode?: 'focus' | 'input'
-  optionValue?: keyof T | ((option: T) => string)
-  optionLabel?: keyof T | ((option: T) => string)
-  optionDisabled?: keyof T | ((option: T) => boolean)
   itemComponent?: (item: T, state: ComboBoxItemState) => JSX.Element
   prefix?: JSX.Element
   noResultComponent?: (inputValue: string, clear: () => void) => JSX.Element
-  unstyled?: boolean
+  onSearch?: (query: string) => void
 }
 
-export type ComboBoxMultipleProps<T extends ComboBoxOption = ComboBoxOption> = Omit<ComboBoxProps<T>, 'value' | 'onChange' | 'multiple'> & {
+export type ComboBoxSingleProps<T extends ComboBoxOption = ComboBoxOption> = ComboBoxBaseProps<T> & {
+  multiple?: false
+  value?: string
+  onChange: (value: string | undefined) => void
+}
+
+export type ComboBoxMultipleProps<T extends ComboBoxOption = ComboBoxOption> = ComboBoxBaseProps<T> & {
   multiple: true
-  value: string[]
+  value?: string[]
   onChange: (value: string[]) => void
 }
 
-const getOptionValue = <T extends ComboBoxOption>(option: T): string => {
+export type ComboBoxProps<T extends ComboBoxOption = ComboBoxOption> =
+  | ComboBoxSingleProps<T>
+  | ComboBoxMultipleProps<T>
+
+export const ComboBoxSearchFilters = {
+  contains: <T extends ComboBoxOption>(options: T[], query: string): T[] => {
+    const q = query.toLowerCase().trim()
+    if (!q) return options
+    return options.filter((opt) => {
+      const label = typeof opt === 'string' ? opt : opt.label
+      return label.toLowerCase().includes(q)
+    })
+  },
+
+  startsWith: <T extends ComboBoxOption>(options: T[], query: string): T[] => {
+    const q = query.toLowerCase().trim()
+    if (!q) return options
+    return options.filter((opt) => {
+      const label = typeof opt === 'string' ? opt : opt.label
+      return label.toLowerCase().startsWith(q)
+    })
+  },
+
+  fuzzy: <T extends ComboBoxOption>(options: T[], query: string): T[] => {
+    const q = query.toLowerCase().trim()
+    if (!q) return options
+    return options.filter((opt) => {
+      const label = (typeof opt === 'string' ? opt : opt.label).toLowerCase()
+      let searchIdx = 0
+      for (let i = 0; i < label.length; i++) {
+        if (label[i] === q[searchIdx]) {
+          searchIdx++
+          if (searchIdx === q.length) return true
+        }
+      }
+      return q.length === 0
+    })
+  },
+}
+
+const getOptionValue = (option: ComboBoxOption): string => {
   if (typeof option === 'string') return option
   return option.value
 }
 
-const getOptionLabel = <T extends ComboBoxOption>(option: T): string => {
+const getOptionLabel = (option: ComboBoxOption): string => {
   if (typeof option === 'string') return option
   return option.label
 }
 
-const getOptionDisabled = <T extends ComboBoxOption>(option: T): boolean => {
+const getOptionDisabled = (option: ComboBoxOption): boolean => {
   if (typeof option === 'string') return false
   return option.disabled ?? false
 }
 
-export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T>): JSX.Element
+export function ComboBox<T extends ComboBoxOption>(props: ComboBoxSingleProps<T>): JSX.Element
 export function ComboBox<T extends ComboBoxOption>(props: ComboBoxMultipleProps<T>): JSX.Element
-export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | ComboBoxMultipleProps<T>): JSX.Element {
-  const [local, others] = splitProps(props as ComboBoxProps<T>, [
+export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T>): JSX.Element {
+  const [local, others] = splitProps(props as ComboBoxSingleProps<T>, [
     'options',
     'value',
     'onChange',
-    'onInputChange',
-    'multiple',
     'placeholder',
     'loading',
-    'noResultsMessage',
+    'noResultsFallback',
     'disabled',
     'name',
     'errorMessage',
-    'containerClass',
-    'inputClass',
-    'triggerClass',
+    'class',
     'debounce',
     'triggerMode',
-    'optionValue',
-    'optionLabel',
-    'optionDisabled',
     'itemComponent',
     'prefix',
     'noResultComponent',
-    'unstyled',
+    'onSearch',
   ])
 
   const isInvalid = () => !!local.errorMessage
@@ -96,14 +126,23 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const [inputValue, setInputValue] = createSignal('')
   const [internalOptions, setInternalOptions] = createSignal<T[]>(local.options)
 
-  createEffect(on(() => local.options, (opts) => {
-    if (!inputValue().trim()) {
+  createEffect(on([() => local.options, inputValue], ([opts, query]) => {
+    if (local.onSearch) return
+
+    const q = query.toLowerCase().trim()
+    if (!q) {
       setInternalOptions(() => opts)
+    } else {
+      setInternalOptions(() =>
+        opts.filter((opt) =>
+          getOptionLabel(opt).toLowerCase().includes(q)
+        )
+      )
     }
   }))
 
   const clearInput = () => {
-    handleInputChange('')
+    handleSearchChange('')
     if (inputEl) {
       inputEl.value = ''
       inputEl.dispatchEvent(new InputEvent('input', { bubbles: true }))
@@ -111,24 +150,13 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
     }
   }
 
-  const hasExternalFilter = () => !!local.onInputChange
+  const hasExternalFilter = () => !!local.onSearch
   const resolvedTriggerMode = () => local.triggerMode ?? 'focus'
 
-  const handleInputChange = (value: string) => {
+  const handleSearchChange = (value: string) => {
     setInputValue(value)
-    if (local.onInputChange) {
-      local.onInputChange(value)
-    } else {
-      const query = value.toLowerCase().trim()
-      if (!query) {
-        setInternalOptions(() => local.options)
-      } else {
-        setInternalOptions(() =>
-          local.options.filter((opt) =>
-            getOptionLabel(opt).toLowerCase().includes(query)
-          )
-        )
-      }
+    if (local.onSearch) {
+      local.onSearch(value)
     }
   }
 
@@ -184,7 +212,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
         multiOnChange([...current, val])
       }
       input.value = ''
-      handleInputChange('')
+      handleSearchChange('')
     } else {
       const firstItem = listbox?.querySelector('[role="option"]:not([data-disabled])') as HTMLElement | null
       firstItem?.click()
@@ -194,7 +222,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const renderItemComponent = (itemProps: any) => (
     <KobalteSearch.Item
       item={itemProps.item}
-      {...(!local.unstyled && { 'data-nsg-combo-box': 'item' })}
+      data-nsg-combobox="item"
     >
       {((state: { selected: () => boolean; highlighted: () => boolean; disabled: () => boolean } | undefined) => {
         if (!state) {
@@ -227,8 +255,8 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
   const renderContent = () => (
     <KobalteSearch.Portal>
       <KobalteSearch.Content
-        class={cn('z-50', !local.unstyled && 'nsg-combo-box')}
-        {...(!local.unstyled && { 'data-nsg-combo-box': 'content' })}
+        class="z-50 nsg-combobox"
+        data-nsg-combobox="content"
       >
         <KobalteSearch.Listbox class="p-1 max-h-60 overflow-auto empty:hidden" />
         <Show when={local.noResultComponent && inputValue().trim()}>
@@ -239,25 +267,32 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
             {local.noResultComponent!(inputValue().trim(), clearInput)}
           </KobalteSearch.NoResult>
         </Show>
+        <Show when={!local.noResultComponent && local.noResultsFallback && resolvedOptions().length === 0}>
+          <KobalteSearch.NoResult
+            class="px-3 py-2 text-sm text-text-secondary"
+          >
+            {local.noResultsFallback}
+          </KobalteSearch.NoResult>
+        </Show>
       </KobalteSearch.Content>
     </KobalteSearch.Portal>
   )
 
-  // Single select
   if (!isMultiple()) {
+    const singleProps = props as ComboBoxSingleProps<T>
     return (
       <div
-        class={cn(!local.unstyled && 'nsg-combo-box')}
-        {...(!local.unstyled && { 'data-nsg-combo-box': 'root' })}
+        class={cn('nsg-combobox', local.class)}
+        data-nsg-combobox="root"
       >
         <KobalteSearch<T>
           options={resolvedOptions()}
-          onInputChange={handleInputChange}
-          onChange={(val) => local.onChange(val ? getOptionValue(val) : '' as any)}
-          optionValue={local.optionValue as any ?? getOptionValue}
+          onInputChange={handleSearchChange}
+          onChange={(val) => singleProps.onChange(val ? getOptionValue(val) : undefined)}
+          optionValue={getOptionValue}
           optionTextValue={getOptionLabel}
-          optionLabel={local.optionLabel as any ?? getOptionLabel}
-          optionDisabled={local.optionDisabled as any ?? getOptionDisabled}
+          optionLabel={getOptionLabel}
+          optionDisabled={getOptionDisabled}
           placeholder={local.placeholder}
           validationState={isInvalid() ? 'invalid' : 'valid'}
           disabled={local.disabled}
@@ -265,12 +300,11 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
           debounceOptionsMillisecond={local.debounce}
           triggerMode={resolvedTriggerMode()}
           itemComponent={renderItemComponent}
-          class={cn('relative', local.containerClass)}
+          class="relative"
           {...others as any}
         >
           <KobalteSearch.Control
-            class={cn(local.triggerClass)}
-            {...(!local.unstyled && { 'data-nsg-combo-box': 'control' })}
+            data-nsg-combobox="control"
             {...(isInvalid() && { 'data-invalid': true })}
           >
             <KobalteSearch.Icon class="text-text-muted shrink-0">
@@ -279,8 +313,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
             <KobalteSearch.Input
               ref={(el) => { inputEl = el }}
               onKeyDown={handleKeyDown}
-              class={cn(local.inputClass)}
-              {...(!local.unstyled && { 'data-nsg-combo-box': 'input' })}
+              data-nsg-combobox="input"
             />
             <KobalteSearch.Indicator class="text-text-muted shrink-0">
               <Show when={local.loading}>
@@ -291,7 +324,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
           {renderContent()}
         </KobalteSearch>
         <Show when={local.errorMessage}>
-          <span {...(!local.unstyled && { 'data-nsg-combo-box': 'error' })}>
+          <span data-nsg-combobox="error">
             {local.errorMessage}
           </span>
         </Show>
@@ -299,17 +332,16 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
     )
   }
 
-  // Multiple select
   const multiProps = props as ComboBoxMultipleProps<T>
   return (
     <div
-      class={cn(!local.unstyled && 'nsg-combo-box')}
-      {...(!local.unstyled && { 'data-nsg-combo-box': 'root' })}
+      class={cn('nsg-combobox', local.class)}
+      data-nsg-combobox="root"
     >
       <KobalteSearch<T>
         multiple
         options={resolvedOptions()}
-        onInputChange={handleInputChange}
+        onInputChange={handleSearchChange}
         onChange={(vals: any) => {
           const allVals: string[] = vals.map(getOptionValue)
           const current = multiProps.value ?? []
@@ -318,10 +350,10 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
             multiProps.onChange([...current, ...added])
           }
         }}
-        optionValue={local.optionValue as any ?? getOptionValue}
+        optionValue={getOptionValue}
         optionTextValue={getOptionLabel}
-        optionLabel={local.optionLabel as any ?? getOptionLabel}
-        optionDisabled={local.optionDisabled as any ?? getOptionDisabled}
+        optionLabel={getOptionLabel}
+        optionDisabled={getOptionDisabled}
         placeholder={local.placeholder}
         validationState={isInvalid() ? 'invalid' : 'valid'}
         disabled={local.disabled}
@@ -329,13 +361,12 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
         debounceOptionsMillisecond={local.debounce}
         triggerMode={resolvedTriggerMode()}
         itemComponent={renderItemComponent}
-        class={cn('relative', local.containerClass)}
+        class="relative"
         {...others as any}
       >
         <KobalteSearch.Control<T>
-          class={cn(local.triggerClass)}
-          {...(!local.unstyled && { 'data-nsg-combo-box': 'control' })}
-          data-variant="multiple"
+          data-nsg-combobox="control"
+          data-multiple="true"
           {...(isInvalid() && { 'data-invalid': true })}
         >
           {(_state) => (
@@ -344,16 +375,18 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
                 <For each={resolvedMultiValue()}>
                   {(option) => (
                     <span
-                      {...(!local.unstyled && { 'data-nsg-combo-box': 'tag' })}
+                      data-nsg-combobox="tag"
                       onPointerDown={(e) => e.stopPropagation()}
                     >
                       {getOptionLabel(option)}
                       <button
                         type="button"
-                        onClick={() => {
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={(e) => {
+                          e.stopPropagation()
                           const val = getOptionValue(option)
-                          const current = (props as ComboBoxMultipleProps<T>).value ?? []
-                          ;(props as ComboBoxMultipleProps<T>).onChange(current.filter((v) => v !== val))
+                          const current = multiProps.value ?? []
+                          multiProps.onChange(current.filter((v) => v !== val))
                         }}
                         class="hover:bg-primary-200 rounded p-0.5"
                       >
@@ -366,9 +399,8 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
                   ref={(el) => { inputEl = el }}
                   onKeyDown={handleKeyDown}
                   placeholder={resolvedMultiValue().length === 0 ? local.placeholder : undefined}
-                  class={cn(local.inputClass)}
-                  {...(!local.unstyled && { 'data-nsg-combo-box': 'input' })}
-                  data-variant="multiple"
+                  data-nsg-combobox="input"
+                  data-multiple="true"
                 />
               </div>
               <KobalteSearch.Indicator class="text-text-muted shrink-0 self-center">
@@ -382,7 +414,7 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T> | Com
         {renderContent()}
       </KobalteSearch>
       <Show when={local.errorMessage}>
-        <span {...(!local.unstyled && { 'data-nsg-combo-box': 'error' })}>
+        <span data-nsg-combobox="error">
           {local.errorMessage}
         </span>
       </Show>
