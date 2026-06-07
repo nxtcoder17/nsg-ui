@@ -1,224 +1,301 @@
-import { type JSX, splitProps, createSignal, createEffect, For, Show, onMount, onCleanup, createMemo, children } from 'solid-js'
+import { type JSX, splitProps, mergeProps, createSignal, createEffect, For, Show, onCleanup, createMemo } from 'solid-js'
+import { Dynamic } from 'solid-js/web'
 import { Dialog as KobalteDialog } from '@kobalte/core/dialog'
-import { cn } from '../../utils/cn'
 import { SearchIcon } from '../../icons'
 
-// ============================================================================
-// Sentinel types
-// ============================================================================
-
-type CommandBarItemData = {
-  $$commandBarItem: true
-  id: string
-  label: string
-  icon?: (props: { class?: string }) => JSX.Element
-  disabled?: boolean
-  keywords?: string[]
-}
-
-type CommandBarGroupData = {
-  $$commandBarGroup: true
-  label: string
-  children: JSX.Element
-}
-
-// ============================================================================
-// Types
-// ============================================================================
-
-export type CommandBarItemState = {
+export interface CommandBarItemState {
   highlighted: boolean
   disabled: boolean
 }
 
-export type CommandBarProps = {
-  open?: boolean
-  onOpenChange?: (open: boolean) => void
-  onSelect: (id: string, label: string) => void
-  placeholder?: string
-  noResultsMessage?: string
-  filterFn?: (item: { id: string; label: string; keywords?: string[] }, query: string) => boolean
-  itemComponent?: (item: { id: string; label: string; icon?: (props: { class?: string }) => JSX.Element }, state: CommandBarItemState) => JSX.Element
-  globalShortcut?: boolean
-  class?: string
-  children?: JSX.Element
-}
-
-type CommandBarItemProps = {
+export interface Value {
   id: string
   label: string
+  description: string // Used for text search/filtering
+  group?: string
   icon?: (props: { class?: string }) => JSX.Element
+  render?: (state: CommandBarItemState) => JSX.Element
   disabled?: boolean
-  keywords?: string[]
 }
 
-type CommandBarGroupProps = {
-  label: string
-  children: JSX.Element
+export type CommandBarProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  onSelect: (id: string, label: string) => void
+  values: Value[]
+
+  placeholder?: string
+  groupsOrder?: string[]
+  noResultsFallback?: JSX.Element
+  filterFn?: (item: Value, query: string) => boolean
+  globalShortcut?: boolean
 }
 
-// ============================================================================
-// Sub-components (sentinel objects)
-// ============================================================================
+type CommandBarEntry =
+  | { type: 'header'; label: string }
+  | { type: 'item'; item: Value; flatIndex: number }
 
-const Item = (props: CommandBarItemProps): JSX.Element => {
-  return {
-    $$commandBarItem: true,
-    get id() { return props.id },
-    get label() { return props.label },
-    get icon() { return props.icon },
-    get disabled() { return props.disabled },
-    get keywords() { return props.keywords },
-  } as unknown as JSX.Element
-}
-
-const Group = (props: CommandBarGroupProps): JSX.Element => {
-  return {
-    $$commandBarGroup: true,
-    get label() { return props.label },
-    get children() { return props.children },
-  } as unknown as JSX.Element
-}
-
-// ============================================================================
-// Helpers
-// ============================================================================
-
-const defaultFilter = (item: { id: string; label: string; keywords?: string[] }, query: string): boolean => {
+const defaultFilter = (item: Value, query: string): boolean => {
   const q = query.toLowerCase()
-  if (item.label.toLowerCase().includes(q)) return true
-  if (item.keywords?.some(k => k.toLowerCase().includes(q))) return true
-  return false
+  return (
+    item.label.toLowerCase().includes(q) ||
+    item.description.toLowerCase().includes(q)
+  )
 }
 
-/** Recursively extract CommandBarItemData from resolved children (handles Groups) */
-function extractItems(resolved: any[]): CommandBarItemData[] {
-  const items: CommandBarItemData[] = []
-  for (const child of resolved) {
-    if (child?.$$commandBarItem) {
-      items.push(child as unknown as CommandBarItemData)
-    } else if (child?.$$commandBarGroup) {
-      const group = child as unknown as CommandBarGroupData
-      const groupResolved = children(() => group.children)
-      const groupArr = groupResolved.toArray()
-      for (const gc of groupArr) {
-        if ((gc as any)?.$$commandBarItem) {
-          items.push(gc as unknown as CommandBarItemData)
+type ItemProps = {
+  item: Value
+  flatIndex: number
+  highlightedIndex: number
+  setHighlightedIndex: (index: number) => void
+  onSelect: (id: string, label: string) => void
+  onOpenChange: (open: boolean) => void
+}
+
+function Item(props: ItemProps): JSX.Element {
+  const isHighlighted = () => props.flatIndex === props.highlightedIndex
+  const state = () => ({
+    highlighted: isHighlighted(),
+    disabled: props.item.disabled ?? false,
+  })
+
+  return (
+    <button
+      type="button"
+      disabled={props.item.disabled}
+      data-index={props.flatIndex}
+      data-nsg-command-bar="item"
+      data-highlighted={isHighlighted() ? '' : undefined}
+      data-disabled={props.item.disabled ? '' : undefined}
+      onMouseEnter={() => !props.item.disabled && props.setHighlightedIndex(props.flatIndex)}
+      onClick={() => {
+        if (props.item.disabled) return
+        props.onSelect(props.item.id, props.item.label)
+        props.onOpenChange(false)
+      }}
+    >
+      <Show when={props.item.render} fallback={
+        <>
+          <Show when={props.item.icon}>
+            {(Icon) => (
+              <Dynamic
+                component={Icon()}
+                class="nsg-command-bar-item-icon"
+              />
+            )}
+          </Show>
+          <span>{props.item.label}</span>
+        </>
+      }>
+        {props.item.render!(state())}
+      </Show>
+    </button>
+  )
+}
+
+type InputProps = {
+  ref: HTMLInputElement | undefined | ((el: HTMLInputElement) => void)
+  value: string
+  onInput: (val: string) => void
+  onKeyDown: (e: KeyboardEvent) => void
+  placeholder?: string
+}
+
+function Input(props: InputProps): JSX.Element {
+  return (
+    <div data-nsg-command-bar="search-wrapper">
+      <SearchIcon class="nsg-command-bar-search-icon" />
+      <input
+        ref={props.ref}
+        type="text"
+        value={props.value}
+        onInput={(e) => props.onInput(e.currentTarget.value)}
+        onKeyDown={props.onKeyDown}
+        placeholder={props.placeholder}
+        data-nsg-command-bar="input"
+      />
+      <kbd data-nsg-command-bar="shortcut">
+        esc
+      </kbd>
+    </div>
+  )
+}
+
+type ListProps = {
+  ref: HTMLDivElement | undefined | ((el: HTMLDivElement) => void)
+  entries: CommandBarEntry[]
+  flatItemsCount: number
+  highlightedIndex: number
+  setHighlightedIndex: (idx: number) => void
+  onSelect: (id: string, label: string) => void
+  onOpenChange: (open: boolean) => void
+  noResultsFallback?: JSX.Element
+}
+
+function List(props: ListProps): JSX.Element {
+  return (
+    <div ref={props.ref} data-nsg-command-bar="list">
+      <Show
+        when={props.flatItemsCount > 0}
+        fallback={
+          <div data-nsg-command-bar="list-empty">
+            {props.noResultsFallback}
+          </div>
         }
+      >
+        <For each={props.entries}>
+          {(entry) => {
+            if (entry.type === 'header') {
+              return (
+                <div data-nsg-command-bar="group-header">
+                  {entry.label}
+                </div>
+              )
+            }
+
+            return (
+              <Item
+                item={entry.item}
+                flatIndex={entry.flatIndex}
+                highlightedIndex={props.highlightedIndex}
+                setHighlightedIndex={props.setHighlightedIndex}
+                onSelect={props.onSelect}
+                onOpenChange={props.onOpenChange}
+              />
+            )
+          }}
+        </For>
+      </Show>
+    </div>
+  )
+}
+
+function Footer(): JSX.Element {
+  return (
+    <div data-nsg-command-bar="footer">
+      <span>
+        <kbd>&uarr;</kbd>
+        <kbd>&darr;</kbd>
+        <span>to navigate</span>
+      </span>
+      <span>
+        <kbd>&crarr;</kbd>
+        <span>to select</span>
+      </span>
+    </div>
+  )
+}
+
+export function CommandBar(props: CommandBarProps): JSX.Element {
+  const merged = mergeProps(
+    {
+      placeholder: 'Search...',
+      noResultsFallback: <span>No results found</span>,
+      globalShortcut: true,
+      filterFn: defaultFilter,
+    },
+    props
+  )
+
+  const [local, others] = splitProps(merged, [
+    'open',
+    'onOpenChange',
+    'onSelect',
+    'values',
+    'placeholder',
+    'groupsOrder',
+    'noResultsFallback',
+    'filterFn',
+    'globalShortcut',
+  ])
+
+  const [search, setSearch] = createSignal('')
+  const [highlightedIndex, setHighlightedIndex] = createSignal(0)
+
+  let inputRef: HTMLInputElement | undefined
+  let listRef: HTMLDivElement | undefined
+
+  const processedData = createMemo(() => {
+    const q = search().trim()
+    const filtered = q 
+      ? local.values.filter(i => local.filterFn(i, q))
+      : local.values
+
+    // 1. Group items
+    const groupsMap = new Map<string, Value[]>()
+    const ungrouped: Value[] = []
+    
+    for (const item of filtered) {
+      if (item.group) {
+        if (!groupsMap.has(item.group)) {
+          groupsMap.set(item.group, [])
+        }
+        groupsMap.get(item.group)!.push(item)
+      } else {
+        ungrouped.push(item)
       }
     }
-  }
-  return items
-}
 
-/** Build grouped entries from resolved children for rendering */
-function buildGroupedEntries(
-  resolved: any[],
-  filteredIds: Set<string>
-): ({ type: 'header'; label: string } | { type: 'item'; item: CommandBarItemData; flatIndex: number })[] {
-  const entries: ({ type: 'header'; label: string } | { type: 'item'; item: CommandBarItemData; flatIndex: number })[] = []
-  let flatIndex = 0
-
-  for (const child of resolved) {
-    if (child?.$$commandBarItem) {
-      const item = child as unknown as CommandBarItemData
-      if (filteredIds.has(item.id)) {
-        entries.push({ type: 'item', item, flatIndex })
-        flatIndex++
+    // 2. Determine group ordering
+    const orderedGroupNames = local.groupsOrder || []
+    const allGroupNames = [...orderedGroupNames]
+    for (const g of groupsMap.keys()) {
+      if (!allGroupNames.includes(g)) {
+        allGroupNames.push(g)
       }
-    } else if (child?.$$commandBarGroup) {
-      const group = child as unknown as CommandBarGroupData
-      const groupResolved = children(() => group.children)
-      const groupItems = groupResolved.toArray().filter((gc: any) => gc?.$$commandBarItem && filteredIds.has(gc.id)) as unknown as CommandBarItemData[]
+    }
+
+    // 3. Build visual entries and flat items list
+    const entries: CommandBarEntry[] = []
+    const flatItems: Value[] = []
+    let flatIndex = 0
+
+    // Ungrouped items first
+    for (const item of ungrouped) {
+      entries.push({ type: 'item', item, flatIndex })
+      flatItems.push(item)
+      flatIndex++
+    }
+
+    // Grouped items
+    for (const groupName of allGroupNames) {
+      const groupItems = groupsMap.get(groupName) || []
       if (groupItems.length > 0) {
-        entries.push({ type: 'header', label: group.label })
+        entries.push({ type: 'header', label: groupName })
         for (const item of groupItems) {
           entries.push({ type: 'item', item, flatIndex })
+          flatItems.push(item)
           flatIndex++
         }
       }
     }
-  }
-  return entries
-}
 
-// ============================================================================
-// Root Component
-// ============================================================================
-
-function CommandBarRoot(props: CommandBarProps): JSX.Element {
-  const [local, others] = splitProps(props, [
-    'open',
-    'onOpenChange',
-    'onSelect',
-    'placeholder',
-    'noResultsMessage',
-    'filterFn',
-    'itemComponent',
-    'globalShortcut',
-    'class',
-    'children',
-  ])
-
-  const [query, setQuery] = createSignal('')
-  const [highlightedIndex, setHighlightedIndex] = createSignal(0)
-  let inputRef: HTMLInputElement | undefined
-  let listRef: HTMLDivElement | undefined
-
-  const resolved = children(() => local.children)
-  const allItems = createMemo(() => extractItems(resolved.toArray()))
-
-  const filterFn = () => local.filterFn ?? defaultFilter
-
-  const filteredItems = createMemo(() => {
-    const q = query().trim()
-    const items = allItems()
-    if (!q) return items.filter(i => !i.disabled)
-    return items.filter(i => !i.disabled && filterFn()(i, q))
+    return { entries, flatItems }
   })
 
-  const filteredIds = createMemo(() => new Set(filteredItems().map(i => i.id)))
-
-  const groupedEntries = createMemo(() => buildGroupedEntries(resolved.toArray(), filteredIds()))
-
-  // Reset on close
+  // Keep highlighted entry in command bar's view
   createEffect(() => {
-    if (!local.open) {
-      setQuery('')
-      setHighlightedIndex(0)
-    }
-  })
-
-  // Focus input when opened
-  createEffect(() => {
-    if (local.open) {
-      setTimeout(() => inputRef?.focus(), 0)
-    }
-  })
-
-  // Clamp highlighted index
-  createEffect(() => {
-    const items = filteredItems()
-    if (highlightedIndex() >= items.length) {
-      setHighlightedIndex(Math.max(0, items.length - 1))
-    }
-  })
-
-  // Scroll highlighted item into view
-  createEffect(() => {
+    const items = processedData().flatItems
     const idx = highlightedIndex()
-    const el = listRef?.querySelector(`[data-index="${idx}"]`) as HTMLElement | null
+
+    if (idx >= items.length) {
+      const newIdx = Math.max(0, items.length - 1)
+      setHighlightedIndex(newIdx)
+    }
+
+    const currentIdx = highlightedIndex()
+    const el = listRef?.querySelector(`[data-index="${currentIdx}"]`) as HTMLElement | null
     el?.scrollIntoView({ block: 'nearest' })
   })
 
-  // Global Cmd+K shortcut
-  onMount(() => {
-    if (local.globalShortcut === false) return
+  // Global keyboard shortcut handler (Cmd/Ctrl+K)
+  createEffect(() => {
+    if (!local.globalShortcut) return
 
     const handler = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault()
-        local.onOpenChange?.(!local.open)
+        local.onOpenChange(!local.open)
       }
     }
 
@@ -227,29 +304,43 @@ function CommandBarRoot(props: CommandBarProps): JSX.Element {
   })
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    const items = filteredItems()
+    const items = processedData().flatItems
+    const len = items.length
 
     switch (e.key) {
       case 'Escape':
         e.preventDefault()
-        local.onOpenChange?.(false)
+        local.onOpenChange(false)
         break
-      case 'ArrowDown':
+      case 'ArrowDown': {
         e.preventDefault()
-        setHighlightedIndex(i => (i + 1) % items.length)
+        if (len === 0) break
+        let nextIdx = highlightedIndex()
+        do {
+          nextIdx = (nextIdx + 1) % len
+        } while (items[nextIdx].disabled && nextIdx !== highlightedIndex())
+        setHighlightedIndex(nextIdx)
         break
-      case 'ArrowUp':
+      }
+      case 'ArrowUp': {
         e.preventDefault()
-        setHighlightedIndex(i => (i - 1 + items.length) % items.length)
+        if (len === 0) break
+        let prevIdx = highlightedIndex()
+        do {
+          prevIdx = (prevIdx - 1 + len) % len
+        } while (items[prevIdx].disabled && prevIdx !== highlightedIndex())
+        setHighlightedIndex(prevIdx)
         break
-      case 'Enter':
+      }
+      case 'Enter': {
         e.preventDefault()
         const item = items[highlightedIndex()]
-        if (item) {
+        if (item && !item.disabled) {
           local.onSelect(item.id, item.label)
-          local.onOpenChange?.(false)
+          local.onOpenChange(false)
         }
         break
+      }
     }
   }
 
@@ -261,118 +352,45 @@ function CommandBarRoot(props: CommandBarProps): JSX.Element {
       preventScroll
     >
       <KobalteDialog.Portal>
-        <KobalteDialog.Overlay class="nsg-dialog" data-nsg-dialog="overlay" />
-        <div class="nsg-dialog fixed inset-0 z-50 flex justify-center items-start pt-[15vh] pointer-events-none" data-nsg-dialog="positioner">
+        <KobalteDialog.Overlay
+          class="nsg-command-bar-overlay"
+          data-nsg-command-bar="overlay"
+        />
+         <div
+          class="nsg-command-bar-positioner"
+          data-nsg-command-bar="positioner"
+        >
           <KobalteDialog.Content
-            class={cn(
-              'nsg-command-bar pointer-events-auto w-full max-w-lg mx-4',
-              'shadow-xl',
-              'data-[expanded]:animate-slide-up',
-              'focus:outline-none',
-              local.class
-            )}
-            data-nsg-dialog="content"
+            class="nsg-command-bar"
+            data-nsg-command-bar="content"
             aria-label="Command bar"
           >
-            {/* Search input */}
-            <div class="flex items-center gap-3 px-4 border-b border-border">
-              <SearchIcon class="w-5 h-5 text-text-muted shrink-0" />
-              <input
-                ref={inputRef}
-                type="text"
-                value={query()}
-                onInput={(e) => {
-                  setQuery(e.currentTarget.value)
-                  setHighlightedIndex(0)
-                }}
-                onKeyDown={handleKeyDown}
-                placeholder={local.placeholder ?? 'Search...'}
-                data-nsg-command-bar="input"
-              />
-              <kbd class="hidden sm:inline-flex items-center gap-1 px-1.5 py-0.5 text-xs font-medium text-text-muted bg-surface-sunken border border-border rounded">
-                esc
-              </kbd>
-            </div>
+            <Input
+              ref={inputRef}
+              value={search()}
+              onInput={(val) => {
+                setSearch(val)
+                setHighlightedIndex(0)
+              }}
+              onKeyDown={handleKeyDown}
+              placeholder={local.placeholder}
+            />
 
-            {/* Results list */}
-            <div ref={listRef} class="max-h-72 overflow-y-auto p-2">
-              <Show
-                when={filteredItems().length > 0}
-                fallback={
-                  <div class="px-3 py-8 text-sm text-text-secondary text-center">
-                    {local.noResultsMessage ?? 'No results found'}
-                  </div>
-                }
-              >
-                <For each={groupedEntries()}>
-                  {(entry) => {
-                    if (entry.type === 'header') {
-                      return (
-                        <div data-nsg-command-bar="group-header">
-                          {entry.label}
-                        </div>
-                      )
-                    }
+            <List
+              ref={listRef}
+              entries={processedData().entries}
+              flatItemsCount={processedData().flatItems.length}
+              highlightedIndex={highlightedIndex()}
+              setHighlightedIndex={setHighlightedIndex}
+              onSelect={local.onSelect}
+              onOpenChange={local.onOpenChange}
+              noResultsFallback={local.noResultsFallback}
+            />
 
-                    const isHighlighted = () => entry.flatIndex === highlightedIndex()
-                    const state = () => ({
-                      highlighted: isHighlighted(),
-                      disabled: entry.item.disabled ?? false,
-                    })
-
-                    return (
-                      <button
-                        type="button"
-                        data-index={entry.flatIndex}
-                        data-nsg-command-bar="item"
-                        {...(isHighlighted() ? { 'data-highlighted': '' } : {})}
-                        onMouseEnter={() => setHighlightedIndex(entry.flatIndex)}
-                        onClick={() => {
-                          local.onSelect(entry.item.id, entry.item.label)
-                          local.onOpenChange?.(false)
-                        }}
-                      >
-                        <Show when={local.itemComponent} fallback={
-                          <>
-                            <Show when={entry.item.icon}>
-                              {(Icon) => {
-                                const IconComponent = Icon()
-                                return <IconComponent class={cn('w-5 h-5', isHighlighted() ? 'text-primary-600' : 'text-text-muted')} />
-                              }}
-                            </Show>
-                            <span>{entry.item.label}</span>
-                          </>
-                        }>
-                          {local.itemComponent!(entry.item, state())}
-                        </Show>
-                      </button>
-                    )
-                  }}
-                </For>
-              </Show>
-            </div>
-
-            {/* Footer */}
-            <div data-nsg-command-bar="footer">
-              <span class="flex items-center gap-1.5">
-                <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&uarr;</kbd>
-                <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&darr;</kbd>
-                <span>to navigate</span>
-              </span>
-              <span class="flex items-center gap-1.5">
-                <kbd class="px-1.5 py-0.5 bg-surface-sunken border border-border rounded font-medium">&crarr;</kbd>
-                <span>to select</span>
-              </span>
-            </div>
+            <Footer />
           </KobalteDialog.Content>
         </div>
       </KobalteDialog.Portal>
     </KobalteDialog>
   )
 }
-
-// ============================================================================
-// Export
-// ============================================================================
-
-export const CommandBar = Object.assign(CommandBarRoot, { Item, Group })
