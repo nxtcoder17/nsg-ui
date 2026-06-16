@@ -14,7 +14,7 @@ export type TextInputProps = {
   readOnly?: boolean
   required?: boolean
   name?: string
-  containerClass?: string
+  class?: string
   inputClass?: string
   // Multiline (textarea)
   multiline?: boolean
@@ -24,7 +24,6 @@ export type TextInputProps = {
   prefix?: JSX.Element
   suffix?: JSX.Element
 }
-
 
 export const TextInput = (props: TextInputProps) => {
   const [local, others] = splitProps(props, [
@@ -39,7 +38,7 @@ export const TextInput = (props: TextInputProps) => {
     'readOnly',
     'required',
     'name',
-    'containerClass',
+    'class',
     'inputClass',
     'multiline',
     'rows',
@@ -50,20 +49,6 @@ export const TextInput = (props: TextInputProps) => {
 
   const isInvalid = () => !!local.errorMessage
 
-  const inputStyles = cn(
-    'flex-1 bg-transparent outline-none text-sm text-text placeholder:text-text-muted',
-    'disabled:cursor-not-allowed'
-  )
-
-  const wrapperStyles = cn(
-    'flex items-center gap-2 px-3 py-2 rounded-md border bg-surface-raised',
-    'transition-colors',
-    'focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-1',
-    isInvalid()
-      ? 'border-danger-500'
-      : 'border-border hover:border-primary-400 focus-within:border-primary-500'
-  )
-
   return (
     <TextField
       value={local.value}
@@ -73,21 +58,21 @@ export const TextInput = (props: TextInputProps) => {
       readOnly={local.readOnly}
       required={local.required}
       name={local.name}
-      class={cn('flex flex-col gap-1.5', local.disabled && 'opacity-50', local.containerClass)}
+      class={cn('nsg-text-input', local.class)}
       {...others}
     >
       <Show when={local.label}>
-        <TextField.Label class="text-sm font-medium text-text">
+        <TextField.Label data-nsg-text-input="label">
           {local.label}
           <Show when={local.required}>
-            <span class="text-danger-500 ml-0.5">*</span>
+            <span>*</span>
           </Show>
         </TextField.Label>
       </Show>
 
-      <div class={wrapperStyles}>
+      <div data-nsg-text-input="wrapper">
         <Show when={local.prefix}>
-          <span class="text-text-muted shrink-0">{local.prefix}</span>
+          <span data-nsg-text-input="prefix">{local.prefix}</span>
         </Show>
 
         <Show
@@ -96,7 +81,8 @@ export const TextInput = (props: TextInputProps) => {
             <TextField.Input
               type={local.type ?? 'text'}
               placeholder={local.placeholder}
-              class={cn(inputStyles, local.inputClass)}
+              class={local.inputClass}
+              data-nsg-text-input="input"
             />
           }
         >
@@ -104,23 +90,24 @@ export const TextInput = (props: TextInputProps) => {
             placeholder={local.placeholder}
             rows={local.rows}
             autoResize={local.autoResize}
-            class={cn(inputStyles, 'resize-none', local.inputClass)}
+            class={local.inputClass}
+            data-nsg-text-input="input"
           />
         </Show>
 
         <Show when={local.suffix}>
-          <span class="text-text-muted shrink-0">{local.suffix}</span>
+          <span data-nsg-text-input="suffix">{local.suffix}</span>
         </Show>
       </div>
 
       <Show when={local.description}>
-        <TextField.Description class="text-xs text-text-secondary">
+        <TextField.Description data-nsg-text-input="description">
           {local.description}
         </TextField.Description>
       </Show>
 
       <Show when={local.errorMessage}>
-        <TextField.ErrorMessage class="text-xs text-danger-500">
+        <TextField.ErrorMessage data-nsg-text-input="error">
           {local.errorMessage}
         </TextField.ErrorMessage>
       </Show>

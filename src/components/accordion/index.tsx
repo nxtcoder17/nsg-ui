@@ -44,14 +44,13 @@ const Item = (props: AccordionItemProps) => {
         <KobalteAccordion.Trigger
           data-nsg-accordion="trigger"
         >
-          <div class="flex-1">
+          <div data-nsg-accordion="trigger-label">
             {local.trigger}
           </div>
           <ChevronRightIcon data-nsg-accordion="trigger-icon" />
         </KobalteAccordion.Trigger>
       </KobalteAccordion.Header>
       <KobalteAccordion.Content
-        class="overflow-hidden"
         data-nsg-accordion="content-wrapper"
       >
         <div data-nsg-accordion="content">

@@ -13,16 +13,24 @@ export type SegmentedControlProps = {
   direction?: 'row' | 'column'
   disabled?: boolean
   name?: string
-  unstyled?: boolean
   class?: string
   children?: JSX.Element
 }
 
 const SegmentedControlRoot = (props: SegmentedControlProps) => {
   const [local, others] = splitProps(props, [
-    'value', 'defaultValue', 'onChange', 'label', 'description',
-    'errorMessage', 'validationState', 'direction', 'disabled',
-    'name', 'unstyled', 'class', 'children',
+    'value',
+    'defaultValue',
+    'onChange',
+    'label',
+    'description',
+    'errorMessage',
+    'validationState',
+    'direction',
+    'disabled',
+    'name',
+    'class',
+    'children',
   ])
 
   return (
@@ -34,41 +42,28 @@ const SegmentedControlRoot = (props: SegmentedControlProps) => {
       validationState={local.validationState}
       disabled={local.disabled}
       name={local.name}
-      class={cn(!local.unstyled && 'nsg-segmented-control', local.class)}
+      class={cn('nsg-segmented-control', local.class)}
       {...others}
     >
       <Show when={local.label}>
-        <KobalteSegmentedControl.Label
-          {...(!local.unstyled && { 'data-nsg-segmented-control': 'label' })}
-        >
+        <KobalteSegmentedControl.Label data-nsg-segmented-control="label">
           {local.label}
         </KobalteSegmentedControl.Label>
       </Show>
 
-      <div
-        role="presentation"
-        class="relative inline-flex items-stretch"
-        {...(!local.unstyled && { 'data-nsg-segmented-control': 'track' })}
-      >
-        <KobalteSegmentedControl.Indicator
-          class="absolute pointer-events-none"
-          {...(!local.unstyled && { 'data-nsg-segmented-control': 'indicator' })}
-        />
+      <div role="presentation" data-nsg-segmented-control="track">
+        <KobalteSegmentedControl.Indicator data-nsg-segmented-control="indicator" />
         {local.children}
       </div>
 
       <Show when={local.description}>
-        <KobalteSegmentedControl.Description
-          {...(!local.unstyled && { 'data-nsg-segmented-control': 'description' })}
-        >
+        <KobalteSegmentedControl.Description data-nsg-segmented-control="description">
           {local.description}
         </KobalteSegmentedControl.Description>
       </Show>
 
       <Show when={local.errorMessage}>
-        <KobalteSegmentedControl.ErrorMessage
-          {...(!local.unstyled && { 'data-nsg-segmented-control': 'error' })}
-        >
+        <KobalteSegmentedControl.ErrorMessage data-nsg-segmented-control="error">
           {local.errorMessage}
         </KobalteSegmentedControl.ErrorMessage>
       </Show>
@@ -79,28 +74,24 @@ const SegmentedControlRoot = (props: SegmentedControlProps) => {
 export type SegmentedControlItemProps = {
   value: string
   disabled?: boolean
-  unstyled?: boolean
   class?: string
   children?: JSX.Element
   'aria-label'?: string
 }
 
 const Item = (props: SegmentedControlItemProps) => {
-  const [local, others] = splitProps(props, ['value', 'disabled', 'unstyled', 'class', 'children', 'aria-label'])
+  const [local, others] = splitProps(props, ['value', 'disabled', 'class', 'children', 'aria-label'])
 
   return (
     <KobalteSegmentedControl.Item
       value={local.value}
       disabled={local.disabled}
-      class={cn('relative z-10', local.class)}
-      {...(!local.unstyled && { 'data-nsg-segmented-control': 'item' })}
+      class={local.class}
+      data-nsg-segmented-control="item"
       {...others}
     >
       <KobalteSegmentedControl.ItemInput class="sr-only" aria-label={local['aria-label']} />
-      <KobalteSegmentedControl.ItemLabel
-        class="flex items-center justify-center w-full h-full"
-        {...(!local.unstyled && { 'data-nsg-segmented-control': 'item-label' })}
-      >
+      <KobalteSegmentedControl.ItemLabel data-nsg-segmented-control="item-label">
         {local.children}
       </KobalteSegmentedControl.ItemLabel>
     </KobalteSegmentedControl.Item>

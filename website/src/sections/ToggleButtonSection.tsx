@@ -75,8 +75,9 @@ export const ToggleButtonSection: Component = () => {
 
         <DemoCard title="Variants" description="Different visual styles">
           <div class="flex gap-3">
-            <ToggleButton kind="default">Default</ToggleButton>
-            <ToggleButton kind="outline">Outline</ToggleButton>
+            <ToggleButton kind="primary">Primary</ToggleButton>
+            <ToggleButton kind="secondary">Secondary</ToggleButton>
+            <ToggleButton kind="secondary" outline>Outline</ToggleButton>
             <ToggleButton kind="ghost">Ghost</ToggleButton>
           </div>
         </DemoCard>

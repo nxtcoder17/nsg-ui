@@ -17,13 +17,22 @@ export interface PopoverProps {
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end'
   /** Gap between popover and trigger */
   gutter?: number
-  unstyled?: boolean
   class?: string
 }
 
 export function Popover(props: PopoverProps) {
   const [local, others] = splitProps(props, [
-    'show', 'onChange', 'trigger', 'triggerLabel', 'title', 'description', 'children', 'arrow', 'placement', 'gutter', 'unstyled', 'class'
+    'show',
+    'onChange',
+    'trigger',
+    'triggerLabel',
+    'title',
+    'description',
+    'children',
+    'arrow',
+    'placement',
+    'gutter',
+    'class'
   ])
 
   return (
@@ -34,27 +43,29 @@ export function Popover(props: PopoverProps) {
       gutter={local.gutter ?? 8}
       {...others}
     >
-      <KobaltePopover.Trigger as="div" aria-label={local.triggerLabel}>{local.trigger}</KobaltePopover.Trigger>
+      <KobaltePopover.Trigger as="div" aria-label={local.triggerLabel}>
+        {local.trigger}
+      </KobaltePopover.Trigger>
 
       <KobaltePopover.Portal>
         <KobaltePopover.Content
-          class={cn(!local.unstyled && 'nsg-popover')}
-          {...(!local.unstyled && { 'data-nsg-popover': 'content' })}
+          class={cn('nsg-popover', local.class)}
+          data-nsg-popover="content"
         >
           <Show when={local.arrow}>
-            <KobaltePopover.Arrow {...(!local.unstyled && { 'data-nsg-popover': 'arrow' })} size={18} />
+            <KobaltePopover.Arrow data-nsg-popover="arrow" size={18} />
           </Show>
 
-          <div class={local.class} {...(!local.unstyled && { 'data-nsg-popover': 'inner' })}>
+          <div data-nsg-popover="inner">
             <Show when={local.title || local.description}>
-              <div {...(!local.unstyled && { 'data-nsg-popover': 'header' })}>
+              <div data-nsg-popover="header">
                 <Show when={local.title}>
-                  <KobaltePopover.Title {...(!local.unstyled && { 'data-nsg-popover': 'title' })}>
+                  <KobaltePopover.Title data-nsg-popover="title">
                     {local.title}
                   </KobaltePopover.Title>
                 </Show>
                 <Show when={local.description}>
-                  <KobaltePopover.Description {...(!local.unstyled && { 'data-nsg-popover': 'description' })}>
+                  <KobaltePopover.Description data-nsg-popover="description">
                     {local.description}
                   </KobaltePopover.Description>
                 </Show>

@@ -1,9 +1,9 @@
 import { ToggleButton as KobalteToggleButton } from '@kobalte/core/toggle-button'
-import { splitProps, JSX } from 'solid-js'
+import { splitProps, JSX, mergeProps } from 'solid-js'
 import { cn } from '../../utils/cn'
 
-export type ToggleButtonKind = 'default' | 'outline' | 'ghost'
-export type ToggleButtonSize = 'sm' | 'md' | 'lg' | 'icon'
+export type ToggleButtonKind = 'primary' | 'secondary' | 'ghost'
+export type ToggleButtonSize = 'sm' | 'md' | 'lg' | 'icon' | 'icon-sm'
 
 export type ToggleButtonProps = {
   pressed?: boolean
@@ -11,49 +11,21 @@ export type ToggleButtonProps = {
   onChange?: (pressed: boolean) => void
   kind?: ToggleButtonKind
   size?: ToggleButtonSize
+  outline?: boolean
   disabled?: boolean
   class?: string
   children: JSX.Element | ((state: { pressed: () => boolean }) => JSX.Element)
 }
 
-const baseStyles = cn(
-  'inline-flex items-center justify-center font-medium transition-colors',
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-  'disabled:opacity-50 disabled:cursor-not-allowed'
-)
-
-const kindStyles: Record<ToggleButtonKind, string> = {
-  default: cn(
-    'bg-neutral-100 text-text-secondary',
-    'hover:bg-neutral-200',
-    'data-[pressed]:bg-primary-100 data-[pressed]:text-primary-700'
-  ),
-  outline: cn(
-    'border border-border bg-transparent text-text-secondary',
-    'hover:bg-neutral-100',
-    'data-[pressed]:border-primary-500 data-[pressed]:bg-primary-50 data-[pressed]:text-primary-700'
-  ),
-  ghost: cn(
-    'bg-transparent text-text-secondary',
-    'hover:bg-neutral-100',
-    'data-[pressed]:bg-primary-100 data-[pressed]:text-primary-700'
-  ),
-}
-
-const sizeStyles: Record<ToggleButtonSize, string> = {
-  sm: 'h-8 px-3 text-xs rounded-md',
-  md: 'h-10 px-4 text-sm rounded-md',
-  lg: 'h-12 px-6 text-base rounded-lg',
-  icon: 'h-10 w-10 rounded-md',
-}
-
 export const ToggleButton = (props: ToggleButtonProps) => {
-  const [local, others] = splitProps(props, [
+  const merged = mergeProps({ kind: 'primary', size: 'md' } as const, props)
+  const [local, others] = splitProps(merged, [
     'pressed',
     'defaultPressed',
     'onChange',
     'kind',
     'size',
+    'outline',
     'disabled',
     'class',
     'children',
@@ -66,11 +38,12 @@ export const ToggleButton = (props: ToggleButtonProps) => {
       onChange={local.onChange}
       disabled={local.disabled}
       class={cn(
-        baseStyles,
-        kindStyles[local.kind ?? 'default'],
-        sizeStyles[local.size ?? 'md'],
+        'nsg-toggle-button',
+        local.outline && 'nsg-toggle-button-outline',
         local.class
       )}
+      data-kind={local.kind}
+      data-size={local.size}
       {...others}
     >
       {local.children}

@@ -23,9 +23,16 @@ export const LinkSection: Component = () => {
     >
       <DemoCard title="Variants" description="Different visual styles">
         <div class="flex flex-wrap gap-6">
-          <Link href="#">Default link</Link>
-          <Link href="#" kind="muted">Muted link</Link>
+          <Link href="#">Primary link</Link>
+          <Link href="#" kind="secondary">Secondary link</Link>
           <Link href="#" kind="danger">Danger link</Link>
+        </div>
+      </DemoCard>
+
+      <DemoCard title="Underline" description="Underline behavior modifier">
+        <div class="flex flex-wrap gap-6">
+          <Link href="#">Underlined (default)</Link>
+          <Link href="#" underline={false}>No Underline</Link>
         </div>
       </DemoCard>
 
@@ -60,7 +67,7 @@ export const LinkSection: Component = () => {
       <DemoCard title="Disabled" description="Non-interactive link state">
         <div class="flex flex-wrap gap-6">
           <Link href="#" disabled>Disabled link</Link>
-          <Link href="#" kind="muted" disabled>Disabled muted</Link>
+          <Link href="#" kind="secondary" disabled>Disabled secondary</Link>
         </div>
       </DemoCard>
     </Section>

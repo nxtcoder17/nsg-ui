@@ -77,7 +77,7 @@ export const ProgressSection: Component = () => {
 					description="Different colors for different contexts"
 				>
 					<div class="max-w-md space-y-4">
-						<Progress value={60} label="Default" showValue />
+						<Progress value={60} label="Primary" showValue />
 						<Progress value={60} label="Success" showValue kind="success" />
 						<Progress value={60} label="Warning" showValue kind="warning" />
 						<Progress value={60} label="Danger" showValue kind="danger" />

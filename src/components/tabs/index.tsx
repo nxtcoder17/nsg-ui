@@ -30,7 +30,6 @@ export type TabsProps = {
   onChange?: (value: string) => void
   orientation?: 'horizontal' | 'vertical'
   navigationOnly?: boolean
-  unstyled?: boolean
   class?: string
   children: JSX.Element
 }
@@ -62,7 +61,6 @@ const TabsRoot = (props: TabsProps) => {
     'onChange',
     'orientation',
     'navigationOnly',
-    'unstyled',
     'class',
     'children',
   ])
@@ -95,18 +93,16 @@ const TabsRoot = (props: TabsProps) => {
         defaultValue={local.defaultValue}
         onChange={local.onChange}
         orientation={local.orientation}
-        class={cn(!local.unstyled && 'nsg-tabs', local.class)}
+        class={cn('nsg-tabs', local.class)}
         {...others}
       >
-        <KobalteTabs.List
-          {...(!local.unstyled && { 'data-nsg-tabs': 'list' })}
-        >
+        <KobalteTabs.List data-nsg-tabs="list">
           <For each={items()}>
             {(item) => (
               <KobalteTabs.Trigger
                 value={item.value}
                 disabled={item.disabled}
-                {...(!local.unstyled && { 'data-nsg-tabs': 'trigger' })}
+                data-nsg-tabs="trigger"
               >
                 {item.trigger}
               </KobalteTabs.Trigger>
@@ -119,7 +115,7 @@ const TabsRoot = (props: TabsProps) => {
             {(item) => (
               <KobalteTabs.Content
                 value={item.value}
-                {...(!local.unstyled && { 'data-nsg-tabs': 'content' })}
+                data-nsg-tabs="content"
               >
                 {item.content}
               </KobalteTabs.Content>

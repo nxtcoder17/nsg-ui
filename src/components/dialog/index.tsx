@@ -1,6 +1,5 @@
 import { Dialog as KobalteDialog } from '@kobalte/core/dialog'
 import { type JSX, splitProps, mergeProps, Show } from 'solid-js'
-import { cn } from '../../utils/cn'
 import { Button, type ButtonOwnProps } from '../button'
 import { XIcon } from '../../icons'
 
@@ -50,16 +49,12 @@ export const Dialog = (props: DialogProps) => {
         <KobalteDialog.Overlay class="nsg-dialog" data-nsg-dialog="overlay" />
         <div class="nsg-dialog" data-nsg-dialog="positioner">
           <KobalteDialog.Content
-            class={cn(
-              'pointer-events-auto w-full max-w-lg mx-4',
-              'focus:outline-none',
-            )}
             data-nsg-dialog="content"
             onEscapeKeyDown={(e) => !local.closeOnEscape && e.preventDefault()}
             onPointerDownOutside={(e) => !local.closeOnClickOutside && e.preventDefault()}
           >
-            <div class="flex flex-row gap-2 p-4 justify-between">
-              <div class="flex flex-col gap-2">
+            <div data-nsg-dialog="header">
+              <div data-nsg-dialog="header-info">
                 <KobalteDialog.Title data-nsg-dialog="title">
                   {local.header.title}
                 </KobalteDialog.Title>
@@ -85,12 +80,8 @@ export const Dialog = (props: DialogProps) => {
   )
 }
 
-function CloseButton(props: ButtonOwnProps & { unstyled?: boolean }) {
-  const [local, others] = splitProps(props, ['unstyled'])
-  if (local.unstyled) {
-    return <KobalteDialog.CloseButton {...others} />
-  }
-  return <KobalteDialog.CloseButton as={Button} kind="ghost" {...others} />
+function CloseButton(props: ButtonOwnProps) {
+  return <KobalteDialog.CloseButton as={Button} kind="ghost" {...props} />
 }
 
 Dialog.CloseButton = CloseButton;

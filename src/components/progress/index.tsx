@@ -1,8 +1,8 @@
 import { Progress as KobalteProgress } from '@kobalte/core/progress'
-import { splitProps, Show } from 'solid-js'
+import { splitProps, Show, mergeProps } from 'solid-js'
 import { cn } from '../../utils/cn'
 
-export type ProgressKind = 'default' | 'success' | 'warning' | 'danger'
+export type ProgressKind = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'
 
 export type ProgressProps = {
   value?: number
@@ -18,21 +18,9 @@ export type ProgressProps = {
   class?: string
 }
 
-const kindStyles: Record<ProgressKind, string> = {
-  default: 'bg-primary-500',
-  success: 'bg-success-500',
-  warning: 'bg-warning-500',
-  danger: 'bg-danger-500',
-}
-
-const sizeStyles: Record<'sm' | 'md' | 'lg', string> = {
-  sm: 'h-1',
-  md: 'h-2',
-  lg: 'h-3',
-}
-
 export const Progress = (props: ProgressProps) => {
-  const [local, others] = splitProps(props, [
+  const merged = mergeProps({ kind: 'primary', size: 'md' } as const, props)
+  const [local, others] = splitProps(merged, [
     'value',
     'min',
     'max',
@@ -60,34 +48,27 @@ export const Progress = (props: ProgressProps) => {
       maxValue={max()}
       indeterminate={local.indeterminate}
       getValueLabel={({ value }) => formatValue(value)}
-      class={cn('flex flex-col gap-1.5', local.class)}
+      class={cn('nsg-progress', local.class)}
+      data-size={local.size}
       {...others}
     >
       <Show when={local.label || local.showValue}>
-        <div class="flex justify-between text-sm">
+        <div data-nsg-progress="header">
           <Show when={local.label}>
-            <KobalteProgress.Label class="font-medium text-text">
+            <KobalteProgress.Label data-nsg-progress="label">
               {local.label}
             </KobalteProgress.Label>
           </Show>
           <Show when={local.showValue && !local.indeterminate}>
-            <KobalteProgress.ValueLabel class="text-text-secondary" />
+            <KobalteProgress.ValueLabel data-nsg-progress="value-label" />
           </Show>
         </div>
       </Show>
 
-      <KobalteProgress.Track
-        class={cn(
-          'w-full rounded-full bg-neutral-200 overflow-hidden',
-          sizeStyles[local.size ?? 'md']
-        )}
-      >
+      <KobalteProgress.Track data-nsg-progress="track">
         <KobalteProgress.Fill
-          class={cn(
-            'h-full rounded-full transition-all duration-300',
-            !local.color && kindStyles[local.kind ?? 'default'],
-            local.indeterminate && 'animate-progress-indeterminate w-1/3'
-          )}
+          data-nsg-progress="fill"
+          data-kind={local.color ? undefined : local.kind}
           style={{
             width: local.indeterminate ? undefined : 'var(--kb-progress-fill-width)',
             background: local.color,

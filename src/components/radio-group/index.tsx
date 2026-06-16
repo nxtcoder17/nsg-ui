@@ -12,7 +12,6 @@ export type RadioGroupProps = {
   name?: string
   errorMessage?: string
   validationState?: 'valid' | 'invalid'
-  unstyled?: boolean
   class?: string
   children?: JSX.Element
 }
@@ -22,15 +21,21 @@ export type RadioOptionProps = {
   label: string
   description?: string
   disabled?: boolean
-  unstyled?: boolean
   class?: string
 }
 
 const RadioGroupRoot = (props: RadioGroupProps) => {
   const [local, others] = splitProps(props, [
-    'value', 'defaultValue', 'onChange', 'orientation',
-    'disabled', 'name', 'errorMessage', 'validationState',
-    'unstyled', 'class', 'children',
+    'value',
+    'defaultValue',
+    'onChange',
+    'orientation',
+    'disabled',
+    'name',
+    'errorMessage',
+    'validationState',
+    'class',
+    'children',
   ])
 
   return (
@@ -42,14 +47,14 @@ const RadioGroupRoot = (props: RadioGroupProps) => {
       validationState={local.validationState}
       disabled={local.disabled}
       name={local.name}
-      class={cn(!local.unstyled && 'nsg-radio-group', local.class)}
+      class={cn('nsg-radio-group', local.class)}
       {...others}
     >
-      <div {...(!local.unstyled && { 'data-nsg-radio-group': 'items' })}>
+      <div data-nsg-radio-group="items">
         {local.children}
       </div>
       <Show when={local.errorMessage}>
-        <span {...(!local.unstyled && { 'data-nsg-radio-group': 'error' })}>
+        <span data-nsg-radio-group="error">
           {local.errorMessage}
         </span>
       </Show>
@@ -59,38 +64,33 @@ const RadioGroupRoot = (props: RadioGroupProps) => {
 
 const Option = (props: RadioOptionProps) => {
   const [local, others] = splitProps(props, [
-    'value', 'label', 'description', 'disabled', 'unstyled', 'class',
+    'value',
+    'label',
+    'description',
+    'disabled',
+    'class',
   ])
 
   return (
     <KobalteRadioGroup.Item
       value={local.value}
       disabled={local.disabled}
-      class={cn(local.class)}
-      {...(!local.unstyled && { 'data-nsg-radio-group': 'option' })}
+      class={local.class}
+      data-nsg-radio-group="option"
       {...others}
     >
       <KobalteRadioGroup.ItemInput class="sr-only" />
-      <KobalteRadioGroup.ItemControl
-        class="shrink-0"
-        {...(!local.unstyled && { 'data-nsg-radio-group': 'control' })}
-      >
-        <KobalteRadioGroup.ItemIndicator
-          {...(!local.unstyled && { 'data-nsg-radio-group': 'indicator' })}
-        >
+      <KobalteRadioGroup.ItemControl data-nsg-radio-group="control">
+        <KobalteRadioGroup.ItemIndicator data-nsg-radio-group="indicator">
           <DotIcon size="xs" />
         </KobalteRadioGroup.ItemIndicator>
       </KobalteRadioGroup.ItemControl>
-      <div class="flex flex-col gap-0.5">
-        <KobalteRadioGroup.ItemLabel
-          {...(!local.unstyled && { 'data-nsg-radio-group': 'label' })}
-        >
+      <div data-nsg-radio-group="option-content">
+        <KobalteRadioGroup.ItemLabel data-nsg-radio-group="label">
           {local.label}
         </KobalteRadioGroup.ItemLabel>
         <Show when={local.description}>
-          <KobalteRadioGroup.ItemDescription
-            {...(!local.unstyled && { 'data-nsg-radio-group': 'description' })}
-          >
+          <KobalteRadioGroup.ItemDescription data-nsg-radio-group="description">
             {local.description}
           </KobalteRadioGroup.ItemDescription>
         </Show>

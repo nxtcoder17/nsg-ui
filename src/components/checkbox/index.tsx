@@ -34,8 +34,6 @@ export const Checkbox = (props: CheckboxProps) => {
     'class',
   ])
 
-  const isInvalid = () => local.validationState === 'invalid'
-
   return (
     <KobalteCheckbox
       checked={local.checked}
@@ -72,10 +70,7 @@ export const Checkbox = (props: CheckboxProps) => {
                 </KobalteCheckbox.Description>
               </Show>
               <Show when={local.errorMessage}>
-                <div 
-                  data-nsg-checkbox="error" 
-                  class={cn(!isInvalid() && 'invisible')}
-                >
+                <div data-nsg-checkbox="error">
                   {local.errorMessage}
                 </div>
               </Show>

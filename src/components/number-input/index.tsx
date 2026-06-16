@@ -1,5 +1,5 @@
 import { NumberField } from '@kobalte/core/number-field'
-import { splitProps, Show, JSX } from 'solid-js'
+import { splitProps, Show, JSX, mergeProps } from 'solid-js'
 import { cn } from '../../utils/cn'
 import { MinusIcon, PlusIcon } from '../../icons'
 
@@ -17,17 +17,16 @@ export type NumberInputProps = {
   readOnly?: boolean
   required?: boolean
   name?: string
-  containerClass?: string
+  class?: string
   inputClass?: string
-  // Optional +/- buttons
   showButtons?: boolean
-  // Addons
   prefix?: JSX.Element
   suffix?: JSX.Element
 }
 
 export const NumberInput = (props: NumberInputProps) => {
-  const [local, others] = splitProps(props, [
+  const merged = mergeProps({ showButtons: false } as const, props)
+  const [local, others] = splitProps(merged, [
     'value',
     'onChange',
     'label',
@@ -41,7 +40,7 @@ export const NumberInput = (props: NumberInputProps) => {
     'readOnly',
     'required',
     'name',
-    'containerClass',
+    'class',
     'inputClass',
     'showButtons',
     'prefix',
@@ -49,29 +48,6 @@ export const NumberInput = (props: NumberInputProps) => {
   ])
 
   const isInvalid = () => !!local.errorMessage
-
-  const inputStyles = cn(
-    'flex-1 bg-transparent outline-none text-sm text-text placeholder:text-text-muted',
-    'disabled:cursor-not-allowed',
-    '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
-  )
-
-  const wrapperStyles = () =>
-    cn(
-      'flex items-center gap-2 px-3 py-2 rounded-md border bg-surface-raised',
-      'transition-colors',
-      'focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-1',
-      isInvalid()
-        ? 'border-danger-500'
-        : 'border-border hover:border-primary-400 focus-within:border-primary-500'
-    )
-
-  const buttonStyles = cn(
-    'shrink-0 w-6 h-6 flex items-center justify-center rounded',
-    'text-text-secondary hover:text-text hover:bg-neutral-100',
-    'transition-colors',
-    'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent'
-  )
 
   return (
     <NumberField
@@ -85,54 +61,56 @@ export const NumberInput = (props: NumberInputProps) => {
       minValue={local.min}
       maxValue={local.max}
       step={local.step}
-      class={cn('flex flex-col gap-1.5', local.disabled && 'opacity-50', local.containerClass)}
+      class={cn('nsg-number-input', local.class)}
       {...others}
     >
       <Show when={local.label}>
-        <NumberField.Label class="text-sm font-medium text-text">
+        <NumberField.Label data-nsg-number-input="label">
           {local.label}
           <Show when={local.required}>
-            <span class="text-danger-500 ml-0.5">*</span>
+            <span>*</span>
           </Show>
         </NumberField.Label>
       </Show>
 
-      <div class={wrapperStyles()}>
+      <div data-nsg-number-input="wrapper">
         <Show when={local.showButtons}>
-          <NumberField.DecrementTrigger class={buttonStyles} aria-label="Decrease value">
+          <NumberField.DecrementTrigger data-nsg-number-input="button" aria-label="Decrease value">
             <MinusIcon size="sm" />
           </NumberField.DecrementTrigger>
         </Show>
 
         <Show when={local.prefix}>
-          <span class="text-text-muted shrink-0">{local.prefix}</span>
+          <span data-nsg-number-input="prefix">{local.prefix}</span>
         </Show>
 
         <NumberField.Input
           placeholder={local.placeholder}
-          class={cn(inputStyles, local.showButtons && 'text-center', local.inputClass)}
+          class={local.inputClass}
+          data-nsg-number-input="input"
+          data-center={local.showButtons ? '' : undefined}
         />
         <NumberField.HiddenInput />
 
         <Show when={local.suffix}>
-          <span class="text-text-muted shrink-0">{local.suffix}</span>
+          <span data-nsg-number-input="suffix">{local.suffix}</span>
         </Show>
 
         <Show when={local.showButtons}>
-          <NumberField.IncrementTrigger class={buttonStyles} aria-label="Increase value">
+          <NumberField.IncrementTrigger data-nsg-number-input="button" aria-label="Increase value">
             <PlusIcon size="sm" />
           </NumberField.IncrementTrigger>
         </Show>
       </div>
 
       <Show when={local.description}>
-        <NumberField.Description class="text-xs text-text-secondary">
+        <NumberField.Description data-nsg-number-input="description">
           {local.description}
         </NumberField.Description>
       </Show>
 
       <Show when={local.errorMessage}>
-        <NumberField.ErrorMessage class="text-xs text-danger-500">
+        <NumberField.ErrorMessage data-nsg-number-input="error">
           {local.errorMessage}
         </NumberField.ErrorMessage>
       </Show>
