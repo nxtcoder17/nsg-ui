@@ -1290,15 +1290,15 @@
     }
   }
 
-  /* --- Separator --- */
   .nsg-separator {
-    @apply bg-border shrink-0;
+    @apply border-t-0 shrink-0;
 
     &[data-orientation="horizontal"] {
-      @apply h-px w-full;
+      @apply h-px w-full bg-neutral-400;
     }
+
     &[data-orientation="vertical"] {
-      @apply w-px h-full;
+      @apply w-px h-full bg-neutral-400;
     }
   }
 }
