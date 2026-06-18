@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js'
-import { Button } from 'nsg-ui'
+import { Button, Link } from 'nsg-ui'
 import { Popover } from 'nsg-ui/components/popover'
 import { DemoCard } from '../components/DemoCard'
 import { PopoverIcon, InfoIcon } from '../icons'
@@ -57,7 +57,7 @@ export const PopoverSection: Component = () => {
             description="This is additional context that helps users understand a feature or action."
             arrow
           >
-            <a href="#" class="text-sm text-primary hover:underline">Learn more</a>
+            <Link href="#">Learn more</Link>
           </Popover>
         </DemoCard>
 

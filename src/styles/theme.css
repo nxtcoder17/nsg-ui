@@ -28,7 +28,7 @@
   --color-danger-200: oklch(88% 0.08 25);
   --color-danger-300: oklch(78% 0.12 25);
   --color-danger-400: oklch(65% 0.17 25);
-  --color-danger-500: oklch(55% 0.2 25);
+  --color-danger-500: oklch(52% 0.2 25);
   --color-danger-600: oklch(48% 0.2 25);
   --color-danger-700: oklch(40% 0.17 25);
   --color-danger-800: oklch(32% 0.13 25);
@@ -990,6 +990,10 @@
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1;
 
     &.nsg-link-underline {
+      @apply underline underline-offset-2;
+    }
+
+    &:hover, &:focus-visible {
       @apply underline underline-offset-2;
     }
 

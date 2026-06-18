@@ -1,5 +1,5 @@
 import { type Component, createSignal } from 'solid-js'
-import { Checkbox } from 'nsg-ui'
+import { Checkbox, Link } from 'nsg-ui'
 import { DemoCard } from '../components/DemoCard'
 import { Section } from '../components/section';
 
@@ -161,7 +161,7 @@ export const CheckboxSection: Component = () => {
             description={
               <span class="text-xs text-text-secondary block max-w-md">
                 Standard terms apply. For customizable invoice scheduling options, visit our{' '}
-                <a href="#" class="text-primary-500 hover:underline">Billing Portal</a>.
+                <Link href="#">Billing Portal</Link>.
               </span>
             }
             validationState="invalid"

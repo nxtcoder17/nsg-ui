@@ -62,7 +62,7 @@ function PaletteIcon(props: { class?: string }) {
 import { CardIcon } from "../sections/CardSection";
 
 export const sections = [
-	{ id: "text", label: "Text", icon: TextIcon, render: () => <a href="/text">Text</a> },
+	{ id: "text", label: "Text", icon: TextIcon },
 	{ id: "button", label: "Button", icon: ButtonIcon },
 	{ id: "dialog", label: "Dialog", icon: DialogIcon },
 	{ id: "popover", label: "Popover", icon: PopoverIcon },

@@ -57,7 +57,7 @@ export const ImageSection: Component = () => {
 						<div>
 							<p class="text-xs text-text-secondary mb-2">Default fallback</p>
 							<Image
-								src="https://invalid-url-that-will-fail.com/image.jpg"
+								src="data:image/png;base64,invalid-image-source"
 								alt="Will fail"
 								class="w-24 h-24 rounded-lg"
 							/>
@@ -65,7 +65,7 @@ export const ImageSection: Component = () => {
 						<div>
 							<p class="text-xs text-text-secondary mb-2">Custom fallback</p>
 							<Image
-								src="https://another-invalid-url.com/nope.jpg"
+								src="data:image/png;base64,invalid-image-source-2"
 								alt="Custom fallback"
 								class="w-24 h-24 rounded-lg"
 								fallback={
