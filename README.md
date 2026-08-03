@@ -17,15 +17,19 @@ In your main CSS file:
 ```css
 @import 'tailwindcss';
 @import 'nsg-ui/theme.css';
-@source "node_modules/nsg-ui/dist/**/*.js";
 ```
 
-That's it. The theme includes:
+That's it. The theme's own `@source` directives register the library's compiled components and icons (in `dist/`) as Tailwind sources, so all utility classes used internally — like `w-3.5 h-3.5` for the `sm` icon size — are generated for you. The theme includes:
 - All color scales (neutral, primary, danger, success, warning)
 - Light mode colors in `@theme`
 - Dark mode overrides in `.dark`
 - Semantic tokens (surface, border, text, etc.)
 - Animations and utilities
+
+> **Note:** If you're on an older Tailwind v4 version that doesn't honor the theme's `@source` directives, add this to your CSS instead:
+> ```css
+> @source "node_modules/nsg-ui/dist/**/*.{js,jsx}";
+> ```
 
 ### Custom Colors
 

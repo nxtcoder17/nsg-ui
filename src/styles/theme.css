@@ -1,3 +1,11 @@
+/* Register built JS/JSX as Tailwind sources so consumers only need:
+ *   @import 'tailwindcss';
+ *   @import 'nsg-ui/theme.css';
+ * The @source paths below are relative to this file (dist/theme.css). */
+@source "./index/**/*.{js,jsx}";
+@source "./icons/**/*.{js,jsx}";
+@source "./chunk/**/*.{js,jsx}";
+
 @theme {
   --color-neutral-50: oklch(98% 0.005 50);
   --color-neutral-100: oklch(96% 0.008 50);

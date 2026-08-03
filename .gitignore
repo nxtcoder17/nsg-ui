@@ -4,3 +4,4 @@ dist/
 tsup.config.bundled_*
 .nixy
 nixy.local.yml
+.commandcode
