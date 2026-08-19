@@ -51,7 +51,7 @@ export const DemoWithCode: Component<DemoWithCodeProps> = (props) => {
   const [showCode, setShowCode] = createSignal(false)
 
   return (
-    <Card class="group hover:shadow-[var(--shadow-card-hover)] transition-all duration-300">
+    <Card class="p-0 group hover:shadow-[var(--shadow-card-hover)] transition-all duration-300">
       <div class="px-6 py-4 border-b border-border-subtle flex items-center justify-between">
         <div>
           <h3 class="font-semibold text-text text-[15px]">{props.title}</h3>

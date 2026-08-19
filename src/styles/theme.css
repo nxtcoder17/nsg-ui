@@ -342,7 +342,9 @@
 /* --- Card --- */
 @layer components {
   .nsg-card {
-    @apply rounded-xl border border-border text-text transition-shadow;
+    /* Built-in padding so bare cards never render edge-to-edge; consumers can
+     * still override with any padding utility (utilities beat components). */
+    @apply rounded-xl border border-border text-text transition-shadow p-4;
 
     &[data-kind="raised"] {
       @apply bg-surface-raised shadow-[var(--shadow-card)];
@@ -639,15 +641,17 @@
 
     [data-nsg-dialog="content"] {
       @apply pointer-events-auto w-full max-w-lg mx-4 focus:outline-none bg-surface-raised text-text border border-border rounded-lg shadow-lg;
+      @apply px-4 py-2;
+      @apply flex flex-col gap-2;
       &[data-expanded] { animation: nsg-scale-in 0.2s ease-out; }
     }
 
     [data-nsg-dialog="header"] {
-      @apply flex flex-row gap-2 p-4 justify-between items-start;
+      @apply flex flex-row justify-between items-start;
     }
 
     [data-nsg-dialog="header-info"] {
-      @apply flex flex-col gap-2;
+      @apply flex flex-col;
     }
 
     [data-nsg-dialog="title"] { @apply text-lg font-semibold text-text; }
