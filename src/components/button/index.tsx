@@ -1,19 +1,23 @@
 import { Button as KobalteButton } from '@kobalte/core/button'
-import { type JSX, splitProps, mergeProps, type ValidComponent, type ComponentProps } from 'solid-js'
+import type { PolymorphicProps } from '@kobalte/core/polymorphic'
+import { type JSX, splitProps, mergeProps, type ValidComponent } from 'solid-js'
 import { cn } from '../../utils/cn'
 
 export interface ButtonOwnProps {
   kind?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
   size?: 'sm' | 'md' | 'lg' | 'icon' | 'icon-sm'
   outline?: boolean
-  as?: ValidComponent
   class?: string
   children?: JSX.Element
 }
 
-export type ButtonProps = ButtonOwnProps & Omit<ComponentProps<'button'>, keyof ButtonOwnProps>
+// Polymorphic: T is inferred from the `as` value (default 'button'), so
+// <Button as={A} href="…"> gets A's props while <Button onClick={…}> keeps
+// native button attributes. `as` itself comes from PolymorphicAttributes.
+export type ButtonProps<T extends ValidComponent = 'button'> = ButtonOwnProps &
+  Omit<PolymorphicProps<T>, keyof ButtonOwnProps>
 
-export const Button = (props: ButtonProps) => {
+export const Button = <T extends ValidComponent = 'button'>(props: ButtonProps<T>) => {
   const merged = mergeProps({ kind: 'primary', size: 'md' } as const, props)
   const [local, others] = splitProps(merged, [
     'kind',
