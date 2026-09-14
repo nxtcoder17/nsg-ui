@@ -1,8 +1,9 @@
 tasks:
   dev:
-    watch:
-      enabled: true
-      dirs:
-        - ./src
+    parallel: true
     cmd:
-      - bun run build
+      # run's nsg-ui tsup compilation
+      - bun run dev
+
+      # run's nsg-ui website dev server
+      - cd website && bun run dev
