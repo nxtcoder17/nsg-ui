@@ -7,6 +7,7 @@ export interface ButtonOwnProps {
   kind?: 'primary' | 'secondary' | 'ghost' | 'danger' | 'link'
   size?: 'sm' | 'md' | 'lg' | 'icon' | 'icon-sm'
   outline?: boolean
+  disabled?: boolean
   class?: string
   children?: JSX.Element
 }

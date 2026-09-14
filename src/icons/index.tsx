@@ -73,12 +73,20 @@ export const DotIcon = (props: IconProps): JSX.Element => {
   )
 }
 
-export const ChevronRightIcon = (props: IconProps): JSX.Element => {
-  const [local, others] = splitProps(props, ['size', 'class', 'strokeWidth'])
+export type ChevronDir = 'left' | 'right' | 'up' | 'down'
+
+export const ChevronIcon = (props: IconProps & { dir?: ChevronDir }): JSX.Element => {
+  const [local, others] = splitProps(props, ['dir', 'size', 'class', 'strokeWidth'])
+  const dirClass = {
+    right: '',
+    down: 'rotate-90',
+    left: 'rotate-180',
+    up: '-rotate-90',
+  }[local.dir ?? 'right']
 
   return (
     <svg
-      class={cn(sizeClasses[local.size ?? 'md'], local.class)}
+      class={cn(sizeClasses[local.size ?? 'md'], dirClass, local.class)}
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -92,24 +100,9 @@ export const ChevronRightIcon = (props: IconProps): JSX.Element => {
   )
 }
 
-export const ChevronDownIcon = (props: IconProps): JSX.Element => {
-  const [local, others] = splitProps(props, ['size', 'class', 'strokeWidth'])
-
-  return (
-    <svg
-      class={cn(sizeClasses[local.size ?? 'md'], local.class)}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width={local.strokeWidth ?? 2}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      {...others}
-    >
-      <polyline points="6 9 12 15 18 9" />
-    </svg>
-  )
-}
+export const ChevronRightIcon = (props: IconProps): JSX.Element => <ChevronIcon dir="right" {...props} />
+export const ChevronLeftIcon = (props: IconProps): JSX.Element => <ChevronIcon dir="left" {...props} />
+export const ChevronDownIcon = (props: IconProps): JSX.Element => <ChevronIcon dir="down" {...props} />
 
 export const XIcon = (props: IconProps): JSX.Element => {
   const [local, others] = splitProps(props, ['size', 'class', 'strokeWidth'])
@@ -127,6 +120,28 @@ export const XIcon = (props: IconProps): JSX.Element => {
     >
       <line x1="18" y1="6" x2="6" y2="18" />
       <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  )
+}
+
+export const DeleteIcon = (props: IconProps): JSX.Element => {
+  const [local, others] = splitProps(props, ['size', 'class', 'strokeWidth'])
+
+  return (
+    <svg
+      class={cn(sizeClasses[local.size ?? 'md'], local.class)}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width={local.strokeWidth ?? 2}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      {...others}
+    >
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+      <line x1="10" y1="11" x2="10" y2="17" />
+      <line x1="14" y1="11" x2="14" y2="17" />
     </svg>
   )
 }
@@ -151,24 +166,7 @@ export const PlusIcon = (props: IconProps): JSX.Element => {
   )
 }
 
-export const ChevronUpIcon = (props: IconProps): JSX.Element => {
-  const [local, others] = splitProps(props, ['size', 'class', 'strokeWidth'])
-
-  return (
-    <svg
-      class={cn(sizeClasses[local.size ?? 'md'], local.class)}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width={local.strokeWidth ?? 2}
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      {...others}
-    >
-      <polyline points="18 15 12 9 6 15" />
-    </svg>
-  )
-}
+export const ChevronUpIcon = (props: IconProps): JSX.Element => <ChevronIcon dir="up" {...props} />
 
 export const SearchIcon = (props: IconProps): JSX.Element => {
   const [local, others] = splitProps(props, ['size', 'class', 'strokeWidth'])

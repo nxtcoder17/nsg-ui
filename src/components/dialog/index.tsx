@@ -1,5 +1,5 @@
 import { Dialog as KobalteDialog } from "@kobalte/core/dialog";
-import { type JSX, splitProps, mergeProps, Show } from "solid-js";
+import { type JSX, splitProps, mergeProps, Show, createSignal } from "solid-js";
 import { Button, type ButtonOwnProps } from "../button";
 import { XIcon } from "../../icons";
 
@@ -9,22 +9,27 @@ type DialogHeader = {
   withCloseIcon?: boolean;
 };
 
+export type DialogRenderApi = { close: () => void }
+export type DialogRenderProp = (api: DialogRenderApi) => JSX.Element
+
 export type DialogProps = {
   header: DialogHeader;
-  show?: boolean;
-  onChange?: (show: boolean) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   trigger?: JSX.Element;
-  children?: JSX.Element;
+  children?: JSX.Element | DialogRenderProp;
   closeOnEscape?: boolean;
   closeOnClickOutside?: boolean;
 };
 
-export const Dialog = (props: DialogProps) => {
+export function Dialog(props: DialogProps & { children: DialogRenderProp }): JSX.Element
+export function Dialog(props: DialogProps): JSX.Element
+export function Dialog(props: DialogProps) {
   const [local, others] = splitProps(
     mergeProps({ closeOnEscape: true, closeOnClickOutside: true }, props),
     [
-      "show",
-      "onChange",
+      "open",
+      "onOpenChange",
       "trigger",
       "header",
       "children",
@@ -33,16 +38,21 @@ export const Dialog = (props: DialogProps) => {
     ],
   );
 
+  const [internalOpen, setInternalOpen] = createSignal(false);
+  const isControlled = () => local.open !== undefined;
+  const open = () => (isControlled() ? local.open! : internalOpen());
+  const setOpen = (v: boolean) => {
+    if (isControlled()) local.onOpenChange?.(v);
+    else setInternalOpen(v);
+  };
   return (
     <KobalteDialog
-      open={local.show}
-      onOpenChange={local.onChange}
+      open={open()}
+      onOpenChange={setOpen}
       modal
       preventScroll
     >
-      <Show when={local.trigger}>
-        <KobalteDialog.Trigger as="span">{local.trigger}</KobalteDialog.Trigger>
-      </Show>
+      {local.trigger}
       <KobalteDialog.Portal>
         <KobalteDialog.Overlay class="nsg-dialog" data-nsg-dialog="overlay" />
         <div class="nsg-dialog" data-nsg-dialog="positioner">
@@ -72,7 +82,9 @@ export const Dialog = (props: DialogProps) => {
               </Show>
             </div>
 
-            {local.children}
+            {typeof local.children === "function"
+              ? (local.children as DialogRenderProp)({ close: () => setOpen(false) })
+              : local.children}
           </KobalteDialog.Content>
         </div>
       </KobalteDialog.Portal>
@@ -84,4 +96,9 @@ function CloseButton(props: ButtonOwnProps) {
   return <KobalteDialog.CloseButton as={Button} kind="secondary" {...props} />;
 }
 
+function TriggerButton(props: ButtonOwnProps) {
+  return <KobalteDialog.Trigger as={Button} {...props} />;
+}
+
 Dialog.CloseButton = CloseButton;
+Dialog.TriggerButton = TriggerButton;

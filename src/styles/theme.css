@@ -290,19 +290,19 @@
     }
 
     &[data-size="sm"] {
-      @apply h-8 px-3 text-xs rounded-sm;
+      @apply h-7 px-2.5 text-xs rounded-sm;
     }
     &[data-size="md"] {
-      @apply h-10 px-4 text-sm rounded-md;
+      @apply h-8 px-3 text-xs rounded-sm;
     }
     &[data-size="lg"] {
-      @apply h-12 px-6 text-base rounded-lg;
+      @apply h-10 px-4 text-sm rounded-md;
     }
     &[data-size="icon"] {
-      @apply h-10 w-10 rounded-md;
+      @apply h-8 w-8 rounded-md;
     }
     &[data-size="icon-sm"] {
-      @apply h-6 w-6 rounded-sm;
+      @apply h-7 w-7 rounded-sm;
     }
   }
 }
@@ -398,7 +398,7 @@
     }
 
     [data-nsg-segmented-control="track"] {
-      @apply relative inline-flex items-stretch p-1 rounded-lg border border-border;
+      @apply relative inline-flex items-stretch p-1 rounded-md border border-border;
       /* No separator before first item (child 2 because Indicator is child 1) */
       > *:nth-child(2)::before { display: none; }
       /* No separator on item following the checked one */
@@ -1258,11 +1258,11 @@
     @apply disabled:pointer-events-none disabled:opacity-50;
 
     /* Sizes */
-    &[data-size="sm"] { @apply h-8 px-3 text-xs rounded-sm; }
-    &[data-size="md"] { @apply h-10 px-4 text-sm rounded-md; }
-    &[data-size="lg"] { @apply h-12 px-6 text-base rounded-lg; }
-    &[data-size="icon"] { @apply h-10 w-10 rounded-md; }
-    &[data-size="icon-sm"] { @apply h-6 w-6 rounded-sm; }
+    &[data-size="sm"] { @apply h-7 px-2.5 text-xs rounded-sm; }
+    &[data-size="md"] { @apply h-8 px-3 text-xs rounded-sm; }
+    &[data-size="lg"] { @apply h-10 px-4 text-sm rounded-md; }
+    &[data-size="icon"] { @apply h-8 w-8 rounded-md; }
+    &[data-size="icon-sm"] { @apply h-7 w-7 rounded-sm; }
 
     /* Primary Kind */
     &[data-kind="primary"] {

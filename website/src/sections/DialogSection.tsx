@@ -14,7 +14,7 @@ function DeleteItemDialog() {
 				description: "This action cannot be undone.",
 				withCloseIcon: true,
 			}}
-			trigger={<Button kind="danger">Delete Item</Button>}
+			trigger={<Dialog.TriggerButton kind="danger">Delete Item</Dialog.TriggerButton>}
 		>
 			<div class="flex justify-end gap-2 pt-2 border-t border-border">
 				<Dialog.CloseButton>Cancel</Dialog.CloseButton>
@@ -25,12 +25,9 @@ function DeleteItemDialog() {
 }
 
 function ConfirmationDialogDemo() {
-	const [show, setShow] = createSignal(false);
 	return (
 		<Dialog
-			show={show()}
-			onChange={setShow}
-			trigger={<Button>Save Changes</Button>}
+			trigger={<Dialog.TriggerButton>Save Changes</Dialog.TriggerButton>}
 			header={{
 				title: "Save changes?",
 				description:
@@ -38,25 +35,20 @@ function ConfirmationDialogDemo() {
 			}}
 		>
 			<div class="flex justify-end gap-2 pt-2 border-t border-border">
-				<Button kind="ghost" onClick={() => setShow(false)}>
-					Cancel
-				</Button>
-				<Button onClick={() => setShow(false)}>Save</Button>
+				<Dialog.CloseButton kind="ghost">Cancel</Dialog.CloseButton>
+				<Dialog.CloseButton>Save</Dialog.CloseButton>
 			</div>
 		</Dialog>
 	);
 }
 
 function FormDialogDemo() {
-	const [show, setShow] = createSignal(false);
 	return (
 		<Dialog
-			show={show()}
-			onChange={setShow}
 			trigger={
-				<Button kind="secondary" outline>
+				<Dialog.TriggerButton kind="secondary" outline>
 					Edit Profile
-				</Button>
+				</Dialog.TriggerButton>
 			}
 			header={{ title: "Edit Profile" }}
 			closeOnClickOutside={false}
@@ -83,11 +75,46 @@ function FormDialogDemo() {
 			</div>
 
 			<div class="flex justify-end gap-2 pt-2">
-				<Button kind="ghost" onClick={() => setShow(false)}>
-					Cancel
-				</Button>
-				<Button onClick={() => setShow(false)}>Save Changes</Button>
+				<Dialog.CloseButton kind="ghost">Cancel</Dialog.CloseButton>
+				<Dialog.CloseButton>Save Changes</Dialog.CloseButton>
 			</div>
+		</Dialog>
+	);
+}
+
+function AsyncSaveDialogDemo() {
+	const [saving, setSaving] = createSignal(false);
+	return (
+		<Dialog
+			trigger={<Dialog.TriggerButton>Save with API</Dialog.TriggerButton>}
+			header={{
+				title: "Save changes?",
+				description: "Closes only after API succeeds — no open prop needed.",
+			}}
+		>
+			{({ close }) => (
+				<div class="flex flex-col gap-4">
+					<p class="text-sm text-text-secondary">
+						Simulates an async save. Dialog stays open until success.
+					</p>
+					<div class="flex justify-end gap-2 pt-2 border-t border-border">
+						<Dialog.CloseButton kind="ghost" disabled={saving()}>
+							Cancel
+						</Dialog.CloseButton>
+						<Button
+							disabled={saving()}
+							onClick={async () => {
+								setSaving(true);
+								await new Promise((r) => setTimeout(r, 1200));
+								setSaving(false);
+								close();
+							}}
+						>
+							{saving() ? "Saving..." : "Save"}
+						</Button>
+					</div>
+				</div>
+			)}
 		</Dialog>
 	);
 }
@@ -121,6 +148,13 @@ export const DialogSection: Component = () => {
 				description="Dialog with form inputs and validation"
 			>
 				<FormDialogDemo />
+			</DemoCard>
+
+			<DemoCard
+				title="Async Save (render-prop close)"
+				description="Use children as function ({ close }) => ... to close after API succeeds — no open prop needed"
+			>
+				<AsyncSaveDialogDemo />
 			</DemoCard>
 		</Section>
 	);

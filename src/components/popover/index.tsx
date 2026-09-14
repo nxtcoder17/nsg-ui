@@ -3,8 +3,8 @@ import { type JSX, splitProps, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
 
 export interface PopoverProps {
-  show?: boolean
-  onChange?: (show: boolean) => void
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
   trigger: JSX.Element
   /** Accessible label for the trigger (required for icon-only triggers) */
   triggerLabel?: string
@@ -22,8 +22,8 @@ export interface PopoverProps {
 
 export function Popover(props: PopoverProps) {
   const [local, others] = splitProps(props, [
-    'show',
-    'onChange',
+    'open',
+    'onOpenChange',
     'trigger',
     'triggerLabel',
     'title',
@@ -37,8 +37,8 @@ export function Popover(props: PopoverProps) {
 
   return (
     <KobaltePopover
-      open={local.show}
-      onOpenChange={local.onChange}
+      open={local.open}
+      onOpenChange={local.onOpenChange}
       placement={local.placement}
       gutter={local.gutter ?? 8}
       {...others}

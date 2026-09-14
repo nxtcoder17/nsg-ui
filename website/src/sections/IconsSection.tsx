@@ -69,50 +69,50 @@ export const IconsSection: Component = () => {
       <DemoWithCode
         title="Button Pairing"
         description="Recommended icon sizes for each button size"
-        code={`// Small button (h-8) → w-3.5 h-3.5 or w-4 h-4
+        code={`// Small button (h-7) → w-3 h-3 or w-3.5 h-3.5
 <Button size="sm">
+<CheckIcon class="w-3 h-3 mr-1.5" /> Save
+</Button>
+
+// Medium button (h-8) → w-3.5 h-3.5 or w-4 h-4
+<Button size="md">
 <CheckIcon class="w-3.5 h-3.5 mr-1.5" /> Save
 </Button>
 
-// Medium button (h-10) → w-4 h-4 or w-5 h-5
-<Button size="md">
+// Large button (h-10) → w-4 h-4 or w-5 h-5
+<Button size="lg">
 <CheckIcon class="w-4 h-4 mr-2" /> Save
 </Button>
 
-// Large button (h-12) → w-5 h-5 or w-6 h-6
-<Button size="lg">
-<CheckIcon class="w-5 h-5 mr-2" /> Save
-</Button>
-
-// Icon-only button (h-10 w-10) → w-5 h-5
+// Icon-only button (h-8 w-8) → w-4 h-4
 <Button size="icon">
-<CheckIcon class="w-5 h-5" />
+<CheckIcon class="w-4 h-4" />
 </Button>`}
       >
         <div class="flex flex-wrap items-end gap-4">
           <div class="flex flex-col items-center gap-2">
             <Button size="sm">
-              <CheckIcon class="w-3.5 h-3.5 mr-1.5" /> Save
+              <CheckIcon class="w-3 h-3 mr-1.5" /> Save
             </Button>
-            <span class="font-mono text-xs text-text-muted">sm + w-3.5</span>
+            <span class="font-mono text-xs text-text-muted">sm + w-3</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <Button size="md">
-              <CheckIcon class="w-4 h-4 mr-2" /> Save
+              <CheckIcon class="w-3.5 h-3.5 mr-1.5" /> Save
             </Button>
-            <span class="font-mono text-xs text-text-muted">md + w-4</span>
+            <span class="font-mono text-xs text-text-muted">md + w-3.5</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <Button size="lg">
-              <CheckIcon class="w-5 h-5 mr-2" /> Save
+              <CheckIcon class="w-4 h-4 mr-2" /> Save
             </Button>
-            <span class="font-mono text-xs text-text-muted">lg + w-5</span>
+            <span class="font-mono text-xs text-text-muted">lg + w-4</span>
           </div>
           <div class="flex flex-col items-center gap-2">
             <Button size="icon" aria-label="Confirm">
-              <CheckIcon class="w-5 h-5" />
+              <CheckIcon class="w-4 h-4" />
             </Button>
-            <span class="font-mono text-xs text-text-muted">icon + w-5</span>
+            <span class="font-mono text-xs text-text-muted">icon + w-4</span>
           </div>
         </div>
       </DemoWithCode>

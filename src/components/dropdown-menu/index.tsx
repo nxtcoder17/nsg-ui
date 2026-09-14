@@ -5,8 +5,8 @@ import { cn } from '../../utils/cn'
 import { CheckIcon, DotIcon, ChevronRightIcon, type Icon } from '../../icons'
 
 export interface DropdownMenuProps {
-  show?: boolean
-  onChange?: (show: boolean) => void
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
   trigger: JSX.Element
   triggerLabel?: string
   placement?: 'top' | 'bottom' | 'left' | 'right' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'left-start' | 'left-end' | 'right-start' | 'right-end'
@@ -18,13 +18,13 @@ export interface DropdownMenuProps {
 
 function DropdownMenuRoot(props: DropdownMenuProps) {
   const [local, others] = splitProps(props, [
-    'show', 'onChange', 'trigger', 'triggerLabel', 'placement', 'gutter', 'children', 'unstyled', 'class'
+    'open', 'onOpenChange', 'trigger', 'triggerLabel', 'placement', 'gutter', 'children', 'unstyled', 'class'
   ])
 
   return (
     <KobalteDropdownMenu
-      open={local.show}
-      onOpenChange={local.onChange}
+      open={local.open}
+      onOpenChange={local.onOpenChange}
       placement={local.placement}
       gutter={local.gutter ?? 8}
       sameWidth
