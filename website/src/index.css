@@ -4,6 +4,13 @@
 @import 'tailwindcss';
 @import '../../src/styles/theme.css';
 
+/* Theme foundations — one stylesheet each, so a project ships only the ones it
+   offers. The kitchensink offers all of them on purpose, and switches with
+   <ThemePicker /> (aliased to ../src in vite.config.ts). */
+@import '../../src/styles/themes/modern-brut-violet.css';
+@import '../../src/styles/themes/riso-aqua.css';
+@import '../../src/styles/themes/riso-press.css';
+
 @custom-variant dark (&:where(.dark, .dark *));
 /* @import './styles/overrides.css'; */
 @source "../../src/components";
@@ -20,6 +27,131 @@
     radial-gradient(ellipse at 20% 0%, oklch(from var(--color-primary-200) l c h / 0.3) 0%, transparent 50%),
     radial-gradient(ellipse at 80% 100%, oklch(from var(--color-success-200) l c h / 0.2) 0%, transparent 50%),
     var(--color-surface);
+}
+
+/* ============================================================================
+ * Chrome follows the foundation too
+ *
+ * The page's own furniture is built from Tailwind utilities, so it is keyed off
+ * Tailwind's names rather than nsg-ui's component parts. Re-pointing the shape
+ * names at the foundation's shape tokens is all it takes for the shell to move
+ * with the components — this is a website concern, which is why it lives here
+ * and not in the library.
+ * ============================================================================ */
+[data-nsg-theme] {
+  --radius-sm: var(--nsg-radius-sm);
+  --radius-md: var(--nsg-radius-md);
+  --radius-lg: var(--nsg-radius-lg);
+  --radius-xl: var(--nsg-radius-xl);
+  --radius-2xl: var(--nsg-radius-xl);
+}
+
+/* The exposed grid / halftone a foundation declares, where the field is: on the
+   page when the foundation is on <html>… */
+html[data-nsg-theme] main {
+  background-image: var(--nsg-page-backdrop, none);
+  background-size: var(--nsg-page-backdrop-size, auto);
+}
+
+/* …and on the subtree itself when something other than <html> carries the
+   attribute, which is what makes the side-by-side comparison below possible. */
+[data-nsg-theme]:not(html) {
+  background-image: var(--nsg-page-backdrop, none);
+  background-size: var(--nsg-page-backdrop-size, auto);
+}
+
+/* ============================================================================
+ * Chrome follows the foundation · part two — the voice and the idioms
+ *
+ * Part one above re-pointed the shape names, which moved the shell's geometry
+ * but not its language. A foundation also declares a VOICE for its actions and
+ * labels (mono, uppercase, tracked — see `modern-brut-violet.css` and
+ * `riso-base.css`) and marks what is chosen with a filled block rather than a
+ * soft tint. The shell reads `--font-mono`, `--nsg-font-size-action-*` and the
+ * `--color-*` contract, so it speaks in whatever language the active foundation
+ * declares. Everything is scoped to `[data-nsg-theme]`, so the unthemed default
+ * look is untouched: `default` clears the attribute and the shell is unchanged.
+ * ============================================================================ */
+[data-nsg-theme] :is(.chrome-nav-item, .chrome-action) {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: var(--nsg-font-size-action-md, 0.75rem);
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+[data-nsg-theme] .chrome-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+[data-nsg-theme] .chrome-meta {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* A panel is drawn, not floated: the field, closed by an ink rule. */
+[data-nsg-theme] .chrome-sidebar {
+  background-color: var(--color-surface);
+  border-right-color: var(--color-border);
+}
+
+/* Brut does not blur, and neither does a press. */
+[data-nsg-theme] .chrome-header {
+  background-color: var(--color-surface);
+  backdrop-filter: none;
+}
+
+/* What is chosen is a filled block of the ACTION ink, not the structural one.
+   Ink is for rules and text; only violet is allowed to act, and a row you click
+   is an action. An always-on ink slab would also be "ambient" weight — the one
+   thing this board says a block must never be — and it out-shouts the page's
+   real primary actions. Same fill as the primary button and a checked control,
+   so "where I am" and "what I chose" read as one language. */
+[data-nsg-theme] .chrome-nav-item[data-active] {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  box-shadow: none;
+}
+
+[data-nsg-theme] .chrome-nav-item[data-active] .chrome-dot {
+  background-color: currentColor;
+}
+
+/* Hover is one visible step DOWN, as everywhere else in the system. */
+[data-nsg-theme] .chrome-nav-item:not([data-active]):hover {
+  background-color: var(--color-surface-sunken);
+  color: var(--color-text);
+}
+
+/* The mark is the action ink inside a rule, not a gradient. */
+[data-nsg-theme] .chrome-logo {
+  background-image: none;
+  background-color: var(--color-primary);
+  box-shadow: inset 0 0 0 var(--nsg-border-width) var(--color-text);
+}
+
+[data-nsg-theme] .chrome-logo svg {
+  color: var(--color-surface);
+}
+
+[data-nsg-theme] .chrome-github {
+  background-color: var(--color-text);
+  color: var(--color-surface);
+}
+
+[data-nsg-theme] .sidebar-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-border-subtle);
+}
+
+[data-nsg-theme] .sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border);
 }
 
 .sidebar-scroll::-webkit-scrollbar-thumb {

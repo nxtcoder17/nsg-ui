@@ -16,6 +16,7 @@ import { NumberInputIcon } from "../sections/NumberInputSection";
 import { TabsIcon } from "../sections/TabsSection";
 import { SegmentedControlIcon } from "../sections/SegmentedControlSection";
 import { ThemeSwitcherIcon } from "../sections/ThemeSwitcherSection";
+import { ThemeFoundationsIcon } from "../sections/ThemeFoundationsSection";
 import { BadgeIcon } from "../sections/BadgeSection";
 import { LinkIcon } from "../sections/LinkSection";
 import { SeparatorIcon } from "../sections/SeparatorSection";
@@ -81,6 +82,11 @@ export const sections = [
 		icon: SegmentedControlIcon,
 	},
 	{ id: "theme-switcher", label: "Theme Switcher", icon: ThemeSwitcherIcon },
+	{
+		id: "theme-foundations",
+		label: "Theme Foundations",
+		icon: ThemeFoundationsIcon,
+	},
 	{ id: "badge", label: "Badge", icon: BadgeIcon },
 	{ id: "card", label: "Card", icon: CardIcon },
 	{ id: "link", label: "Link", icon: LinkIcon },
@@ -103,11 +109,11 @@ interface SidebarProps {
 
 export const Sidebar: Component<SidebarProps> = (props) => {
 	return (
-		<aside class="fixed left-0 top-0 h-full w-64 bg-surface-sunken flex flex-col border-r border-border">
+		<aside class="chrome-sidebar fixed left-0 top-0 h-full w-64 bg-surface-sunken flex flex-col border-r border-border">
 			{/* Logo area */}
 			<div class="px-6 py-8">
 				<div class="flex items-center gap-3">
-					<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-success-400 flex items-center justify-center">
+					<div class="chrome-logo w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-success-400 flex items-center justify-center">
 						<LayersIcon class="w-5 h-5 text-white" />
 					</div>
 					<div>
@@ -121,7 +127,7 @@ export const Sidebar: Component<SidebarProps> = (props) => {
 
 			{/* Navigation */}
 			<nav class="flex-1 px-3 sidebar-scroll overflow-y-auto">
-				<div class="text-text-muted text-[11px] font-medium uppercase tracking-wider px-3 mb-2">
+				<div class="chrome-label text-text-muted text-[11px] font-medium uppercase tracking-wider px-3 mb-2">
 					Components
 				</div>
 				<div class="space-y-1">
@@ -129,7 +135,8 @@ export const Sidebar: Component<SidebarProps> = (props) => {
 						{(section) => (
 							<button
 								onClick={() => props.onSectionClick(section.id)}
-								class={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+								data-active={props.activeSection === section.id ? "true" : undefined}
+								class={`chrome-nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
 									props.activeSection === section.id
 										? "bg-primary-100 text-primary shadow-sm"
 										: "text-text-secondary hover:bg-surface-raised hover:text-text"
@@ -138,7 +145,7 @@ export const Sidebar: Component<SidebarProps> = (props) => {
 								<section.icon class="w-[18px] h-[18px]" />
 								{section.label}
 								{props.activeSection === section.id && (
-									<div class="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
+									<div class="chrome-dot ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
 								)}
 							</button>
 						)}
@@ -148,7 +155,7 @@ export const Sidebar: Component<SidebarProps> = (props) => {
 
 			{/* Footer */}
 			<div class="px-6 py-6 border-t border-border">
-				<div class="flex items-center gap-2 text-text-muted text-xs">
+				<div class="chrome-meta flex items-center gap-2 text-text-muted text-xs">
 					<span>Built with</span>
 					<span class="text-text-secondary font-medium">SolidJS</span>
 				</div>

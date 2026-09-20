@@ -291,12 +291,15 @@
 
     &[data-size="sm"] {
       @apply h-7 px-2.5 text-xs rounded-sm;
+      font-size: var(--nsg-font-size-action-sm); /* after the fallback above, so a theme owns it */
     }
     &[data-size="md"] {
       @apply h-8 px-3 text-xs rounded-sm;
+      font-size: var(--nsg-font-size-action-md);
     }
     &[data-size="lg"] {
       @apply h-10 px-4 text-sm rounded-md;
+      font-size: var(--nsg-font-size-action-lg);
     }
     &[data-size="icon"] {
       @apply h-8 w-8 rounded-md;
@@ -329,12 +332,15 @@
 
     &[data-size="sm"] {
       @apply px-1.5 py-0.5 text-[10px];
+      font-size: var(--nsg-font-size-badge-sm);
     }
     &[data-size="md"] {
       @apply px-2 py-0.5 text-xs;
+      font-size: var(--nsg-font-size-badge-md);
     }
     &[data-size="lg"] {
       @apply px-2.5 py-1 text-sm;
+      font-size: var(--nsg-font-size-badge-lg);
     }
   }
 }
@@ -747,7 +753,7 @@
 
     [data-nsg-radio-group="control"] {
       @apply w-5 h-5 rounded-full flex items-center justify-center mt-px shrink-0;
-      @apply border-2 border-neutral-300 bg-surface-raised;
+      @apply border border-neutral-300 bg-surface-raised;
       @apply data-[checked]:border-primary-500 data-[checked]:bg-primary-50;
       @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
       @apply transition-colors;
@@ -791,7 +797,7 @@
     }
 
     [data-nsg-checkbox="control"] {
-      @apply w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 mt-px;
+      @apply w-5 h-5 rounded border flex items-center justify-center shrink-0 mt-px;
       @apply bg-surface-raised border-neutral-300;
       @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
       @apply transition-colors;
@@ -1258,9 +1264,18 @@
     @apply disabled:pointer-events-none disabled:opacity-50;
 
     /* Sizes */
-    &[data-size="sm"] { @apply h-7 px-2.5 text-xs rounded-sm; }
-    &[data-size="md"] { @apply h-8 px-3 text-xs rounded-sm; }
-    &[data-size="lg"] { @apply h-10 px-4 text-sm rounded-md; }
+    &[data-size="sm"] {
+      @apply h-7 px-2.5 text-xs rounded-sm;
+      font-size: var(--nsg-font-size-action-sm);
+    }
+    &[data-size="md"] {
+      @apply h-8 px-3 text-xs rounded-sm;
+      font-size: var(--nsg-font-size-action-md);
+    }
+    &[data-size="lg"] {
+      @apply h-10 px-4 text-sm rounded-md;
+      font-size: var(--nsg-font-size-action-lg);
+    }
     &[data-size="icon"] { @apply h-8 w-8 rounded-md; }
     &[data-size="icon-sm"] { @apply h-7 w-7 rounded-sm; }
 
@@ -1322,4 +1337,215 @@
 @keyframes nsg-toast-slide-in {
   from { transform: translateY(1rem); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+/* ============================================================================
+ * Theme foundations — the geometry half of a design, made switchable
+ *
+ * Component rules above are written with Tailwind's own geometry utilities
+ * (`rounded-sm`, `shadow-lg`, …), whose values are baked into the stylesheet at
+ * build time. A foundation that ships as plain CSS therefore cannot move them
+ * by re-declaring Tailwind's `--radius-*` / `--shadow-*` names. The block at
+ * the bottom of this file maps every rounded / shadowed / stroked part onto
+ * library-owned tokens instead, so a foundation only declares values:
+ *
+ *   --nsg-radius-xs|sm|md|lg|xl|full   border-radius of every part
+ *   --nsg-shadow-sm|lg|xl|menu         box-shadow of floating surfaces
+ *   --nsg-border-width                 stroke weight of outlined surfaces
+ *   --nsg-font-size-action-sm|md|lg    label size of sized action parts, so a
+ *   --nsg-font-size-badge-sm|md|lg     type voice never flattens `data-size`
+ *   --nsg-page-backdrop, -size         optional page texture for app chrome
+ *
+ * WHY the mapping lives here rather than inside each theme: every foundation —
+ * including one written next month — gets the whole component set for free, and
+ * a new component only needs one line in the list below. Foundations are plain
+ * CSS (no Tailwind, no @apply), so they can be imported into a Tailwind entry
+ * file or linked with a <link> tag; see `nsg-ui/themes`.
+ * ============================================================================ */
+
+:root {
+  /* Defaults reproduce the unthemed look exactly. */
+  --nsg-radius-xs: 0.25rem;
+  --nsg-radius-sm: 6px;
+  --nsg-radius-md: 10px;
+  --nsg-radius-lg: 16px;
+  --nsg-radius-xl: 24px;
+  --nsg-radius-full: 9999px;
+
+  --nsg-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --nsg-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --nsg-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --nsg-shadow-menu: 0 4px 24px -4px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  --nsg-border-width: 1px;
+
+  /* Type scale of the sized parts. A foundation's type voice (mono, uppercase,
+   * tracked) is unlayered and beats the component layer, so a voice rule that
+   * also states a size would flatten `data-size` for every theme. The voice
+   * declares family/weight/tracking/case; the SIZE comes from here. Defaults
+   * are exactly what the component rules used to hardcode. */
+  --nsg-font-size-action-sm: 0.75rem;
+  --nsg-font-size-action-md: 0.75rem;
+  --nsg-font-size-action-lg: 0.875rem;
+  --nsg-font-size-badge-sm: 10px;
+  --nsg-font-size-badge-md: 0.75rem;
+  --nsg-font-size-badge-lg: 0.875rem;
+
+  --nsg-page-backdrop: none;
+  --nsg-page-backdrop-size: auto;
+}
+
+/* ---------------------------------------------------------------------------
+ * radius — one line per part, grouped by which token it answers to
+ * ------------------------------------------------------------------------- */
+@layer components {
+  /* small controls, menu items */
+  :is(
+    .nsg-button[data-size="sm"],
+    .nsg-button[data-size="md"],
+    .nsg-button[data-size="icon-sm"],
+    .nsg-toggle-button[data-size="sm"],
+    .nsg-toggle-button[data-size="md"],
+    .nsg-toggle-button[data-size="icon-sm"],
+    .nsg-segmented-control [data-nsg-segmented-control="indicator"],
+    .nsg-segmented-control [data-nsg-segmented-control="item"],
+    .nsg-dropdown-menu[data-nsg-dropdown-menu="content"],
+    .nsg-dropdown-menu[data-nsg-dropdown-menu="subcontent"],
+    .nsg-dropdown-menu [data-nsg-dropdown-menu="action"],
+    .nsg-dropdown-menu [data-nsg-dropdown-menu="option"],
+    .nsg-context-menu[data-nsg-context-menu="content"],
+    .nsg-context-menu[data-nsg-context-menu="subcontent"],
+    .nsg-context-menu [data-nsg-context-menu="action"],
+    .nsg-context-menu [data-nsg-context-menu="option"],
+    .nsg-context-menu [data-nsg-context-menu="submenu-trigger"],
+    .nsg-link
+  ) {
+    @apply rounded-[var(--nsg-radius-sm)];
+  }
+
+  /* full-size buttons, fields, segmented track */
+  :is(
+    .nsg-button[data-size="lg"],
+    .nsg-button[data-size="icon"],
+    .nsg-toggle-button[data-size="lg"],
+    .nsg-toggle-button[data-size="icon"],
+    .nsg-segmented-control [data-nsg-segmented-control="track"],
+    .nsg-popover[data-nsg-popover="content"],
+    .nsg-combobox [data-nsg-combobox="control"],
+    .nsg-combobox [data-nsg-combobox="item"],
+    .nsg-text-input [data-nsg-text-input="wrapper"],
+    .nsg-number-input [data-nsg-number-input="wrapper"],
+    .nsg-command-bar [data-nsg-command-bar="item"]
+  ) {
+    @apply rounded-[var(--nsg-radius-md)];
+  }
+
+  /* sheets, panels, floating surfaces */
+  :is(
+    .nsg-accordion,
+    .nsg-command-bar,
+    .nsg-dialog [data-nsg-dialog="content"],
+    .nsg-combobox[data-nsg-combobox="content"],
+    .nsg-toast,
+    .nsg-dropdown-menu [data-nsg-dropdown-menu="submenu-trigger"]
+  ) {
+    @apply rounded-[var(--nsg-radius-lg)];
+  }
+
+  /* cards */
+  :is(.nsg-card) {
+    @apply rounded-[var(--nsg-radius-xl)];
+  }
+
+  /* pills */
+  :is(
+    .nsg-badge,
+    .nsg-progress [data-nsg-progress="track"],
+    .nsg-progress [data-nsg-progress="fill"]
+  ) {
+    @apply rounded-[var(--nsg-radius-full)];
+  }
+
+  /* A radio is round in EVERY foundation, so it is deliberately not in any list
+     above: its circle is meaning, not geometry — a squared radio stops reading
+     as a radio. Square-cornered systems keep it round for the same reason
+     (neobrutalism.dev's radio is `rounded-full border-2` on an otherwise
+     square-cornered sheet). Pinned rather than mapped to `--nsg-radius-full`,
+     because that token is exactly what a `radius-full: 0` foundation would use
+     to square it. Its stroke weight still follows `--nsg-border-width`, and a
+     foundation may still re-ink it. */
+  .nsg-radio-group [data-nsg-radio-group="control"] {
+    border-radius: 50%;
+  }
+
+  /* chips and inner squares */
+  :is(
+    .nsg-checkbox [data-nsg-checkbox="control"],
+    .nsg-command-bar [data-nsg-command-bar="shortcut"],
+    .nsg-command-bar [data-nsg-command-bar="footer"] kbd,
+    .nsg-combobox [data-nsg-combobox="tag"],
+    .nsg-number-input [data-nsg-number-input="button"],
+    .nsg-toast [data-nsg-toast="close-button"]
+  ) {
+    @apply rounded-[var(--nsg-radius-xs)];
+  }
+
+  /* -------------------------------------------------------------------------
+   * elevation — floating surfaces only; resting surfaces are borderless or
+   * owned by the theme
+   * ----------------------------------------------------------------------- */
+  :is(.nsg-segmented-control [data-nsg-segmented-control="indicator"]) {
+    @apply shadow-[var(--nsg-shadow-sm)];
+  }
+
+  :is(
+    .nsg-context-menu[data-nsg-context-menu="content"],
+    .nsg-context-menu[data-nsg-context-menu="subcontent"],
+    .nsg-dialog [data-nsg-dialog="content"],
+    .nsg-popover[data-nsg-popover="content"],
+    .nsg-combobox[data-nsg-combobox="content"],
+    .nsg-toast
+  ) {
+    @apply shadow-[var(--nsg-shadow-lg)];
+  }
+
+  :is(
+    .nsg-dropdown-menu[data-nsg-dropdown-menu="content"],
+    .nsg-dropdown-menu[data-nsg-dropdown-menu="subcontent"]
+  ) {
+    @apply shadow-[var(--nsg-shadow-menu)];
+  }
+
+  :is(.nsg-command-bar) {
+    @apply shadow-[var(--nsg-shadow-xl)];
+  }
+
+  /* -------------------------------------------------------------------------
+   * stroke weight of outlined surfaces — only parts that are ALREADY stroked,
+   * so nothing gains a border it did not have. Cards keep their own
+   * `--shadow-card`, so a foundation can restyle them without either token.
+   * ----------------------------------------------------------------------- */
+  :is(
+    .nsg-card,
+    .nsg-accordion,
+    .nsg-checkbox [data-nsg-checkbox="control"],
+    .nsg-radio-group [data-nsg-radio-group="control"],
+    .nsg-command-bar,
+    .nsg-command-bar [data-nsg-command-bar="shortcut"],
+    .nsg-segmented-control [data-nsg-segmented-control="track"],
+    .nsg-dialog [data-nsg-dialog="content"],
+    .nsg-combobox [data-nsg-combobox="control"],
+    .nsg-combobox[data-nsg-combobox="content"],
+    .nsg-context-menu[data-nsg-context-menu="content"],
+    .nsg-context-menu[data-nsg-context-menu="subcontent"],
+    .nsg-dropdown-menu[data-nsg-dropdown-menu="content"],
+    .nsg-dropdown-menu[data-nsg-dropdown-menu="subcontent"],
+    .nsg-text-input [data-nsg-text-input="wrapper"],
+    .nsg-number-input [data-nsg-number-input="wrapper"],
+    .nsg-toast,
+    .nsg-button.nsg-button-outline,
+    .nsg-badge.nsg-badge-outline,
+    .nsg-toggle-button.nsg-toggle-button-outline
+  ) {
+    border-width: var(--nsg-border-width);
+  }
 }

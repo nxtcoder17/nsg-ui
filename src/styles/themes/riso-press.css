@@ -1,0 +1,49 @@
+/* ============================================================================
+ * FOUNDATION · Riso Press · Federal plate
+ *
+ * Design board: `.secrets/designs/05-riso-press.html`. The board's own note is
+ * that 05 and 10 are the same drawing with one colour moved — so this file is
+ * the same press, with the pink plate on press instead of aqua:
+ *
+ *   · federal blue acts, fluorescent pink marks (and is the conflict ink here,
+ *     exactly as the board aliases `--red: var(--pink)`);
+ *   · every thin mark that has to read on paper is printed in blue at full
+ *     strength, so `info` borrows the action ink — the press only has two
+ *     plates and the board never introduces a third;
+ *   · mustard is state, moss is ok, and nothing else is a colour.
+ *
+ *   import:  @import 'nsg-ui/themes/riso-press.css';
+ *   select:  <html data-nsg-theme="riso-press">   (or applyThemeFoundation('riso-press'))
+ *
+ * This file is the whole reason the press language is shared: a plate is these
+ * eight inks, and nothing else had to be written again.
+ * ============================================================================ */
+@import './riso-base.css';
+
+[data-nsg-theme='riso-press'] {
+  /* two spot inks */
+  --nsg-spot: #1c37c4; /* federal blue — acts */
+  --nsg-spot-deep: #14289a; /* the same plate, pressed twice */
+  --nsg-spot-2: #ff3d8b; /* fluorescent pink — marks */
+  --nsg-spot-2-deep: #14289a; /* blue at full strength: hairlines and info ink */
+
+  /* one state ink, one ok ink */
+  --nsg-spot-3: #f5c518; /* mustard — state */
+  --nsg-ok: #0d7a4b; /* moss — ok */
+
+  /* conflict is the pink plate on this sheet */
+  --nsg-alert: #e01f6f;
+  --nsg-alert-deep: #b01356;
+}
+
+/* Dark: the base flips the sheet; the plate lifts its own inks. */
+[data-nsg-theme='riso-press'].dark {
+  --nsg-spot: #6f8cff;
+  --nsg-spot-deep: #4f6ff0;
+  --nsg-spot-2: #ff74ab;
+  --nsg-spot-2-deep: #6f8cff;
+  --nsg-spot-3: #f0ce4a;
+  --nsg-ok: #35b37c;
+  --nsg-alert: #ff74ab;
+  --nsg-alert-deep: #ff9cc4;
+}

@@ -17,7 +17,14 @@
       "solid": "./dist/icons/index.jsx",
       "import": "./dist/icons/index.js"
     },
-    "./theme.css": "./dist/theme.css"
+    "./theme.css": "./dist/theme.css",
+    "./themes": {
+      "types": "./dist/themes/index.d.ts",
+      "solid": "./dist/themes/index.jsx",
+      "import": "./dist/themes/index.js"
+    },
+    "./themes/*.css": "./dist/themes/*.css",
+    "./themes/*": "./dist/themes/*.css"
   },
   "files": [
     "dist",

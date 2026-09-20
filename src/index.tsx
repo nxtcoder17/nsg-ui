@@ -27,3 +27,20 @@ export { ToggleButton, type ToggleButtonProps, type ToggleButtonKind, type Toggl
 export { CommandBar, type CommandBarProps, type CommandBarItemState } from './components/command-bar'
 export { Text, type TextProps, type TextColor, type TextElement } from './components/text'
 export { ThemeSwitcher, type ThemeSwitcherProps, type Theme } from './components/theme-switcher'
+export { ThemePicker, type ThemePickerProps } from './components/theme-picker'
+
+// Theme foundations — whole design languages, switched with one attribute
+export {
+  THEME_FOUNDATIONS,
+  THEME_FOUNDATION_ATTRIBUTE,
+  THEME_FOUNDATION_STORAGE_KEY,
+  DEFAULT_THEME_FOUNDATION_ID,
+  THEME_STYLESHEET_PARTIALS,
+  themeStylesheets,
+  applyThemeFoundation,
+  getThemeFoundation,
+  getStoredThemeFoundation,
+  resolveThemeFoundation,
+  type ThemeFoundation,
+  type ThemeFoundationId,
+} from './themes'

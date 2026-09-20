@@ -72,6 +72,34 @@ function App() {
 }
 ```
 
+## Theme Foundations
+
+Whole design languages for every component at once, switched with one attribute:
+
+```css
+@import 'tailwindcss';
+@import 'nsg-ui/theme.css';
+
+/* only the foundations you offer get shipped */
+@import 'nsg-ui/themes/modern-brut-violet.css';
+@import 'nsg-ui/themes/riso-aqua.css';
+```
+
+```tsx
+import { ThemePicker } from 'nsg-ui'
+
+<ThemePicker />
+```
+
+```html
+<html data-nsg-theme="riso-aqua">   <!-- or applyThemeFoundation('riso-aqua') -->
+```
+
+Shipped: `default` (the built-in look), `modern-brut-violet`, `riso-aqua`,
+`riso-press`. Each is a separate stylesheet, so a project pays for the
+foundations it imports and nothing else. Full contract, dark-mode rules and an
+authoring guide: [docs/themes.md](./docs/themes.md).
+
 ## Components
 
 | Component | Description |

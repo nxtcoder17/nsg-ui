@@ -1,0 +1,1010 @@
+/* ============================================================================
+ * FOUNDATION · Modern Brut · Violet
+ *
+ * Design board: `.secrets/designs/11-modern-brut-violet.html` (a colour variant
+ * of 06-modern-brut). Nothing from the board is dropped:
+ *
+ *   · square corners and a hard ink block that is EARNED, not ambient: 6px for
+ *     the screen's primary action (and a raised card's hover), 4px for menus
+ *     and the other floating sheets, none at all for the centred dialog;
+ *   · ink rules instead of grey ones (--color-border IS the ink, so panels read
+ *     as drawn rather than floated);
+ *   · one typeface (Inter Tight) plus one mono (IBM Plex Mono), hierarchy from
+ *     scale and spacing — every action and label is mono, uppercase;
+ *   · colour as function, never as flavour: violet acts, orange is only ever
+ *     conflict, moss is only ever ok, acid is only ever live;
+ *   · an exposed 64px/16px grid behind the page (--nsg-page-backdrop, opt-in).
+ *
+ *   import:  @import 'nsg-ui/themes/modern-brut-violet.css';
+ *   select:  <html data-nsg-theme="modern-brut-violet">
+ *            (or applyThemeFoundation('modern-brut-violet'))
+ *
+ * WHERE TO REFINE: the `--nsg-*` ink/paper values below are the whole design.
+ * Every ramp is mixed from them, so moving `--nsg-spot` re-inks the primary
+ * ramp, the block shadow and the ring together.
+ *
+ * THE ONE RULE THAT KEEPS THIS THEME LEGIBLE: a vivid plate ink is a FILL,
+ * never an ink. Raw orange reads 2.9:1 and raw acid 2.4:1 on paper, so each has
+ * a partner for the ramp positions that end up as text — `--nsg-spot-2-deep`
+ * for conflict, `--nsg-spot-3-ink` for the acid. Every ramp keeps the vivid ink
+ * in 50–400 (fills, tints, kind bars) and the deep one from 500 up (text,
+ * rules, a filled button's own label).
+ * ============================================================================ */
+/* ---------------------------------------------------------------------------
+ * Fonts — Inter Tight (text, and the display cut) + IBM Plex Mono (every action and label)
+ *
+ * Declared here as @font-face, NOT pulled from a shared partial and NOT an
+ * external `@import url(…)`: an @import is only legal before every other
+ * statement, and a foundation is inlined MID-stylesheet by a bundler, where it
+ * would be silently dropped. @font-face is legal at any position, so the
+ * foundation owns its families outright — no third file to import, and no
+ * render-blocking round-trip to fonts.googleapis.com before the first request.
+ *
+ *
+ * Self-hosting is a find-and-replace on the `src` urls. Every subset Google
+ * ships is kept: `unicode-range` makes the browser fetch only the ones in use.
+ * ------------------------------------------------------------------------- */
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1iIq129k.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1isq129k.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1iAq129k.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1iEq129k.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwl1FgtIU.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlRFgtIU.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwl9FgtIU.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwl5FgtIU.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3twJwlBFgg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwl1FgtIU.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlRFgtIU.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwl9FgtIU.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwl5FgtIU.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3vAOwlBFgg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3pQPwl1FgtIU.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3pQPwlRFgtIU.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3pQPwl9FgtIU.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3pQPwl5FgtIU.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/ibmplexmono/v20/-F6qfjptAgt5VM-kVkqdyU8n3pQPwlBFgg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsK8ah8QA.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsD8ah8QA.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsL8ah8QA.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsE8ah8QA.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsI8ah8QA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsJ8ah8QA.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsH8ag.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsK8ah8QA.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsD8ah8QA.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsL8ah8QA.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsE8ah8QA.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsI8ah8QA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsJ8ah8QA.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsH8ag.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsK8ah8QA.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsD8ah8QA.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsL8ah8QA.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsE8ah8QA.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsI8ah8QA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsJ8ah8QA.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsH8ag.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+/* cyrillic-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsK8ah8QA.woff2) format('woff2');
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+}
+/* cyrillic */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsD8ah8QA.woff2) format('woff2');
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+/* greek-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsL8ah8QA.woff2) format('woff2');
+  unicode-range: U+1F00-1FFF;
+}
+/* greek */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsE8ah8QA.woff2) format('woff2');
+  unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C, U+038E-03A1, U+03A3-03FF;
+}
+/* vietnamese */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsI8ah8QA.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+/* latin-ext */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsJ8ah8QA.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* latin */
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/intertight/v9/NGSwv5HMAFg6IuGlBNMjxLsH8ag.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+[data-nsg-theme='modern-brut-violet'] {
+  /* --- the board's palette, verbatim --------------------------------------- */
+  --nsg-ink: #111113; /* text, rules, and every block */
+  --nsg-ink-soft: #39393d;
+  --nsg-ink-deep: #0a0a0c; /* beyond the ink, for the ends of the ramp */
+  --nsg-paper: #f4f4f2; /* the field */
+  --nsg-paper-2: #e6e6e3; /* sunken sheets, table stripes */
+  --nsg-paper-3: #cbcbc6; /* internal rules */
+  --nsg-paper-light: #fafaf8; /* the sheet, one step off the field */
+  --nsg-raised: #ffffff; /* sheets that sit on the field */
+  --nsg-muted: #6d6d72;
+  --nsg-spot: #6d28d9; /* acts */
+  --nsg-spot-2: #ff5b23; /* conflict — a FILL: 2.9:1 on paper, never an ink */
+  --nsg-spot-2-deep: #c2410c; /* the same conflict at ink strength (5.2:1) */
+  --nsg-spot-3: #c8a000; /* NOTE: acid, darkened until it reads on paper */
+  --nsg-spot-3-ink: color-mix(in oklab, var(--nsg-spot-3) 58%, var(--nsg-ink));
+  --nsg-ok: #127a45; /* ok, and nothing else */
+  --nsg-block: 6px 6px 0 var(--nsg-ink); /* the screen's action, and a card's hover */
+
+  /* --- type ---------------------------------------------------------------- */
+  --font-sans: 'Inter Tight', system-ui, -apple-system, sans-serif;
+  --font-display: 'Inter Tight', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+
+  /* --- surfaces ------------------------------------------------------------ */
+  --color-surface: var(--nsg-paper);
+  --color-surface-raised: var(--nsg-raised);
+  --color-surface-sunken: var(--nsg-paper-2);
+  --color-surface-hover: var(--nsg-paper-2);
+
+  /* Rules are the ink: that single choice is what makes these panels drawn. */
+  --color-border: var(--nsg-ink);
+  --color-border-subtle: var(--nsg-paper-3);
+  --color-ring: var(--nsg-spot);
+
+  --color-text: var(--nsg-ink);
+  --color-text-secondary: var(--nsg-ink-soft);
+  --color-text-muted: var(--nsg-muted);
+
+  /* --- colour as function -------------------------------------------------- */
+  --color-primary: var(--nsg-spot);
+  /* Hover is the ramp's 600 step, computed rather than restated: the components
+   * read the ramp, so a literal here would silently drift from it. */
+  --color-primary-hover: color-mix(in oklab, var(--nsg-spot) 88%, var(--nsg-ink));
+  --color-danger: var(--nsg-spot-2-deep);
+  --color-danger-hover: color-mix(in oklab, var(--nsg-spot-2-deep) 88%, var(--nsg-ink));
+  --color-success: var(--nsg-ok);
+  --color-warning: var(--nsg-spot-3-ink);
+  /* NOTE: the board has one action ink, so `info` borrows it. Nothing that reads
+   * as an action collides with it (the badge set has no `primary` kind); the
+   * only alternative that invents no colour is the neutral ink, which collides
+   * with `neutral` instead. Point this at `--nsg-spot-2-deep` if the board
+   * grows a mark ink. */
+  --color-info: var(--nsg-spot);
+
+  /* --- neutral ramp: the paper/ink axis, derived so it inverts in dark ----- */
+  --color-neutral-50: var(--nsg-paper-light);
+  --color-neutral-100: var(--nsg-paper);
+  --color-neutral-200: var(--nsg-paper-2);
+  --color-neutral-300: var(--nsg-paper-3);
+  --color-neutral-400: color-mix(in oklab, var(--nsg-ink) 52%, var(--nsg-paper));
+  --color-neutral-500: var(--nsg-muted);
+  --color-neutral-600: var(--nsg-ink-soft);
+  --color-neutral-700: color-mix(in oklab, var(--nsg-ink) 88%, var(--nsg-paper-2));
+  --color-neutral-800: color-mix(in oklab, var(--nsg-ink) 96%, var(--nsg-paper-2));
+  --color-neutral-900: var(--nsg-ink);
+  --color-neutral-950: var(--nsg-ink-deep);
+
+  /* --- colour ramps, mixed from the anchors above --------------------------
+   * 50–400 step toward the sheet, 600–950 step into the ink, 500 IS the anchor.
+   * The mixes read the vars above, so dark mode needs no ramp of its own:
+   * flipping the sheet/ink vars flips every ramp with them. */
+  --color-primary-50: color-mix(in oklab, var(--nsg-spot) 8%, var(--nsg-raised));
+  --color-primary-100: color-mix(in oklab, var(--nsg-spot) 16%, var(--nsg-raised));
+  --color-primary-200: color-mix(in oklab, var(--nsg-spot) 30%, var(--nsg-raised));
+  --color-primary-300: color-mix(in oklab, var(--nsg-spot) 46%, var(--nsg-raised));
+  --color-primary-400: color-mix(in oklab, var(--nsg-spot) 68%, var(--nsg-raised));
+  --color-primary-500: var(--nsg-spot);
+  --color-primary-600: color-mix(in oklab, var(--nsg-spot) 88%, var(--nsg-ink));
+  --color-primary-700: color-mix(in oklab, var(--nsg-spot) 74%, var(--nsg-ink));
+  --color-primary-800: color-mix(in oklab, var(--nsg-spot) 58%, var(--nsg-ink));
+  --color-primary-900: color-mix(in oklab, var(--nsg-spot) 44%, var(--nsg-ink));
+  --color-primary-950: color-mix(in oklab, var(--nsg-spot) 32%, var(--nsg-ink));
+
+  --color-danger-50: color-mix(in oklab, var(--nsg-spot-2) 8%, var(--nsg-raised));
+  --color-danger-100: color-mix(in oklab, var(--nsg-spot-2) 16%, var(--nsg-raised));
+  --color-danger-200: color-mix(in oklab, var(--nsg-spot-2) 30%, var(--nsg-raised));
+  --color-danger-300: color-mix(in oklab, var(--nsg-spot-2) 46%, var(--nsg-raised));
+  --color-danger-400: color-mix(in oklab, var(--nsg-spot-2) 68%, var(--nsg-raised));
+  /* 50–400 keep the bright plate (a fill). 500 is the ink position, so the step
+   * from 400 to 500 is a deliberate lightness jump: the vivid orange cannot be
+   * read as text, which is exactly why `--nsg-spot-2-deep` exists. */
+  --color-danger-500: var(--nsg-spot-2-deep);
+  --color-danger-600: color-mix(in oklab, var(--nsg-spot-2-deep) 88%, var(--nsg-ink));
+  --color-danger-700: color-mix(in oklab, var(--nsg-spot-2-deep) 74%, var(--nsg-ink));
+  --color-danger-800: color-mix(in oklab, var(--nsg-spot-2-deep) 58%, var(--nsg-ink));
+  --color-danger-900: color-mix(in oklab, var(--nsg-spot-2-deep) 44%, var(--nsg-ink));
+  --color-danger-950: color-mix(in oklab, var(--nsg-spot-2-deep) 32%, var(--nsg-ink));
+
+  --color-success-50: color-mix(in oklab, var(--nsg-ok) 8%, var(--nsg-raised));
+  --color-success-100: color-mix(in oklab, var(--nsg-ok) 16%, var(--nsg-raised));
+  --color-success-200: color-mix(in oklab, var(--nsg-ok) 30%, var(--nsg-raised));
+  --color-success-300: color-mix(in oklab, var(--nsg-ok) 46%, var(--nsg-raised));
+  --color-success-400: color-mix(in oklab, var(--nsg-ok) 68%, var(--nsg-raised));
+  --color-success-500: var(--nsg-ok);
+  --color-success-600: color-mix(in oklab, var(--nsg-ok) 88%, var(--nsg-ink));
+  --color-success-700: color-mix(in oklab, var(--nsg-ok) 74%, var(--nsg-ink));
+  --color-success-800: color-mix(in oklab, var(--nsg-ok) 58%, var(--nsg-ink));
+  --color-success-900: color-mix(in oklab, var(--nsg-ok) 44%, var(--nsg-ink));
+  --color-success-950: color-mix(in oklab, var(--nsg-ok) 32%, var(--nsg-ink));
+
+  --color-warning-50: color-mix(in oklab, var(--nsg-spot-3) 8%, var(--nsg-raised));
+  --color-warning-100: color-mix(in oklab, var(--nsg-spot-3) 16%, var(--nsg-raised));
+  --color-warning-200: color-mix(in oklab, var(--nsg-spot-3) 30%, var(--nsg-raised));
+  --color-warning-300: color-mix(in oklab, var(--nsg-spot-3) 46%, var(--nsg-raised));
+  --color-warning-400: color-mix(in oklab, var(--nsg-spot-3) 68%, var(--nsg-raised));
+  /* Same rule as danger: 50–400 carry the raw acid (a fill), 500 up is the ink
+   * position, derived so it flips with the sheet in dark mode too. */
+  --color-warning-500: var(--nsg-spot-3-ink);
+  --color-warning-600: color-mix(in oklab, var(--nsg-spot-3-ink) 88%, var(--nsg-ink));
+  --color-warning-700: color-mix(in oklab, var(--nsg-spot-3-ink) 74%, var(--nsg-ink));
+  --color-warning-800: color-mix(in oklab, var(--nsg-spot-3-ink) 58%, var(--nsg-ink));
+  --color-warning-900: color-mix(in oklab, var(--nsg-spot-3-ink) 44%, var(--nsg-ink));
+  --color-warning-950: color-mix(in oklab, var(--nsg-spot-3-ink) 32%, var(--nsg-ink));
+
+  --color-info-50: color-mix(in oklab, var(--nsg-spot) 8%, var(--nsg-raised));
+  --color-info-100: color-mix(in oklab, var(--nsg-spot) 16%, var(--nsg-raised));
+  --color-info-200: color-mix(in oklab, var(--nsg-spot) 30%, var(--nsg-raised));
+  --color-info-300: color-mix(in oklab, var(--nsg-spot) 46%, var(--nsg-raised));
+  --color-info-400: color-mix(in oklab, var(--nsg-spot) 68%, var(--nsg-raised));
+  --color-info-500: var(--nsg-spot);
+  --color-info-600: color-mix(in oklab, var(--nsg-spot) 88%, var(--nsg-ink));
+  --color-info-700: color-mix(in oklab, var(--nsg-spot) 74%, var(--nsg-ink));
+  --color-info-800: color-mix(in oklab, var(--nsg-spot) 58%, var(--nsg-ink));
+  --color-info-900: color-mix(in oklab, var(--nsg-spot) 44%, var(--nsg-ink));
+  --color-info-950: color-mix(in oklab, var(--nsg-spot) 32%, var(--nsg-ink));
+
+  /* --- geometry: radius 0, a tiered block shadow, inked strokes ----------- */
+  --nsg-radius-xs: 0;
+  --nsg-radius-sm: 0;
+  --nsg-radius-md: 0;
+  --nsg-radius-lg: 0;
+  --nsg-radius-xl: 0;
+  --nsg-radius-full: 0; /* squares badges and progress bars — a radio stays round */
+  --nsg-border-width: 1.5px;
+
+  /* The block is tiered, because "one hard shadow" is about how OFTEN it is
+   * earned, not about every surface getting the same one: the action gets 6px
+   * (--nsg-block), things that hang off a corner get 4px, and the centred
+   * dialog gets none at all (see the furniture at the end of this file). */
+  --nsg-block-float: 4px 4px 0 var(--nsg-ink);
+  --nsg-shadow-sm: none; /* no rest shadows in this system */
+  --nsg-shadow-lg: var(--nsg-block-float);
+  --nsg-shadow-xl: var(--nsg-block-float);
+  --nsg-shadow-menu: var(--nsg-block-float);
+  --shadow-card: none;
+  --shadow-card-hover: var(--nsg-block);
+
+  /* The action voice reads on the button's own size scale — the type rules at
+   * the end of this file deliberately state no font-size, so `data-size` keeps
+   * its three steps. */
+  --nsg-font-size-action-sm: 10px;
+  --nsg-font-size-action-md: 11px;
+  --nsg-font-size-action-lg: 12px;
+  --nsg-font-size-badge-sm: 10px;
+  --nsg-font-size-badge-md: 11px;
+  --nsg-font-size-badge-lg: 12px;
+
+  /* --- exposed structure (app chrome opts in) ----------------------------- */
+  --nsg-page-backdrop:
+    linear-gradient(rgba(17, 17, 19, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 17, 19, 0.055) 1px, transparent 1px),
+    linear-gradient(rgba(17, 17, 19, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 17, 19, 0.028) 1px, transparent 1px);
+  --nsg-page-backdrop-size: 64px 64px, 64px 64px, 16px 16px, 16px 16px;
+}
+
+/* ============================================================================
+ * Dark — 07-ink-night, the same board on an ink field. Only the ink/paper axis
+ * and the few inks that need lifting are restated: every ramp above recomputes
+ * itself from these vars, which is why there is no ramp list in here.
+ * ============================================================================ */
+[data-nsg-theme='modern-brut-violet'].dark {
+  --nsg-ink: #f2f2ef;
+  --nsg-ink-soft: #c9c9c5;
+  --nsg-ink-deep: #ffffff;
+  --nsg-paper: #111113;
+  --nsg-paper-2: #1b1b1e;
+  --nsg-paper-3: #34343a;
+  --nsg-paper-light: #0c0c0e;
+  --nsg-raised: #1d1d20;
+  --nsg-muted: #8b8b91;
+  --nsg-spot: #a78bfa; /* NOTE: lifted until it clears 4.5:1 on the ink field */
+  --nsg-spot-2: #ff7a4d;
+  --nsg-spot-2-deep: #ff9a75; /* conflict at ink strength on an ink field */
+  --nsg-spot-3: #e0bf34;
+  --nsg-ok: #34c98a;
+  /* `--nsg-spot-3-ink`, `--color-primary-hover` and `--color-danger-hover`
+   * recompute from the above, so they are not restated here. */
+
+  --color-surface: var(--nsg-paper);
+  --color-surface-raised: var(--nsg-raised);
+  --color-surface-sunken: #0c0c0e;
+  --color-surface-hover: var(--nsg-paper-2);
+  /* An inked rule on an ink field is invisible, so dark rules step back up — but
+   * they are still the INK, not a grey: 45% of it clears 3.5:1. */
+  --color-border: color-mix(in oklab, var(--nsg-ink) 45%, var(--nsg-paper));
+  --color-border-subtle: #26262b;
+
+  --nsg-page-backdrop:
+    linear-gradient(rgba(244, 244, 242, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 244, 242, 0.055) 1px, transparent 1px),
+    linear-gradient(rgba(244, 244, 242, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(244, 244, 242, 0.028) 1px, transparent 1px);
+}
+
+/* ============================================================================
+ * The board's voice, where nsg-ui has parts the board does not name
+ * ============================================================================ */
+
+/* Every action is a mono, uppercase, tracked slab. The SIZE is not stated here
+ * on purpose: it comes from `--nsg-font-size-action-*`, so `data-size` keeps its
+ * three steps and this voice cannot flatten them. */
+[data-nsg-theme='modern-brut-violet'] :is(.nsg-button, .nsg-toggle-button) {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+/* A part with no size to answer to still reads at the md step. */
+[data-nsg-theme='modern-brut-violet'] :is(.nsg-button, .nsg-toggle-button):not([data-size]) {
+  font-size: var(--nsg-font-size-action-md);
+}
+
+/* The 6px block, owned by the primary action and a raised card's hover — the
+ * biggest one in the system, so only the screen's action earns it. Hovering
+ * collapses it: the block reads as the button coming down onto the sheet. */
+[data-nsg-theme='modern-brut-violet'] .nsg-button[data-kind='primary'] {
+  box-shadow: var(--nsg-block);
+  transition: box-shadow 0.1s ease-out, background-color 0.1s ease-out;
+}
+
+[data-nsg-theme='modern-brut-violet'] .nsg-button[data-kind='primary']:hover {
+  box-shadow: 2px 2px 0 var(--nsg-ink);
+}
+
+/* Only the primary action carries the block, so the rest of the actions are
+ * drawn by a rule instead — otherwise "secondary" is a floating grey chip. */
+[data-nsg-theme='modern-brut-violet']
+  :is(.nsg-button[data-kind='secondary'], .nsg-toggle-button) {
+  border-width: var(--nsg-border-width);
+  border-color: var(--nsg-ink);
+}
+
+/* Labels are the page's small print: mono, uppercase, quiet. */
+[data-nsg-theme='modern-brut-violet']
+  :is(
+    [data-nsg-text-input='label'],
+    [data-nsg-number-input='label'],
+    [data-nsg-dropdown-menu='group-label'],
+    [data-nsg-context-menu='group-label'],
+    [data-nsg-command-bar='group-header']
+  ) {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+[data-nsg-theme='modern-brut-violet'] .nsg-badge {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  /* A chip is drawn too: a rule in its own kind ink, not a smeared tint. */
+  border-width: var(--nsg-border-width);
+  border-color: currentColor;
+}
+
+[data-nsg-theme='modern-brut-violet'] .nsg-badge:not([data-size]) {
+  font-size: var(--nsg-font-size-badge-md);
+}
+
+/* Meta text — timestamps, ids, counts — is mono and tabular, as on the board. */
+[data-nsg-theme='modern-brut-violet']
+  :is([data-nsg-command-bar='shortcut'], [data-nsg-command-bar='footer'] kbd) {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================================================
+ * Furniture · part two — the parts that were still soft, grey or ambient
+ *
+ * Each rule below is a value, not a second palette: it stays inside the board's
+ * vocabulary (ink rules, square corners, a block that is earned rather than
+ * ambient, violet acts, orange conflicts, acid states, moss is ok).
+ *
+ * One shape is NOT this file's to choose: the radio control stays a circle. Its
+ * circle is meaning, not geometry — `theme.css` pins it, so this file only
+ * re-inks it. The checkbox, by contrast, IS a square here (chips list in the
+ * map in `theme.css`).
+ * ============================================================================ */
+
+/* --- hovers that actually read --------------------------------------------- */
+
+/* `--nsg-paper` and `--nsg-raised` are within 4% of each other, so the neutral
+ * ramp's hover steps (paper-light / paper) are invisible on a raised sheet —
+ * which is where a card, a dialog and an accordion live.
+ *
+ * Hover is `--color-surface-sunken` (paper-2), NOT `--color-surface-hover`: on a
+ * raised sheet in dark mode paper-2 (#1b1b1e) is within two units of
+ * `--nsg-raised` (#1d1d20), so it is invisible, while sunken is one visible step
+ * DOWN from both the field and the raised sheet in both modes. It also matches
+ * the board's only hover gesture — the primary action's block collapsing, i.e.
+ * the control pressing into the sheet. */
+[data-nsg-theme='modern-brut-violet']
+  :is(
+    .nsg-accordion [data-nsg-accordion='trigger']:hover,
+    .nsg-button[data-kind='ghost']:hover,
+    .nsg-button.nsg-button-outline[data-kind='secondary']:hover,
+    .nsg-number-input [data-nsg-number-input='button']:hover,
+    .nsg-toggle-button:not([data-pressed]):hover
+  ) {
+  background-color: var(--color-surface-sunken);
+}
+
+/* --- the checkbox and the radio share one idiom ---------------------------- */
+
+/* At rest they are small ink-ruled controls — a square for the checkbox, a
+ * circle for the radio. The radio's shape is NOT taken from this foundation:
+ * `theme.css` pins it round, because a squared radio stops reading as a radio
+ * (so does neobrutalism.dev, whose radio is `rounded-full border-2` on a sheet
+ * that is square everywhere else). Only the ink is ours. `neutral-300`
+ * (paper-3) used to be the last soft grey rule in a design whose argument is
+ * that rules are the ink. */
+[data-nsg-theme='modern-brut-violet']
+  :is(
+    .nsg-checkbox [data-nsg-checkbox='control'],
+    .nsg-radio-group [data-nsg-radio-group='control']
+  ) {
+  border-color: var(--nsg-ink);
+  background-color: var(--nsg-raised);
+}
+
+/* About to change → violet. */
+[data-nsg-theme='modern-brut-violet']
+  :is(
+    .nsg-checkbox:hover [data-nsg-checkbox='control'],
+    .nsg-radio-group [data-nsg-radio-group='option']:hover [data-nsg-radio-group='control']
+  ) {
+  border-color: var(--nsg-spot);
+}
+
+/* Changed → a filled violet block, and the same event in both controls (the
+ * radio used to answer with a tinted field while the checkbox filled). */
+[data-nsg-theme='modern-brut-violet']
+  :is(
+    .nsg-checkbox [data-nsg-checkbox='control'][data-checked],
+    .nsg-checkbox [data-nsg-checkbox='control'][data-indeterminate],
+    .nsg-radio-group [data-nsg-radio-group='control'][data-checked]
+  ) {
+  border-color: var(--nsg-spot);
+  background-color: var(--nsg-spot);
+}
+
+/* Invalid is conflict-inked, hover included. */
+[data-nsg-theme='modern-brut-violet'] .nsg-checkbox[data-invalid] [data-nsg-checkbox='control'],
+[data-nsg-theme='modern-brut-violet'] .nsg-checkbox[data-invalid]:hover [data-nsg-checkbox='control'] {
+  border-color: var(--color-danger-500);
+}
+
+/* Both ticks read as paper on that violet block. In dark the block is a LIGHT
+ * violet (#a78bfa), so the component's `text-white` tick would be 2.2:1 — paper
+ * is 6.9:1 there and 7.0:1 against the light-mode violet. */
+[data-nsg-theme='modern-brut-violet']
+  :is(
+    .nsg-checkbox [data-nsg-checkbox='indicator'],
+    .nsg-radio-group [data-nsg-radio-group='indicator']
+  ) {
+  color: var(--nsg-paper);
+}
+
+/* --- the segmented control selects by inversion ---------------------------- */
+
+/* The board's "chosen" is a filled block, not a raised one: an ink slice with
+ * paper on it — the same idiom as a checked checkbox, so a segment and a
+ * checkbox read as the same kind of event. */
+[data-nsg-theme='modern-brut-violet']
+  .nsg-segmented-control [data-nsg-segmented-control='indicator'] {
+  background-color: var(--nsg-ink);
+}
+
+[data-nsg-theme='modern-brut-violet']
+  .nsg-segmented-control [data-nsg-segmented-control='item'][data-checked] {
+  color: var(--nsg-paper);
+}
+
+/* Its hairlines are rules, so they are the ink. */
+[data-nsg-theme='modern-brut-violet']
+  .nsg-segmented-control [data-nsg-segmented-control='item']::before {
+  background-color: var(--nsg-ink);
+}
+
+/* --- one highlight idiom for all four menus -------------------------------- */
+
+/* The combobox and the command bar already mark with violet; the two menus marked
+ * with the sunken paper, which is a hover, not "the thing you are about to do".
+ * Now all four speak once — and a danger row keeps the conflict ink on a
+ * conflict field. */
+[data-nsg-theme='modern-brut-violet']
+  :is(
+    .nsg-dropdown-menu [data-nsg-dropdown-menu='action'],
+    .nsg-dropdown-menu [data-nsg-dropdown-menu='option'],
+    .nsg-dropdown-menu [data-nsg-dropdown-menu='submenu-trigger'],
+    .nsg-context-menu [data-nsg-context-menu='action'],
+    .nsg-context-menu [data-nsg-context-menu='option'],
+    .nsg-context-menu [data-nsg-context-menu='submenu-trigger']
+  ):is([data-highlighted], [data-expanded]) {
+  background-color: var(--color-primary-100);
+  color: var(--color-primary-900);
+}
+
+[data-nsg-theme='modern-brut-violet']
+  :is(
+    .nsg-dropdown-menu [data-nsg-dropdown-menu='action'][data-kind='danger'],
+    .nsg-context-menu [data-nsg-context-menu='action'][data-kind='danger']
+  )[data-highlighted] {
+  background-color: var(--color-danger-100);
+  color: var(--color-danger-700);
+}
+
+/* --- state components in the design's voice -------------------------------- */
+
+/* A toast is a drawn sheet: paper, an ink rule, and the kind carried by the icon
+ * and a 4px bar. It used to be a pastel card (`*-50` fill, `*-200` rule) wearing
+ * a hard ink block — a soft component with a brutalist shadow — and its warning
+ * and danger icons read at 2.4:1 and 3.0:1. */
+[data-nsg-theme='modern-brut-violet'] .nsg-toast {
+  background-color: var(--color-surface-raised);
+  border-color: var(--nsg-ink);
+  border-left-width: 4px;
+}
+
+[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='info'] { border-left-color: var(--nsg-spot); }
+[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='success'] { border-left-color: var(--nsg-ok); }
+[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='warning'] { border-left-color: var(--nsg-spot-3); }
+[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='danger'] { border-left-color: var(--nsg-spot-2); }
+
+[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='info'] [data-nsg-toast='icon'] { color: var(--nsg-spot); }
+[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='success'] [data-nsg-toast='icon'] { color: var(--color-success-500); }
+[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='warning'] [data-nsg-toast='icon'] { color: var(--color-warning-500); }
+[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='danger'] [data-nsg-toast='icon'] { color: var(--color-danger-500); }
+
+/* The close button is a hit target on a raised sheet, so it uses the same
+ * sunken-paper hover as everything else (see the hover block above). */
+[data-nsg-theme='modern-brut-violet'] .nsg-toast [data-nsg-toast='close-button']:hover {
+  background-color: var(--color-surface-sunken);
+}
+
+/* The progress track is a groove: an ink rule around the sheet, so it reads as
+ * structure instead of a grey smear. The fill stays a fill, vivid on purpose. */
+[data-nsg-theme='modern-brut-violet'] .nsg-progress [data-nsg-progress='track'] {
+  background-color: var(--nsg-raised);
+  box-shadow: inset 0 0 0 var(--nsg-border-width) var(--nsg-ink);
+}
+
+/* --- overlays and the centred sheet ---------------------------------------- */
+
+/* Brut does not blur. The veil is flat, so the ink rule stays the edge of the
+ * sheet rather than the blur doing it. */
+[data-nsg-theme='modern-brut-violet']
+  :is(.nsg-dialog[data-nsg-dialog='overlay'], .nsg-command-bar-overlay) {
+  backdrop-filter: none;
+}
+
+/* A centred sheet is not an offset one: the block belongs to the screen's action
+ * and to things that hang off a corner, not to a panel centred in the viewport
+ * (where a bottom-right offset reads as a mistake). */
+[data-nsg-theme='modern-brut-violet'] .nsg-dialog [data-nsg-dialog='content'] {
+  box-shadow: none;
+}
+
+/* --- fields keep their rule while focused ---------------------------------- */
+
+/* The combobox drops its rule on focus (`border-transparent`) because the ring
+ * takes over. Here the rule IS the field, so it turns violet instead — which is
+ * also what the text input already does. */
+[data-nsg-theme='modern-brut-violet'] .nsg-combobox [data-nsg-combobox='control']:focus-within {
+  border-color: var(--nsg-spot);
+}
+
+/* --- the last two grey surfaces -------------------------------------------- */
+
+[data-nsg-theme='modern-brut-violet'] .nsg-separator {
+  background-color: var(--color-border);
+}
+
+[data-nsg-theme='modern-brut-violet'] .nsg-image [data-nsg-image='default-fallback'] {
+  background-color: var(--color-surface-sunken);
+}
+
+[data-nsg-theme='modern-brut-violet'] .nsg-image [data-nsg-image='default-fallback-icon'] {
+  color: var(--nsg-ink);
+}
+
+/* --- the two actions that were still in the sans --------------------------- */
+
+/* Tabs and segmented-control items are actions like any other; they were the
+ * only ones left speaking in the sans voice, next to mono buttons. */
+[data-nsg-theme='modern-brut-violet'] .nsg-tabs [data-nsg-tabs='trigger'] {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+[data-nsg-theme='modern-brut-violet']
+  .nsg-segmented-control [data-nsg-segmented-control='item'] {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
