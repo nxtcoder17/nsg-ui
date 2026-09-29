@@ -4,12 +4,10 @@
 @import 'tailwindcss';
 @import '../../src/styles/theme.css';
 
-/* Theme foundations — one stylesheet each, so a project ships only the ones it
-   offers. The kitchensink offers all of them on purpose, and switches with
-   <ThemePicker /> (aliased to ../src in vite.config.ts). */
+/* Theme foundation — one stylesheet, so a project ships only what it offers.
+   The kitchensink imports it and switches with <ThemePicker /> (aliased to
+   ../src in vite.config.ts). */
 @import '../../src/styles/themes/modern-brut.css';
-@import '../../src/styles/themes/riso-aqua.css';
-@import '../../src/styles/themes/riso-press.css';
 
 @custom-variant dark (&:where(.dark, .dark *));
 /* @import './styles/overrides.css'; */
@@ -65,12 +63,12 @@ html[data-nsg-theme] main {
  *
  * Part one above re-pointed the shape names, which moved the shell's geometry
  * but not its language. A foundation also declares a VOICE for its actions and
- * labels (mono, uppercase, tracked — see `modern-brut.css` and
- * `riso-base.css`) and marks what is chosen with a filled block rather than a
- * soft tint. The shell reads `--font-mono`, `--nsg-font-size-action-*` and the
- * `--color-*` contract, so it speaks in whatever language the active foundation
- * declares. Everything is scoped to `[data-nsg-theme]`, so the unthemed default
- * look is untouched: `default` clears the attribute and the shell is unchanged.
+ * labels (mono, uppercase, tracked — see `modern-brut.css`) and marks what is
+ * chosen with a filled block rather than a soft tint. The shell reads
+ * `--font-mono`, `--nsg-font-size-action-*` and the `--color-*` contract, so it
+ * speaks in whatever language the active foundation declares. Everything is
+ * scoped to `[data-nsg-theme]`, so the unthemed default look is untouched:
+ * `default` clears the attribute and the shell is unchanged.
  * ============================================================================ */
 [data-nsg-theme] :is(.chrome-nav-item, .chrome-action) {
   font-family: var(--font-mono);

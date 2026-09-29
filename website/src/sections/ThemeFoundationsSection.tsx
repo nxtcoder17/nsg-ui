@@ -32,9 +32,9 @@ const pickerCode = `import { ThemePicker } from 'nsg-ui'
 <ThemePicker />                      // every shipped foundation, with its swatch
 <ThemePicker withSwatches={false} /> // labels only`;
 
-const subtreeCode = `// any element can carry its own foundation — compare two designs on one page
-<div data-nsg-theme="riso-aqua">
-  <Button>Ship it</Button>
+const subtreeCode = `// any element can carry its own foundation — scope it to compare designs
+<div>
+  <Button>Ship it</Button>        // the built-in default look
 </div>
 
 <div data-nsg-theme="modern-brut">
@@ -46,11 +46,10 @@ const importCode = `/* app.css */
 @import 'nsg-ui/theme.css';
 
 /* one stylesheet per foundation: ship only the ones you offer */
-@import 'nsg-ui/themes/modern-brut.css';
-@import 'nsg-ui/themes/riso-aqua.css';`;
+@import 'nsg-ui/themes/modern-brut.css';`;
 
 const attributeCode = `<!-- light/dark is one axis, the foundation is another -->
-<html data-nsg-theme="riso-aqua" class="dark">`;
+<html data-nsg-theme="modern-brut" class="dark">`;
 
 const programmaticCode = `import { applyThemeFoundation } from 'nsg-ui/themes'
 
@@ -126,7 +125,14 @@ export const ThemeFoundationsSection: Component = () => {
 										<p class="text-text-secondary text-xs">
 											A card, a field-below it, and a toggle — the same components, four designs.
 										</p>
-										<Progress value={64} size="sm" />
+										{/* A bar with no name is an unnamed widget; the preview
+										    has no visible caption, so it is named for what
+										    it is showing. */}
+										<Progress
+											value={64}
+											size="sm"
+											aria-label={`${foundation.label} progress`}
+										/>
 									</Card>
 
 									<div class="flex items-center gap-2">

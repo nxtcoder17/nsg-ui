@@ -685,6 +685,34 @@
   }
 }
 
+/* --- Trigger wrappers --- */
+
+/* A `Popover` / `DropdownMenu` trigger is a control the caller passes in, and
+ * Kobalte needs a wrapper element around it to hang its handlers on. That
+ * wrapper must be EXACTLY the control's box:
+ *
+ *   · as a block-level box holding an inline-level control it picked up the
+ *     control's line-box strut, so it stood a fraction of a pixel taller than
+ *     the control inside it;
+ *   · as a flex item it was stretched to whatever row it sat in, again taller
+ *     than the control.
+ *
+ * Either way a sliver of the `role="button"` wrapper — not the button — was left
+ * uncovered, and axe reads an uncovered sliver as a partially obscured touch
+ * target (`target-size`). A `flex` wrapper has no baseline, so its height IS the
+ * control's, and `align-self: center` stops a row from stretching it. Neither
+ * changes the wrapper's width, and both are inert outside a flex row.
+ *
+ * Deliberately NOT applied to the context menu: its trigger wraps arbitrary
+ * caller content (a panel, a whole region) rather than a single control, so
+ * imposing flex layout on it would reflow that content. */
+@layer components {
+  .nsg-trigger {
+    display: flex;
+    align-self: center;
+  }
+}
+
 /* --- Tabs --- */
 
 @layer components {
@@ -1003,8 +1031,12 @@
       @apply w-full h-full flex items-center justify-center bg-neutral-100;
     }
 
+    /* 500, not 400: the fallback glyph is an ICON, but a screen reader still
+     * reads the alt text at its rendered size, and 400-on-100 measured 1.49:1 —
+     * effectively invisible. 500 clears 4.3:1 and 600 clears 7:1; 500 keeps the
+     * glyph recessive, which is what a placeholder should be. */
     [data-nsg-image="default-fallback-icon"] {
-      @apply w-8 h-8 text-neutral-400;
+      @apply w-8 h-8 text-neutral-500;
     }
   }
 

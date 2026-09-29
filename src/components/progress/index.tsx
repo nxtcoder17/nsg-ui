@@ -1,5 +1,5 @@
 import { Progress as KobalteProgress } from '@kobalte/core/progress'
-import { splitProps, Show, mergeProps } from 'solid-js'
+import { splitProps, Show, mergeProps, createUniqueId } from 'solid-js'
 import { cn } from '../../utils/cn'
 
 export type ProgressKind = 'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'info'
@@ -9,6 +9,7 @@ export type ProgressProps = {
   min?: number
   max?: number
   indeterminate?: boolean
+  /** Visible caption, and the bar's accessible name. */
   label?: string
   showValue?: boolean
   kind?: ProgressKind
@@ -16,6 +17,11 @@ export type ProgressProps = {
   color?: string
   size?: 'sm' | 'md' | 'lg'
   class?: string
+  /** Accessible name for the bar when there is no visible `label` — or to
+   *  override it. A `progressbar` with no name is an unnamed widget. */
+  'aria-label'?: string
+  /** Ids of the element(s) that name the bar. */
+  'aria-labelledby'?: string
 }
 
 export const Progress = (props: ProgressProps) => {
@@ -41,6 +47,8 @@ export const Progress = (props: ProgressProps) => {
     return `${percentage}%`
   }
 
+  const labelId = createUniqueId()
+
   return (
     <KobalteProgress
       value={local.value}
@@ -48,19 +56,38 @@ export const Progress = (props: ProgressProps) => {
       maxValue={max()}
       indeterminate={local.indeterminate}
       getValueLabel={({ value }) => formatValue(value)}
+      /* The bar carries `role="progressbar"`, and a role with no accessible name
+       * is an unnamed widget — a screen reader announces a bare percentage with
+       * nothing saying what is progressing.
+       *
+       * Precedence, and it matters: an explicit `aria-label` from the caller
+       * wins, then the visible `label` (rendered as the bar's caption), then the
+       * `showValue` caption. These read FROM the spread above rather than being
+       * set by it, so a `label`-less usage can never overwrite a label the caller
+       * already supplied — which is exactly the bug the first version had. */
+      {...others}
+      aria-label={others['aria-label'] ?? local.label ?? undefined}
+      aria-labelledby={
+        others['aria-labelledby'] ??
+        (!local.label && !others['aria-label'] && local.showValue
+          ? labelId
+          : undefined)
+      }
       class={cn('nsg-progress', local.class)}
       data-size={local.size}
-      {...others}
     >
       <Show when={local.label || local.showValue}>
         <div data-nsg-progress="header">
           <Show when={local.label}>
-            <KobalteProgress.Label data-nsg-progress="label">
+            <KobalteProgress.Label data-nsg-progress="label" id={labelId}>
               {local.label}
             </KobalteProgress.Label>
           </Show>
           <Show when={local.showValue && !local.indeterminate}>
-            <KobalteProgress.ValueLabel data-nsg-progress="value-label" />
+            <KobalteProgress.ValueLabel
+              data-nsg-progress="value-label"
+              id={local.label ? undefined : labelId}
+            />
           </Show>
         </div>
       </Show>

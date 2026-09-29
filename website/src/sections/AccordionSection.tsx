@@ -41,7 +41,11 @@ export const AccordionSection: Component = () => {
 						<Accordion.Item
 							value="item-0"
 							trigger={
-								<div class="text-blue-700">I am written in blue color</div>
+								/* A semantic token, not `text-blue-700`. The hardcoded blue
+								 * is 2.46:1 on the foundation's raised sheet and failed
+								 * contrast; `text-primary` is the accent at a weight that is
+								 * legible on the surface it is actually drawn on. */
+								<div class="text-primary">I am written in the accent color</div>
 							}
 						>
 							Yes buddy, you are!

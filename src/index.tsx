@@ -35,7 +35,6 @@ export {
   THEME_FOUNDATION_ATTRIBUTE,
   THEME_FOUNDATION_STORAGE_KEY,
   DEFAULT_THEME_FOUNDATION_ID,
-  THEME_STYLESHEET_PARTIALS,
   themeStylesheets,
   applyThemeFoundation,
   getThemeFoundation,

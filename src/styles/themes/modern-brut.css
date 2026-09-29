@@ -487,7 +487,14 @@
   --nsg-paper-3: #cbcbc6; /* internal rules */
   --nsg-paper-light: #fafaf8; /* the sheet, one step off the field */
   --nsg-raised: #ffffff; /* sheets that sit on the field */
-  --nsg-muted: #6d6d72;
+  /* Muted is a TEXT step, so it has to clear on every surface it lands on — not
+   * only the field. At #6d6d72 it measured 4.67:1 on the paper field but 4.12:1
+   * on the sunken sheet, so a muted caption placed on any sunken or striped
+   * surface failed AA. Stepping it down toward the ink keeps the "one step back
+   * from body text" relationship while clearing 4.5:1 on both: 4.9:1 on the
+   * field, 4.6:1 on the sunken sheet. The muted/dark pair is the same move, so
+   * both modes step together. */
+  --nsg-muted: #626269;
   /* The ONE swappable value. Every accent surface in this foundation is derived
    * from it — the whole `--color-primary-*` ramp, the ring, the active nav row,
    * the checked checkbox and radio, the primary and danger action inks — so a
@@ -678,7 +685,11 @@
   --nsg-paper-3: #34343a;
   --nsg-paper-light: #0c0c0e;
   --nsg-raised: #1d1d20;
-  --nsg-muted: #8b8b91;
+  /* The same step as light, for the same reason: the dark muted cleared the
+   * field at 5.6:1 but only 4.96:1 on the raised sheet, so the same caption on
+   * the same surface failed in dark too. Lifting it keeps the pair consistent
+   * and clears both surfaces. */
+  --nsg-muted: #b9b9bb;
   /* On an ink field the action ink has to be LIGHTER, not the same value: the
    * sheet is now the dark end, so the accent is lifted until its own label
    * clears text on it (measured 8.5:1 for the shipped blue).
@@ -1107,7 +1118,7 @@
 /* --- one highlight idiom for all four menus -------------------------------- */
 
 /* The mark is a SOLID accent, not a tint, in all four. A 16% `primary-100`
- * wash is the riso and base idiom — a soft field behind the label — and inside
+ * wash is the pre-foundation idiom — a soft field behind the label — and inside
  * a brutalist sheet it read as a foreign object. Three components already say
  * "chosen" with a solid fill (the active nav row, the checked checkbox, and the
  * light-mode segmented slice), so the menus were the only ones speaking a
@@ -1287,7 +1298,7 @@
  *
  * The base gives a multi-select tag `bg-primary-100 text-primary-800` — a soft
  * violet wash, and this foundation had no rule for it, so the tags were the one
- * control still speaking the riso voice. It is the same defect the menu rows had:
+ * control still speaking the pre-foundation voice. It is the same defect the menu rows had:
  * a wash is the one cue in this language that cannot be drawn.
  *
  * A tag is a *value the user has committed to*, which is a stronger claim than a

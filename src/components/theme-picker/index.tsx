@@ -52,7 +52,6 @@ export type ThemePickerProps = {
  * offer:
  *
  *   @import 'nsg-ui/themes/modern-brut.css';
- *   @import 'nsg-ui/themes/riso-aqua.css';
  *
  *   <ThemePicker />
  */
@@ -83,7 +82,18 @@ export const ThemePicker = (props: ThemePickerProps) => {
     <DropdownMenu
       triggerLabel={props.label ?? 'Design foundation'}
       trigger={
-        <Button kind="secondary" outline size={size()} class={cn('gap-2', props.class)}>
+        /* The button's visible text is the CURRENT value ("Modern Brut"), so it
+         * is the name a screen-reader user should hear. The static "Design
+         * foundation" context is not stamped here as an `aria-label` — that would
+         * REPLACE the visible value and break `label-content-name-mismatch`. It
+         * is rendered by `DropdownMenu` as hidden text ahead of this button, so
+         * the control is named "Design foundation Modern Brut". */
+        <Button
+          kind="secondary"
+          outline
+          size={size()}
+          class={cn('gap-2', props.class)}
+        >
           <Show when={props.withSwatches !== false && currentFoundation()}>
             <Swatch colors={currentFoundation()!.swatch} />
           </Show>

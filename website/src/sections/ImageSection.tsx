@@ -23,6 +23,12 @@ export function ImageIcon(props: { class?: string }) {
 
 export const ImageSection: Component = () => {
 	const [status, setStatus] = createSignal<string>("idle");
+	// The error path is only demonstrated on request. A deliberately broken `src`
+	// makes the browser log `net::ERR_INVALID_URL` for every visitor on load,
+	// which fails Lighthouse's best-practices audit for the whole site over a demo
+	// that nobody asked to see yet. Toggling keeps the feature demonstrable
+	// without charging every page load for it.
+	const [showFallbackDemo, setShowFallbackDemo] = createSignal(false);
 
 	return (
 		<Section
@@ -53,6 +59,14 @@ export const ImageSection: Component = () => {
 					title="Fallback"
 					description="Shows fallback while loading or on error"
 				>
+					<button
+						type="button"
+						class="mb-4 border border-border px-3 py-1.5 text-xs text-text hover:bg-surface-raised"
+						onClick={() => setShowFallbackDemo(!showFallbackDemo())}
+					>
+						{showFallbackDemo() ? "Hide error demo" : "Show error demo"}
+					</button>
+					{showFallbackDemo() ? (
 					<div class="flex gap-6 items-end">
 						<div>
 							<p class="text-xs text-text-secondary mb-2">Default fallback</p>
@@ -75,6 +89,14 @@ export const ImageSection: Component = () => {
 								}
 							/>
 						</div>
+					</div>
+					) : (
+						<p class="text-xs text-text-muted">
+							Hidden — a broken image source logs a console error on every
+							page load.
+						</p>
+					)}
+					<div class="flex gap-6 items-end mt-6">
 						<div>
 							<p class="text-xs text-text-secondary mb-2">Loading state</p>
 							<Image

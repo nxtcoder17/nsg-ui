@@ -61,42 +61,15 @@ export const THEME_FOUNDATIONS: ThemeFoundation[] = [
      * used to be listed here, appears nowhere in the palette). */
     swatch: ['#111113', '#f4f4f2', '#005bac', '#ff5b23'],
   },
-  {
-    id: 'riso-aqua',
-    label: 'Riso Press · Aqua',
-    description:
-      'Press sheets with a halftone dot, two spot inks, 2px corners and a misregistered block shadow.',
-    stylesheet: 'riso-aqua.css',
-    swatch: ['#17161b', '#fbfbfc', '#1c37c4', '#5ec8e5'],
-  },
-  {
-    id: 'riso-press',
-    label: 'Riso Press · Federal',
-    description:
-      'The same press as Aqua with the pink plate on press: federal blue acts, fluorescent pink marks.',
-    stylesheet: 'riso-press.css',
-    swatch: ['#17161b', '#fbfbfc', '#1c37c4', '#ff3d8b'],
-  },
 ]
 
 export type ThemeFoundationId = (typeof THEME_FOUNDATIONS)[number]['id']
 
-/**
- * Stylesheets that exist only to be `@import`-ed by a foundation above (a shared
- * family language, e.g. the press). They are copied to `dist/themes/` but are
- * not selectable foundations, and nothing outside this package should import
- * them directly — import a plate instead.
- */
-export const THEME_STYLESHEET_PARTIALS: string[] = ['riso-base.css']
-
-/** Every stylesheet that ships in `dist/themes/` — the foundations, then the partials. */
+/** Every stylesheet that ships in `dist/themes/` — one per selectable foundation. */
 export function themeStylesheets(): string[] {
-  return [
-    ...THEME_FOUNDATIONS.map((foundation) => foundation.stylesheet).filter(
-      (file): file is string => file !== null,
-    ),
-    ...THEME_STYLESHEET_PARTIALS,
-  ]
+  return THEME_FOUNDATIONS.map((foundation) => foundation.stylesheet).filter(
+    (file): file is string => file !== null,
+  )
 }
 
 export function resolveThemeFoundation(id: string | null | undefined): ThemeFoundation | undefined {
@@ -140,15 +113,18 @@ export function getStoredThemeFoundation(storageKey = THEME_FOUNDATION_STORAGE_K
 }
 
 /**
- * Ids that were renamed, so a returning visitor is not silently dropped back to
- * the default look by a stale `localStorage` value.
+ * Ids that were renamed or removed, so a returning visitor is not silently left
+ * on a stale `localStorage` value that names a foundation no longer shipped.
  *
  * `modern-brut-violet` became `modern-brut` when the foundation stopped shipping
  * a fixed palette: its action ink is now a one-line override, so the hue is no
- * longer part of the foundation's identity.
+ * longer part of the foundation's identity. `riso-aqua` and `riso-press` were
+ * retired outright, so they fall back to the built-in default.
  */
 const RENAMED_FOUNDATION_IDS: Record<string, string> = {
   'modern-brut-violet': 'modern-brut',
+  'riso-aqua': DEFAULT_THEME_FOUNDATION_ID,
+  'riso-press': DEFAULT_THEME_FOUNDATION_ID,
 }
 
 /** Map a possibly-stored id onto the current one. */

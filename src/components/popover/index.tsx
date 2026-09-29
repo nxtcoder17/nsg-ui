@@ -43,7 +43,7 @@ export function Popover(props: PopoverProps) {
       gutter={local.gutter ?? 8}
       {...others}
     >
-      <KobaltePopover.Trigger as="div" aria-label={local.triggerLabel}>
+      <KobaltePopover.Trigger as="div" class="nsg-trigger" aria-label={local.triggerLabel}>
         {local.trigger}
       </KobaltePopover.Trigger>
 

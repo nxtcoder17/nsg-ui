@@ -30,7 +30,27 @@ function DropdownMenuRoot(props: DropdownMenuProps) {
       sameWidth
       {...others}
     >
-      <KobalteDropdownMenu.Trigger as="div" class="max-w-fit" aria-label={local.triggerLabel}>
+      {/* The label is a PREFIX of the control's name, never a replacement.
+       *
+       * The trigger is a real control (a `<button>` in practice) that already has
+       * a visible, changing label — "Modern Brut" for the theme picker. Stamping
+       * a static `aria-label` on the wrapper REPLACED that name, so the control
+       * announced "Design foundation" while the text on screen read "Modern
+       * Brut": `label-content-name-mismatch`.
+       *
+       * Hiding the wrapper from the tree instead (an earlier attempt) took the
+       * whole control with it — a focusable button inside an `aria-hidden`
+       * container is `aria-hidden-focus`.
+       *
+       * So the label is hidden text INSIDE the wrapper, ahead of the trigger. Its
+       * accessible name is computed from its contents, like any other button, so
+       * it becomes "Design foundation Modern Brut": it still says what the
+       * control does, it now CONTAINS the visible value, and an icon-only trigger
+       * with no text of its own still gets a name. */}
+      <KobalteDropdownMenu.Trigger as="div" class="nsg-trigger max-w-fit">
+        <Show when={local.triggerLabel}>
+          <span class="sr-only">{local.triggerLabel}</span>
+        </Show>
         {local.trigger}
       </KobalteDropdownMenu.Trigger>
 

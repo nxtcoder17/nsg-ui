@@ -21,9 +21,15 @@
           document.documentElement.classList.add("dark");
         }
 
-        // `modern-brut-violet` was renamed to `modern-brut`; map it here too, so
-        // this pre-paint script does not reinstate an id the picker has dropped.
-        const RENAMED = { "modern-brut-violet": "modern-brut" };
+        // Two kinds of stale id: one foundation was renamed (`modern-brut-violet`
+        // -> `modern-brut`), and the two riso plates were retired outright and
+        // fall back to `default`. Both have to be remapped here, or the pre-paint
+        // script would reinstate an id no stylesheet answers to.
+        const RENAMED = {
+          "modern-brut-violet": "modern-brut",
+          "riso-aqua": "default",
+          "riso-press": "default",
+        };
         const stored = localStorage.getItem("nsg-ui-foundation");
         const foundation = stored ? (RENAMED[stored] ?? stored) : null;
         if (foundation && foundation !== "default") {
