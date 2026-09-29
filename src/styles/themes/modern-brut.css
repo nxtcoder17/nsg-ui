@@ -764,8 +764,10 @@
  * something you press.
  *
  * Which colour a block takes is decided by the whole style, not by the button:
- * the block is a DRAWING convention (this object has thickness) and it is
- * always ink. Both reference neobrutalist button systems agree — neobrutalism.com
+ * the block is a DRAWING convention (this object has thickness) and it is always
+ * the RULE colour — the ink in light, the ink stepped back for the field in dark
+ * (`--color-border`), the same line a section draws with. Both reference
+ * neobrutalist button systems agree — neobrutalism.com
  * gives `default`, `secondary`, `destructive` and `outline` one shared class
  * (`border-2 border-black shadow-md`) and neobrutalism-ui gives all five of its
  * variants the same `border-2 border-black shadow-brutal`; in both, the ONLY
@@ -788,7 +790,7 @@
 }
 
 [data-nsg-theme='modern-brut'] .nsg-button[data-kind='primary']:hover {
-  box-shadow: 2px 2px 0 var(--nsg-ink);
+  box-shadow: 2px 2px 0 var(--color-border);
 }
 
 [data-nsg-theme='modern-brut']
@@ -797,7 +799,7 @@
     .nsg-button[data-kind='danger']:hover,
     .nsg-toggle-button:hover
   ) {
-  box-shadow: 2px 2px 0 var(--nsg-ink);
+  box-shadow: 2px 2px 0 var(--color-border);
 }
 
 /* Ghost and link are actions that show their state on the sheet, not objects
@@ -807,13 +809,29 @@
   box-shadow: none;
 }
 
-/* Secondary and danger are drawn with BOTH a rule and a block. The rule is the
- * foundation's own, not the base token's: a filled button already has its fill
- * to be read against, so a hairline there is just noise. */
+/* Secondary and danger are drawn with BOTH a rule and a block, and the rule is
+ * the same one a section draws with — `--color-border`, the ink stepped back for
+ * the field. It used to be the raw ink, which on the ink field inverts to
+ * near-white: a filled control ringed in white reads as a wireframe, and that
+ * ring was the only thing drawing the control at all. Sharing the section's rule
+ * means a button and a card are edged by the same line. */
 [data-nsg-theme='modern-brut']
   :is(.nsg-button[data-kind='secondary'], .nsg-button[data-kind='danger'], .nsg-toggle-button) {
   border-width: var(--nsg-border-width);
-  border-color: var(--nsg-ink);
+  border-color: var(--color-border);
+}
+
+/* …and a BODY, because "a rule alone, at this weight, reads as a label on the
+ * field rather than something you press" — the foundation's own argument for
+ * every other object here. `secondary` fills with the field colour and the
+ * `outline` variant is transparent, so these two were the only objects in the
+ * foundation with no sheet of their own. They take the raised sheet, exactly
+ * like the sections they sit among. `danger` is already filled with its kind ink
+ * and is deliberately not in this list, and an `outline` variant keeps its kind
+ * colours — only the body is given back to it. */
+[data-nsg-theme='modern-brut']
+  :is(.nsg-button[data-kind='secondary'], .nsg-toggle-button) {
+  background-color: var(--nsg-raised);
 }
 
 /* --- the menus: a brutalist sheet holding quiet rows ------------------------ */
@@ -967,19 +985,19 @@
 
 /* --- the checkbox and the radio share one idiom ---------------------------- */
 
-/* At rest they are small ink-ruled controls — a square for the checkbox, a
- * circle for the radio. The radio's shape is NOT taken from this foundation:
+/* At rest they are small ruled controls — a square for the checkbox, a circle
+ * for the radio. The radio's shape is NOT taken from this foundation:
  * `theme.css` pins it round, because a squared radio stops reading as a radio
  * (so does neobrutalism.dev, whose radio is `rounded-full border-2` on a sheet
- * that is square everywhere else). Only the ink is ours. `neutral-300`
- * (paper-3) used to be the last soft grey rule in a design whose argument is
- * that rules are the ink. */
+ * that is square everywhere else). Only the rule is ours, and it is the same
+ * rule everything else draws with — as the raw ink it inverted to near-white on
+ * the ink field, so an unchecked box glared. */
 [data-nsg-theme='modern-brut']
   :is(
     .nsg-checkbox [data-nsg-checkbox='control'],
     .nsg-radio-group [data-nsg-radio-group='control']
   ) {
-  border-color: var(--nsg-ink);
+  border-color: var(--color-border);
   background-color: var(--nsg-raised);
 }
 
@@ -1077,6 +1095,15 @@
   box-shadow: var(--nsg-block-float);
 }
 
+/* The track is the OBJECT here — the slices are cut out of it — so it takes the
+ * same hover every other object takes: hovering anywhere in the control tightens
+ * the block, which is this foundation's one gesture for "you can press this". It
+ * was the last thing carrying a block with no hover state at all. */
+[data-nsg-theme='modern-brut']
+  .nsg-segmented-control [data-nsg-segmented-control='track']:hover {
+  box-shadow: 2px 2px 0 var(--color-border);
+}
+
 /* The separator between items is a RULE, and a rule is a division of the
  * surface it sits on — not a 1px stub hanging in mid-air. The base draws it as a
  * 50%-height `::before` on every item, which left a short mark floating beside
@@ -1109,10 +1136,12 @@
   color: var(--color-text-muted);
 }
 
-/* Its hairlines are rules, so they are the ink. */
+/* The divider between slices takes the same rule as everything else that divides
+ * a surface. As the ink it inverted to near-white on the ink field and drew a
+ * bright vertical seam through the middle of the track. */
 [data-nsg-theme='modern-brut']
   .nsg-segmented-control [data-nsg-segmented-control='item']::before {
-  background-color: var(--nsg-ink);
+  background-color: var(--color-border);
 }
 
 /* --- one highlight idiom for all four menus -------------------------------- */
@@ -1217,7 +1246,7 @@
  * on its worst kind and forced every line to full paper. */
 [data-nsg-theme='modern-brut'] .nsg-toast {
   background-color: var(--color-primary-200);
-  border-color: var(--nsg-ink);
+  border-color: var(--color-border);
   box-shadow: 4px 4px 0 var(--nsg-spot);
 }
 
@@ -1242,7 +1271,7 @@
  * coloured smear on a grey one. */
 [data-nsg-theme='modern-brut'] .nsg-progress [data-nsg-progress='track'] {
   background-color: var(--nsg-raised);
-  box-shadow: inset 0 0 0 var(--nsg-border-width) var(--nsg-ink);
+  box-shadow: inset 0 0 0 var(--nsg-border-width) var(--color-border);
 }
 
 /* The label and the value are the pair that sit above the bar, and they are a
@@ -1361,7 +1390,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  border-bottom: var(--nsg-border-width) solid var(--nsg-ink);
+  border-bottom: var(--nsg-border-width) solid var(--color-border);
   background-color: var(--nsg-raised);
 }
 
@@ -1381,7 +1410,7 @@
 
 [data-nsg-theme='modern-brut'] .nsg-accordion [data-nsg-accordion='content'] {
   background-color: var(--nsg-raised);
-  border-bottom: var(--nsg-border-width) solid var(--nsg-ink);
+  border-bottom: var(--nsg-border-width) solid var(--color-border);
 }
 
 /* --- links: prose, so the affordance is a rule, not a soft underline -------- */
@@ -1412,11 +1441,13 @@
   font-weight: 600;
   text-decoration-line: underline;
   text-decoration-thickness: var(--nsg-border-width);
-  /* The rule is the INK, not the link's own colour. A violet underline under
-   * violet text is one mark doing two jobs, and it disappears at small sizes; a
-   * neutral rule is legible regardless of which kind the link is, which is what
-   * lets primary / danger / secondary all share one affordance. */
-  text-decoration-color: var(--nsg-ink);
+  /* The rule is the foundation's own, not the link's colour. An accent underline
+   * under accent text is one mark doing two jobs, and it disappears at small
+   * sizes; a neutral rule is legible regardless of which kind the link is, which
+   * is what lets primary / danger / secondary share one affordance. It is
+   * `--color-border` like every other rule here — the raw ink would invert to
+   * near-white on the ink field. */
+  text-decoration-color: var(--color-border);
   text-underline-offset: 0.2em;
 }
 
@@ -1435,7 +1466,7 @@
  * is this foundation's own "you can act on this" gesture and needs no second
  * colour to work. */
 [data-nsg-theme='modern-brut'] .nsg-link:hover {
-  text-decoration-color: var(--nsg-ink);
+  text-decoration-color: var(--color-border);
   text-decoration-thickness: calc(var(--nsg-border-width) * 2);
 }
 
@@ -1519,7 +1550,7 @@
  * becomes the foundation's ink at full weight, and the idle tabs sit quiet on it.
  */
 [data-nsg-theme='modern-brut'] .nsg-tabs [data-nsg-tabs='list'] {
-  border-bottom: var(--nsg-border-width) solid var(--nsg-ink);
+  border-bottom: var(--nsg-border-width) solid var(--color-border);
 }
 
 [data-nsg-theme='modern-brut']

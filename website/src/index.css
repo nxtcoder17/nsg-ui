@@ -146,11 +146,13 @@ html[data-nsg-theme] main {
   color: var(--color-text);
 }
 
-/* The mark is the action ink inside a rule, not a gradient. */
+/* The mark is the action ink inside a rule, not a gradient. The rule is the
+   section rule, so the logo is edged like everything else on the page — as the
+   ink it inverted to a white ring on the ink field. */
 [data-nsg-theme] .chrome-logo {
   background-image: none;
   background-color: var(--color-primary);
-  box-shadow: inset 0 0 0 var(--nsg-border-width) var(--color-text);
+  box-shadow: inset 0 0 0 var(--nsg-border-width) var(--color-border);
 }
 
 [data-nsg-theme] .chrome-logo svg {

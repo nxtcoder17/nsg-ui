@@ -2,6 +2,8 @@ import { type Component, createSignal, Show } from 'solid-js'
 import { Card } from 'nsg-ui'
 import { Editor } from 'solid-prism-editor'
 import 'solid-prism-editor/prism/languages/tsx'
+import 'solid-prism-editor/prism/languages/bash'
+import 'solid-prism-editor/prism/languages/css'
 import 'solid-prism-editor/layout.css'
 import '../styles/prism-editor-theme.css'
 
@@ -28,6 +30,15 @@ export const CodeBlock: Component<CodeBlockProps> = (props) => {
           readOnly
           tabSize={2}
           insertSpaces
+          /* The editor renders a real (read-only) `<textarea>`, and a form control
+           * with no accessible name fails the `label` audit. It is display code,
+           * so it is named for what it shows. */
+          onMount={(editor) =>
+            editor.textarea.setAttribute(
+              'aria-label',
+              `${props.language ?? 'tsx'} code sample`,
+            )
+          }
         />
       </div>
       <button

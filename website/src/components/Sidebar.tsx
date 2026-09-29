@@ -26,6 +26,7 @@ import { AccordionIcon } from "../sections/AccordionSection";
 import { ToggleButtonIcon } from "../sections/ToggleButtonSection";
 import { ContextMenuIcon } from "../sections/ContextMenuSection";
 import { TextIcon } from "../sections/TextSection";
+import { InstallationIcon } from "../sections/InstallationSection";
 
 function CommandBarIcon(props: { class?: string }) {
 	return (
@@ -62,7 +63,11 @@ function PaletteIcon(props: { class?: string }) {
 
 import { CardIcon } from "../sections/CardSection";
 
-export const sections = [
+const gettingStarted = [
+	{ id: "installation", label: "Installation", icon: InstallationIcon },
+] as const;
+
+const components = [
 	{ id: "text", label: "Text", icon: TextIcon },
 	{ id: "button", label: "Button", icon: ButtonIcon },
 	{ id: "dialog", label: "Dialog", icon: DialogIcon },
@@ -100,6 +105,22 @@ export const sections = [
 	{ id: "colors", label: "Color Palette", icon: PaletteIcon },
 ] as const;
 
+/** Every section in page order — drives the nav and the scroll-spy. */
+export const sections = [...gettingStarted, ...components] as const;
+
+/** The nav, grouped. `gettingStarted` sits above the components by design. */
+export const navGroups: {
+	label: string;
+	items: readonly {
+		id: SectionId;
+		label: string;
+		icon: Component<{ class?: string }>;
+	}[];
+}[] = [
+	{ label: "Getting started", items: gettingStarted },
+	{ label: "Components", items: components },
+];
+
 export type SectionId = (typeof sections)[number]["id"];
 
 interface SidebarProps {
@@ -127,30 +148,36 @@ export const Sidebar: Component<SidebarProps> = (props) => {
 
 			{/* Navigation */}
 			<nav class="flex-1 px-3 nsg-scrollbar overflow-y-auto">
-				<div class="chrome-label text-text-muted text-[11px] font-medium uppercase tracking-wider px-3 mb-2">
-					Components
-				</div>
-				<div class="space-y-1">
-					<For each={sections}>
-						{(section) => (
-							<button
-								onClick={() => props.onSectionClick(section.id)}
-								data-active={props.activeSection === section.id ? "true" : undefined}
-								class={`chrome-nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
-									props.activeSection === section.id
-										? "bg-primary-100 text-primary shadow-sm"
-										: "text-text-secondary hover:bg-surface-raised hover:text-text"
-								}`}
-							>
-								<section.icon class="w-[18px] h-[18px]" />
-								{section.label}
-								{props.activeSection === section.id && (
-									<div class="chrome-dot ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
-								)}
-							</button>
-						)}
-					</For>
-				</div>
+				<For each={navGroups}>
+					{(group) => (
+						<div class="mb-3 last:mb-0">
+							<div class="chrome-label text-text-muted text-[11px] font-medium uppercase tracking-wider px-3 mb-2">
+								{group.label}
+							</div>
+							<div class="space-y-1">
+								<For each={group.items}>
+									{(section) => (
+										<button
+											onClick={() => props.onSectionClick(section.id)}
+											data-active={props.activeSection === section.id ? "true" : undefined}
+											class={`chrome-nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+												props.activeSection === section.id
+													? "bg-primary-100 text-primary shadow-sm"
+													: "text-text-secondary hover:bg-surface-raised hover:text-text"
+											}`}
+										>
+											<section.icon class="w-[18px] h-[18px]" />
+											{section.label}
+											{props.activeSection === section.id && (
+												<div class="chrome-dot ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
+											)}
+										</button>
+									)}
+								</For>
+							</div>
+						</div>
+					)}
+				</For>
 			</nav>
 
 			{/* Footer */}
