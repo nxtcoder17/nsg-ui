@@ -1,0 +1,312 @@
+/* NxtFont (@nxtcoder17/nxtfont) — the kitchen sink's default `--font-mono`,
+ * inlined here instead of `@import url('cdn.jsdelivr.net/…/nxtfont.css')`.
+ *
+ * Same reason as `outfit.css`: a remote stylesheet `@import` is a
+ * render-blocking request chained behind the app bundle. The rules are the
+ * package's own, with the relative `./WOFF2/…` urls made absolute so this file
+ * can live in the bundle. The browser still downloads only the weights and
+ * subsets the page actually uses (`unicode-range`), and the latin cuts are
+ * `preload`ed from `index.html`. */
+/* NxtFont - Custom Iosevka Build */
+/* https://github.com/nxtcoder17/nxtfont */
+
+/* Regular normal — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Regular.latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* Regular normal — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Regular.latin-ext.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Regular normal — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Regular.symbols.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+
+/* Regular italic — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Italic.latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* Regular italic — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Italic.latin-ext.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Regular italic — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Italic.symbols.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+
+/* Medium normal — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Medium.latin.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* Medium normal — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Medium.latin-ext.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Medium normal — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Medium.symbols.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+
+/* Medium italic — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-MediumItalic.latin.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* Medium italic — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-MediumItalic.latin-ext.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Medium italic — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-MediumItalic.symbols.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+
+/* SemiBold normal — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBold.latin.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* SemiBold normal — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBold.latin-ext.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* SemiBold normal — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBold.symbols.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+
+/* SemiBold italic — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBoldItalic.latin.woff2") format("woff2");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* SemiBold italic — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBoldItalic.latin-ext.woff2") format("woff2");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* SemiBold italic — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBoldItalic.symbols.woff2") format("woff2");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+
+/* Bold normal — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Bold.latin.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* Bold normal — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Bold.latin-ext.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Bold normal — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Bold.symbols.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+
+/* Bold italic — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-BoldItalic.latin.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* Bold italic — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-BoldItalic.latin-ext.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Bold italic — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-BoldItalic.symbols.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+
+/* ExtraBold normal — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBold.latin.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* ExtraBold normal — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBold.latin-ext.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ExtraBold normal — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBold.symbols.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+
+/* ExtraBold italic — latin */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBoldItalic.latin.woff2") format("woff2");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0000-00FF;
+}
+
+/* ExtraBold italic — latin-ext */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBoldItalic.latin-ext.woff2") format("woff2");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ExtraBold italic — symbols */
+@font-face {
+  font-family: "NxtFont";
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBoldItalic.symbols.woff2") format("woff2");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+  unicode-range: U+2000-206F, U+2190-21FF, U+2200-22FF, U+2300-23FF, U+2500-257F, U+25A0-25FF, U+2600-26FF, U+FE00-FE0F, U+FE20-FE2F;
+}
+

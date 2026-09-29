@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="NSG UI — a SolidJS component library with accessible, themeable components including buttons, dialogs, menus, inputs, and more." />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <!-- The latin cut of Outfit paints the LCP text, so warm it from HTML-parse
+         time rather than waiting for the app CSS to be parsed and applied. -->
+    <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v15/QGYvz_MVcBeNP4NJtEtq.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Regular.latin.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Medium.latin.woff2" as="font" type="font/woff2" crossorigin />
     <title>Not So Good UI - NSG UI</title>

@@ -1,5 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap');
-@import url('https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/nxtfont.css');
+/* The two families the default look uses, declared locally (no remote
+   font `@import`, which would be render-blocking and chain behind this file). */
+@import './fonts/outfit.css';
+@import './fonts/nxtfont.css';
 
 @import 'tailwindcss';
 @import '../../src/styles/theme.css';
