@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="nsg-scrollbar">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -21,7 +21,11 @@
           document.documentElement.classList.add("dark");
         }
 
-        const foundation = localStorage.getItem("nsg-ui-foundation");
+        // `modern-brut-violet` was renamed to `modern-brut`; map it here too, so
+        // this pre-paint script does not reinstate an id the picker has dropped.
+        const RENAMED = { "modern-brut-violet": "modern-brut" };
+        const stored = localStorage.getItem("nsg-ui-foundation");
+        const foundation = stored ? (RENAMED[stored] ?? stored) : null;
         if (foundation && foundation !== "default") {
           document.documentElement.dataset.nsgTheme = foundation;
         }

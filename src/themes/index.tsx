@@ -6,13 +6,13 @@
  * document element, so a project can offer a selector for it (see
  * `ThemePicker`) without touching component markup or rebuilding.
  *
- *   <link rel="stylesheet" href="node_modules/nsg-ui/dist/themes/modern-brut-violet.css" />
- *   document.documentElement.dataset.nsgTheme = 'modern-brut-violet'
+ *   <link rel="stylesheet" href="node_modules/nsg-ui/dist/themes/modern-brut.css" />
+ *   document.documentElement.dataset.nsgTheme = 'modern-brut'
  *
  * or, in a Tailwind CSS entry file:
  *
  *   @import 'nsg-ui/theme.css';
- *   @import 'nsg-ui/themes/modern-brut-violet.css';
+ *   @import 'nsg-ui/themes/modern-brut.css';
  *
  * Foundations are plain CSS (no Tailwind, no `@apply`) so they can be imported
  * into a build or linked at runtime. Writing one is a token list — the contract
@@ -51,15 +51,15 @@ export const THEME_FOUNDATIONS: ThemeFoundation[] = [
     swatch: ['#0f0e0c', '#ffffff', '#333333', '#1a1a1a'],
   },
   {
-    id: 'modern-brut-violet',
-    label: 'Modern Brut · Violet',
+    id: 'modern-brut',
+    label: 'Modern Brut',
     description:
-      'Exposed 64px structure, square corners, a hard ink block that is earned rather than ambient, violet as the only action ink.',
-    stylesheet: 'modern-brut-violet.css',
+      'Exposed 64px structure, square corners, a hard ink block that is earned rather than ambient, and one action ink you can swap with a single declaration.',
+    stylesheet: 'modern-brut.css',
     /* [ink, paper, action ink, second ink] — the second ink is the conflict
      * orange the plate actually uses. The acid is a fill (and #c8ff00, which
      * used to be listed here, appears nowhere in the palette). */
-    swatch: ['#111113', '#f4f4f2', '#6d28d9', '#ff5b23'],
+    swatch: ['#111113', '#f4f4f2', '#005bac', '#ff5b23'],
   },
   {
     id: 'riso-aqua',
@@ -133,8 +133,26 @@ export function applyThemeFoundation(id: string, storageKey = THEME_FOUNDATION_S
 export function getStoredThemeFoundation(storageKey = THEME_FOUNDATION_STORAGE_KEY): string {
   if (typeof localStorage === 'undefined') return DEFAULT_THEME_FOUNDATION_ID
   try {
-    return localStorage.getItem(storageKey) ?? DEFAULT_THEME_FOUNDATION_ID
+    return migrateFoundationId(localStorage.getItem(storageKey) ?? DEFAULT_THEME_FOUNDATION_ID)
   } catch {
     return DEFAULT_THEME_FOUNDATION_ID
   }
+}
+
+/**
+ * Ids that were renamed, so a returning visitor is not silently dropped back to
+ * the default look by a stale `localStorage` value.
+ *
+ * `modern-brut-violet` became `modern-brut` when the foundation stopped shipping
+ * a fixed palette: its action ink is now a one-line override, so the hue is no
+ * longer part of the foundation's identity.
+ */
+const RENAMED_FOUNDATION_IDS: Record<string, string> = {
+  'modern-brut-violet': 'modern-brut',
+}
+
+/** Map a possibly-stored id onto the current one. */
+export function migrateFoundationId(id: string | null | undefined): string {
+  if (!id) return DEFAULT_THEME_FOUNDATION_ID
+  return RENAMED_FOUNDATION_IDS[id] ?? id
 }

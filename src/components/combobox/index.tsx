@@ -258,7 +258,17 @@ export function ComboBox<T extends ComboBoxOption>(props: ComboBoxProps<T>): JSX
         class="z-50 nsg-combobox"
         data-nsg-combobox="content"
       >
-        <KobalteSearch.Listbox class="p-1 max-h-60 overflow-auto empty:hidden" />
+        {/* `listbox` is named because this is the element that actually scrolls
+         * (`overflow-auto`), and it is a child of `content`, which clips instead
+         * of scrolling. Without the attribute a foundation has no way to reach
+         * it, so the popup kept the browser's default scrollbar — track, arrows
+         * and all — inside an otherwise fully themed sheet. `nsg-scrollbar` is the
+         * base's opt-in treatment; its colour and radius are token-driven, so the
+         * foundation re-inks the bar without a scrollbar rule of its own. */}
+        <KobalteSearch.Listbox
+          class="nsg-scrollbar p-1 max-h-60 overflow-auto empty:hidden"
+          data-nsg-combobox="listbox"
+        />
         <Show when={local.noResultComponent && inputValue().trim()}>
           <KobalteSearch.NoResult
             ref={(el) => { noResultEl = el }}

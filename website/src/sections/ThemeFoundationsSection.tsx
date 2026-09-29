@@ -37,7 +37,7 @@ const subtreeCode = `// any element can carry its own foundation — compare two
   <Button>Ship it</Button>
 </div>
 
-<div data-nsg-theme="modern-brut-violet">
+<div data-nsg-theme="modern-brut">
   <Button>Ship it</Button>
 </div>`;
 
@@ -46,7 +46,7 @@ const importCode = `/* app.css */
 @import 'nsg-ui/theme.css';
 
 /* one stylesheet per foundation: ship only the ones you offer */
-@import 'nsg-ui/themes/modern-brut-violet.css';
+@import 'nsg-ui/themes/modern-brut.css';
 @import 'nsg-ui/themes/riso-aqua.css';`;
 
 const attributeCode = `<!-- light/dark is one axis, the foundation is another -->
@@ -54,7 +54,7 @@ const attributeCode = `<!-- light/dark is one axis, the foundation is another --
 
 const programmaticCode = `import { applyThemeFoundation } from 'nsg-ui/themes'
 
-applyThemeFoundation('modern-brut-violet')  // attribute + localStorage`;
+applyThemeFoundation('modern-brut')  // attribute + localStorage`;
 
 export const ThemeFoundationsSection: Component = () => {
 	// One shared signal for the field inside every preview panel: the panels are

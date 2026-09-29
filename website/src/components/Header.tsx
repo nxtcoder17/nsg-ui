@@ -1,4 +1,5 @@
 import type { Component } from "solid-js";
+import { Button } from "nsg-ui";
 import { ThemeSwitcher } from "../../../src/components/theme-switcher";
 import { ThemePicker } from "../../../src/components/theme-picker";
 import { GitHubIcon } from "../icons";
@@ -12,20 +13,34 @@ export const Header: Component = () => {
 					<p class="text-text-muted text-sm">Explore all components</p>
 				</div>
 				<div class="flex items-center gap-3">
-					{/* Which design language every component below is speaking */}
-					<ThemePicker />
+					{/* Which design language every component below is speaking. `size="sm"`
+					    puts all three header controls on the same 28px step — the
+					    picker defaults to `md` (32px), which is a step taller than
+					    the switcher and the GitHub button beside it. */}
+					<ThemePicker size="sm" />
 					<ThemeSwitcher />
 
-					{/* GitHub Link */}
-					<a
+					{/* GitHub — a real Button, not a hand-rolled anchor. It used to carry
+					    its own `bg-neutral-900 … rounded-lg` Tailwind, which the
+					    foundation zeroed the radius of but left the fill, so it was the
+					    one header control with a solid ink slab, no rule and no block
+					    while both its neighbours had both. Its `chrome-action` class
+					    only sets the type voice, which is why the mismatch was so easy
+					    to miss. Now it is a secondary button like its siblings. */}
+					<Button
+						as="a"
 						href="https://github.com/nxtcoder17/nsg-ui"
 						target="_blank"
-						class="chrome-action chrome-github flex items-center gap-2 px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-300 text-neutral-50 dark:text-neutral-900 text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-400 transition-colors"
 						rel="noopener noreferrer"
+						kind="secondary"
+						size="sm"
 					>
-						<GitHubIcon class="w-4 h-4" />
+						{/* The glyph carries its own margin, which is the library's icon
+						    convention — `Button` sets no `gap`, so an unspaced icon
+						    renders flush against its label. */}
+						<GitHubIcon class="w-4 h-4 mr-1.5" />
 						GitHub
-					</a>
+					</Button>
 				</div>
 			</div>
 		</header>

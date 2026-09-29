@@ -81,7 +81,7 @@ Whole design languages for every component at once, switched with one attribute:
 @import 'nsg-ui/theme.css';
 
 /* only the foundations you offer get shipped */
-@import 'nsg-ui/themes/modern-brut-violet.css';
+@import 'nsg-ui/themes/modern-brut.css';
 @import 'nsg-ui/themes/riso-aqua.css';
 ```
 
@@ -95,10 +95,63 @@ import { ThemePicker } from 'nsg-ui'
 <html data-nsg-theme="riso-aqua">   <!-- or applyThemeFoundation('riso-aqua') -->
 ```
 
-Shipped: `default` (the built-in look), `modern-brut-violet`, `riso-aqua`,
+Shipped: `default` (the built-in look), `modern-brut`, `riso-aqua`,
 `riso-press`. Each is a separate stylesheet, so a project pays for the
 foundations it imports and nothing else. Full contract, dark-mode rules and an
-authoring guide: [docs/themes.md](./docs/themes.md).
+authoring guide: [docs/themes.md](./docs/themes.md). The reasoning behind
+`modern-brut`'s rules — what the style is, and what the reference
+implementations actually do — is in
+[docs/NEOBRUTALISM-design.md](./docs/NEOBRUTALISM-design.md).
+
+### Re-inking Modern Brut
+
+`modern-brut` ships in a deep blue, but the hue is not part of its identity —
+it is one declaration. The whole `--color-primary-*` ramp, the ring, the active
+nav row, the checked checkbox and radio, the marked menu rows, the combo tags and
+the primary and danger action inks are all derived from `--nsg-spot`, so a single
+value re-inks the entire language with nothing structural to touch.
+
+Dark mode needs its own value, because on an ink field the action ink has to be
+*lighter* rather than the same hue — the sheet is now the dark end, so the action
+is lifted until its own label clears text on it. An override is therefore a
+**pair**:
+
+```css
+/* after importing the foundation */
+[data-nsg-theme='modern-brut']      { --nsg-spot: #a61e63; }  /* light, 6.4:1 */
+[data-nsg-theme='modern-brut'].dark { --nsg-spot: #fbcfe8; }  /* dark, 13.6:1 */
+```
+
+These are the recommended hues. Each was measured in the browser: the light
+figure is the accent against the paper field, the dark figure is the lifted
+accent against the ink field, and both clear WCAG AA (4.5:1) for text.
+
+| Accent | Light | Dark | On the field (light → dark) |
+|---|---|---|---|
+| **Blue** *(default)* | `#005bac` | `#7fb3de` | 6.2:1 → 8.4:1 |
+| Violet | `#6d28d9` | `#a78bfa` | 6.5:1 → 6.9:1 |
+| Indigo | `#4338ca` | `#a5b4fc` | 7.2:1 → 9.5:1 |
+| Sky | `#0369a1` | `#7dd3fc` | 5.4:1 → 11.3:1 |
+| Cyan | `#0e7490` | `#67e8f9` | 4.9:1 → 13.0:1 |
+| Teal | `#0f766e` | `#5eead4` | 5.0:1 → 12.7:1 |
+| Magenta | `#a21caf` | `#e879f9` | 5.7:1 → 7.7:1 |
+| Pink | `#be185d` | `#f9a8d4` | 5.5:1 → 10.4:1 |
+| Rose | `#be123c` | `#fda4af` | 5.7:1 → 10.0:1 |
+
+Notes for choosing your own:
+
+- **The light value is the one that will fail.** Cyan and teal are the closest to
+  the limit at 4.9–5.0:1; a darker, more saturated version of either will drop
+  below AA, and a lighter one is fine.
+- **The dark value is the one people get wrong**, and it is the common mistake:
+  reusing the light value scores **2.8:1** for the shipped blue, because the sheet
+  is now the dark end. Pick a genuinely lighter tint of the same hue and check it
+  against the field — `#005bac` needs `#7fb3de` to clear, which is a 45% lift
+  toward white, not a different hue.
+- **A hue is safe, a lightness is not.** These pairs are all mid-to-deep in light
+  and pale in dark. That is the constraint, not the specific hex values.
+- The conflict orange, the state acid and the ok green are independent anchors —
+  they do not move with the accent, so an accent swap never disturbs them.
 
 ## Components
 

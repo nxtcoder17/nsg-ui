@@ -7,7 +7,7 @@ import { Section } from "../components/section";
 
 const icons = [
   { name: 'CheckIcon', component: CheckIcon, usage: 'Checkbox selection indicator' },
-  { name: 'DotIcon', component: DotIcon, usage: 'Radio button selection indicator' },
+  { name: 'DotIcon', component: DotIcon, usage: 'Radio option mark inside menus' },
   { name: 'ChevronRightIcon', component: ChevronRightIcon, usage: 'Submenu indicator' },
 ] as const
 

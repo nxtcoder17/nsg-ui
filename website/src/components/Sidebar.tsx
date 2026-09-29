@@ -126,7 +126,7 @@ export const Sidebar: Component<SidebarProps> = (props) => {
 			</div>
 
 			{/* Navigation */}
-			<nav class="flex-1 px-3 sidebar-scroll overflow-y-auto">
+			<nav class="flex-1 px-3 nsg-scrollbar overflow-y-auto">
 				<div class="chrome-label text-text-muted text-[11px] font-medium uppercase tracking-wider px-3 mb-2">
 					Components
 				</div>

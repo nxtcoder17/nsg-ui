@@ -1,6 +1,5 @@
 import { type Component, createSignal } from "solid-js";
-import { Button } from "nsg-ui";
-import { Dialog } from "nsg-ui";
+import { Button, Dialog, TextInput } from "nsg-ui";
 import { DemoCard } from "../components/DemoCard";
 import { DialogIcon } from "../icons";
 import { Section } from "../components/section";
@@ -43,6 +42,14 @@ function ConfirmationDialogDemo() {
 }
 
 function FormDialogDemo() {
+	// The real component, not a hand-rolled <label>/<input>. The hand-rolled pair
+	// this replaced carried a body-sans label, a transparent border and a focus
+	// ring — the pre-foundation field idiom — so the fields inside the modal were
+	// the only ones on the page not speaking the design's voice. Demos have to use
+	// the library, or they review the wrong thing.
+	const [name, setName] = createSignal("");
+	const [email, setEmail] = createSignal("");
+
 	return (
 		<Dialog
 			trigger={
@@ -54,24 +61,19 @@ function FormDialogDemo() {
 			closeOnClickOutside={false}
 		>
 			<div class="pt-0 space-y-4">
-				<div>
-					<label class="block text-sm font-medium text-text mb-1.5">Name</label>
-					<input
-						type="text"
-						placeholder="John Doe"
-						class="w-full px-3 py-2.5 border border-border rounded-lg bg-surface text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-shadow"
-					/>
-				</div>
-				<div>
-					<label class="block text-sm font-medium text-text mb-1.5">
-						Email
-					</label>
-					<input
-						type="email"
-						placeholder="john@example.com"
-						class="w-full px-3 py-2.5 border border-border rounded-lg bg-surface text-text placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-shadow"
-					/>
-				</div>
+				<TextInput
+					label="Name"
+					placeholder="John Doe"
+					value={name()}
+					onChange={setName}
+				/>
+				<TextInput
+					label="Email"
+					type="email"
+					placeholder="john@example.com"
+					value={email()}
+					onChange={setEmail}
+				/>
 			</div>
 
 			<div class="flex justify-end gap-2 pt-2">

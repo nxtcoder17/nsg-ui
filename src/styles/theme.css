@@ -759,8 +759,14 @@
       @apply transition-colors;
     }
 
+    /* The mark is a drawn dot, not a glyph. It used to be a `DotIcon size="xs"`
+       — a 12px box whose `r="4"` circle rendered a 4px speck in a 20px ring,
+       one fifth of the control and lighter than the checkbox's 14px tick. Drawn
+       here it sizes against the control instead of a 24-unit icon box, and
+       `currentColor` keeps the ink the foundation's business (brutal answers
+       with paper on its filled violet block, as it does for the checkbox). */
     [data-nsg-radio-group="indicator"] {
-      @apply text-primary-500;
+      @apply block size-2 shrink-0 rounded-full bg-current text-primary-500;
     }
 
     [data-nsg-radio-group="option-content"] {
@@ -1547,5 +1553,66 @@
     .nsg-toggle-button.nsg-toggle-button-outline
   ) {
     border-width: var(--nsg-border-width);
+  }
+
+  /* -------------------------------------------------------------------------
+   * scrollbars — opt in with `nsg-scrollbar` on any scroll container, `<html>`
+   * included when you mean the viewport. A scrolled region should read as part
+   * of the page rather than as the OS.
+   *
+   * The two engine treatments are deliberately exclusive. Chromium drops
+   * `::-webkit-scrollbar` entirely the moment `scrollbar-color` is set, so the
+   * shape rules sit behind `@supports selector(…)` and the standard properties
+   * only reach engines that lack the pseudo-element (Firefox). Writing both
+   * unconditionally would hand Chromium's shape to the UA and lose the radius —
+   * which is the whole point in a foundation that squares its corners.
+   *
+   * Colour and radius come from tokens, so a foundation re-inks the bar without
+   * a scrollbar rule of its own: `--nsg-radius-full` is 9999px here, 0 in
+   * brutal, 2px on the press.
+   *
+   * The thumb takes a TEXT token rather than a border one. A border token is
+   * built to sit quietly near the surface (`--color-border-subtle` is oklch 96%
+   * in light — a white thumb on a white track), while the muted text step is
+   * built to be legible against the surface in both modes, which is exactly the
+   * job, and it needs no restating in dark.
+   *
+   * Thin, and solid, in every foundation. Thinness is not a design-language
+   * choice: a bar is chrome, and the one thing it must never be is a feature. An
+   * earlier pass ruled the thumb instead (a slab inside a rule) at 10px, and at
+   * that size the outline IS the graphic — the rule runs the full height of the
+   * scroller and reads as a track with a thumb inside it, which is not what a
+   * scrollbar is. 4px is thin enough to disappear into the gutter and still be
+   * found; 6px and 10px both read as a deliberate object, which a scrollbar
+   * should not be.
+   *
+   * A thumb has no hover state, in any foundation. It is a scroller, not a
+   * button: at this size the fill is the whole bar, so a colour that flips under
+   * the pointer is a glitch.
+   * ----------------------------------------------------------------------- */
+  @supports selector(::-webkit-scrollbar) {
+    .nsg-scrollbar {
+      &::-webkit-scrollbar {
+        width: 4px;
+        height: 4px;
+      }
+
+      &::-webkit-scrollbar-track,
+      &::-webkit-scrollbar-corner {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: var(--color-text-muted);
+        border-radius: var(--nsg-radius-full);
+      }
+    }
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    .nsg-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: var(--color-text-muted) transparent;
+    }
   }
 }

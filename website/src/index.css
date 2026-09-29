@@ -7,7 +7,7 @@
 /* Theme foundations — one stylesheet each, so a project ships only the ones it
    offers. The kitchensink offers all of them on purpose, and switches with
    <ThemePicker /> (aliased to ../src in vite.config.ts). */
-@import '../../src/styles/themes/modern-brut-violet.css';
+@import '../../src/styles/themes/modern-brut.css';
 @import '../../src/styles/themes/riso-aqua.css';
 @import '../../src/styles/themes/riso-press.css';
 
@@ -65,7 +65,7 @@ html[data-nsg-theme] main {
  *
  * Part one above re-pointed the shape names, which moved the shell's geometry
  * but not its language. A foundation also declares a VOICE for its actions and
- * labels (mono, uppercase, tracked — see `modern-brut-violet.css` and
+ * labels (mono, uppercase, tracked — see `modern-brut.css` and
  * `riso-base.css`) and marks what is chosen with a filled block rather than a
  * soft tint. The shell reads `--font-mono`, `--nsg-font-size-action-*` and the
  * `--color-*` contract, so it speaks in whatever language the active foundation
@@ -109,15 +109,31 @@ html[data-nsg-theme] main {
 }
 
 /* What is chosen is a filled block of the ACTION ink, not the structural one.
-   Ink is for rules and text; only violet is allowed to act, and a row you click
-   is an action. An always-on ink slab would also be "ambient" weight — the one
-   thing this board says a block must never be — and it out-shouts the page's
-   real primary actions. Same fill as the primary button and a checked control,
-   so "where I am" and "what I chose" read as one language. */
+   Ink is for rules and text; only the accent is allowed to act, and a row you
+   click is an action. An always-on ink slab would also be "ambient" weight — the
+   one thing this board says a block must never be — and it out-shouts the
+   page's real primary actions. Same fill as the primary button and a checked
+   control, so "where I am" and "what I chose" read as one language.
+   The `box-shadow: none` is deliberate: a nav is a page region, not a floating
+   object, so it takes no block of its own.
+   The outline is the other half of that. This is the largest accent block in the
+   system — 38px against a 32px tab, a 21px segmented slice and a 20px checkbox —
+   and it was the only one of them with neither a rule nor a block around it, so a
+   full-bleed mass of colour read as visibly TALLER than the transparent rows
+   beside it even though every row is the same 38px. A solid area always looks
+   larger than an empty one of the same size, so the fix is not to shrink the row
+   but to contain it the way every other accent block is contained. The 1.5px
+   rule does that without adding a second coloured mark, and it makes the row a
+   cut-out object rather than a stripe painted onto the sidebar.
+   The rule is `--color-border`, NOT raw ink: on the ink field raw ink inverts to
+   near-white, and a near-white hairline around the active row would be the
+   brightest thing in the sidebar — the same failure the menu separator had. */
 [data-nsg-theme] .chrome-nav-item[data-active] {
   background-color: var(--color-primary);
   color: var(--color-surface);
   box-shadow: none;
+  outline: var(--nsg-border-width) solid var(--color-border);
+  outline-offset: calc(-1 * var(--nsg-border-width));
 }
 
 [data-nsg-theme] .chrome-nav-item[data-active] .chrome-dot {
@@ -146,19 +162,6 @@ html[data-nsg-theme] main {
   color: var(--color-surface);
 }
 
-[data-nsg-theme] .sidebar-scroll::-webkit-scrollbar-thumb {
-  background: var(--color-border-subtle);
-}
-
-[data-nsg-theme] .sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background: var(--color-border);
-}
-
-.sidebar-scroll::-webkit-scrollbar-thumb {
-  background: oklch(35% 0.02 260);
-}
-
-.sidebar-scroll::-webkit-scrollbar-thumb:hover {
-  background: oklch(45% 0.02 260);
-}
+/* Scrollbars come from the library now (`nsg-scrollbar`, see theme.css) —
+ * class applied on `<html>` and the sidebar nav. */
 

@@ -25,6 +25,16 @@ export type ThemePickerProps = {
   storageKey?: string
   /** Render the four-colour swatch of each foundation in the menu. */
   withSwatches?: boolean
+  /**
+   * Trigger size (default: 'md').
+   *
+   * Exposed so the trigger can be matched to the controls it sits beside. The
+   * `md` step is 32px and `sm` is 28px, so a picker placed in a row of `sm`
+   * controls is a step taller than everything next to it and reads as the odd one
+   * out. This is a component-level decision rather than a foundation one, so it
+   * cannot be fixed in CSS without reaching past the component's own API.
+   */
+  size?: 'sm' | 'md' | 'lg'
   /** Accessible label for the trigger. */
   label?: string
   class?: string
@@ -41,7 +51,7 @@ export type ThemePickerProps = {
  * flips the attribute, so it adds no CSS to your bundle. Import the ones you
  * offer:
  *
- *   @import 'nsg-ui/themes/modern-brut-violet.css';
+ *   @import 'nsg-ui/themes/modern-brut.css';
  *   @import 'nsg-ui/themes/riso-aqua.css';
  *
  *   <ThemePicker />
@@ -49,6 +59,7 @@ export type ThemePickerProps = {
 export const ThemePicker = (props: ThemePickerProps) => {
   const foundations = () => props.foundations ?? THEME_FOUNDATIONS
   const storageKey = () => props.storageKey ?? THEME_FOUNDATION_STORAGE_KEY
+  const size = () => props.size ?? 'md'
 
   const fallback = () =>
     props.defaultValue ?? getStoredThemeFoundation(storageKey()) ?? DEFAULT_THEME_FOUNDATION_ID
@@ -72,7 +83,7 @@ export const ThemePicker = (props: ThemePickerProps) => {
     <DropdownMenu
       triggerLabel={props.label ?? 'Design foundation'}
       trigger={
-        <Button kind="secondary" outline size="md" class={cn('gap-2', props.class)}>
+        <Button kind="secondary" outline size={size()} class={cn('gap-2', props.class)}>
           <Show when={props.withSwatches !== false && currentFoundation()}>
             <Swatch colors={currentFoundation()!.swatch} />
           </Show>

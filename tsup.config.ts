@@ -29,7 +29,7 @@ const presetOptions: preset.PresetOptions = {
  * Ships each theme foundation as its own stylesheet, so a consumer that imports
  * one foundation pays for one foundation and nothing else:
  *
- *   @import 'nsg-ui/themes/modern-brut-violet.css';
+ *   @import 'nsg-ui/themes/modern-brut.css';
  *
  * The file list comes from the registry in `src/themes`, so adding a foundation
  * never touches this config, and a stray file in the themes directory is never

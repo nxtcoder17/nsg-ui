@@ -213,7 +213,7 @@
 }
 
 /* IBM Plex Mono — the press's mono. Declared here too, NOT inherited from
- * modern-brut-violet: importing riso-aqua on its own must be self-contained. */
+ * modern-brut: importing riso-aqua on its own must be self-contained. */
 /* cyrillic-ext */
 @font-face {
   font-family: 'IBM Plex Mono';

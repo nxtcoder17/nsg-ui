@@ -1,7 +1,7 @@
 /* ============================================================================
  * FOUNDATION · Modern Brut · Violet
  *
- * Design board: `.secrets/designs/11-modern-brut-violet.html` (a colour variant
+ * Design board: `.secrets/designs/11-modern-brut.html` (a colour variant
  * of 06-modern-brut). Nothing from the board is dropped:
  *
  *   · square corners and a hard ink block that is EARNED, not ambient: 6px for
@@ -11,13 +11,13 @@
  *     as drawn rather than floated);
  *   · one typeface (Inter Tight) plus one mono (IBM Plex Mono), hierarchy from
  *     scale and spacing — every action and label is mono, uppercase;
- *   · colour as function, never as flavour: violet acts, orange is only ever
+ *   · colour as function, never as flavour: the accent acts, orange is only ever
  *     conflict, moss is only ever ok, acid is only ever live;
  *   · an exposed 64px/16px grid behind the page (--nsg-page-backdrop, opt-in).
  *
- *   import:  @import 'nsg-ui/themes/modern-brut-violet.css';
- *   select:  <html data-nsg-theme="modern-brut-violet">
- *            (or applyThemeFoundation('modern-brut-violet'))
+ *   import:  @import 'nsg-ui/themes/modern-brut.css';
+ *   select:  <html data-nsg-theme="modern-brut">
+ *            (or applyThemeFoundation('modern-brut'))
  *
  * WHERE TO REFINE: the `--nsg-*` ink/paper values below are the whole design.
  * Every ramp is mixed from them, so moving `--nsg-spot` re-inks the primary
@@ -477,7 +477,7 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-[data-nsg-theme='modern-brut-violet'] {
+[data-nsg-theme='modern-brut'] {
   /* --- the board's palette, verbatim --------------------------------------- */
   --nsg-ink: #111113; /* text, rules, and every block */
   --nsg-ink-soft: #39393d;
@@ -488,7 +488,17 @@
   --nsg-paper-light: #fafaf8; /* the sheet, one step off the field */
   --nsg-raised: #ffffff; /* sheets that sit on the field */
   --nsg-muted: #6d6d72;
-  --nsg-spot: #6d28d9; /* acts */
+  /* The ONE swappable value. Every accent surface in this foundation is derived
+   * from it — the whole `--color-primary-*` ramp, the ring, the active nav row,
+   * the checked checkbox and radio, the primary and danger action inks — so a
+   * single declaration re-inks the whole language. See the README for the
+   * recommended hues and the light/dark pair each one needs.
+   *
+   * Dark mode needs its own value, because on an ink field the action ink has to
+   * be LIGHTER rather than the same hue: the sheet is now the dark end, so the
+   * action is lifted until its own label clears text on it. An override is
+   * therefore a PAIR of declarations, light and dark (README shows the recipe). */
+  --nsg-spot: #005bac; /* acts — the shipped default; see the README to re-ink */
   --nsg-spot-2: #ff5b23; /* conflict — a FILL: 2.9:1 on paper, never an ink */
   --nsg-spot-2-deep: #c2410c; /* the same conflict at ink strength (5.2:1) */
   --nsg-spot-3: #c8a000; /* NOTE: acid, darkened until it reads on paper */
@@ -659,7 +669,7 @@
  * and the few inks that need lifting are restated: every ramp above recomputes
  * itself from these vars, which is why there is no ramp list in here.
  * ============================================================================ */
-[data-nsg-theme='modern-brut-violet'].dark {
+[data-nsg-theme='modern-brut'].dark {
   --nsg-ink: #f2f2ef;
   --nsg-ink-soft: #c9c9c5;
   --nsg-ink-deep: #ffffff;
@@ -669,7 +679,23 @@
   --nsg-paper-light: #0c0c0e;
   --nsg-raised: #1d1d20;
   --nsg-muted: #8b8b91;
-  --nsg-spot: #a78bfa; /* NOTE: lifted until it clears 4.5:1 on the ink field */
+  /* On an ink field the action ink has to be LIGHTER, not the same value: the
+   * sheet is now the dark end, so the accent is lifted until its own label
+   * clears text on it (measured 8.5:1 for the shipped blue).
+   *
+   * This block restates `--nsg-spot` rather than pointing it at
+   * `--nsg-spot-dark`, because a consumer who overrides `--nsg-spot` in their
+   * own sheet lands on top of whichever declaration the cascade reaches LAST —
+   * so if dark merely re-pointed the same name, their light value would silently
+   * win in dark mode too. Restating it here means the dark default is the last
+   * word, and an override must therefore be written as a PAIR (see README):
+   *
+   *   [data-nsg-theme='modern-brut']        { --nsg-spot: #1d4ed8; }
+   *   [data-nsg-theme='modern-brut'].dark   { --nsg-spot: #93c5fd; }
+   *
+   * `--nsg-spot-dark` exists to document the default and to be read by that
+   * second rule; it is not an indirection the cascade depends on. */
+  --nsg-spot: #7fb3de; /* lifted until its own label clears text on the ink field */
   --nsg-spot-2: #ff7a4d;
   --nsg-spot-2-deep: #ff9a75; /* conflict at ink strength on an ink field */
   --nsg-spot-3: #e0bf34;
@@ -691,6 +717,15 @@
     linear-gradient(90deg, rgba(244, 244, 242, 0.055) 1px, transparent 1px),
     linear-gradient(rgba(244, 244, 242, 0.028) 1px, transparent 1px),
     linear-gradient(90deg, rgba(244, 244, 242, 0.028) 1px, transparent 1px);
+
+  /* The block is the ink as a shape, which in light is the ink itself. On an ink
+   * field that put a near-white slab UNDER every raised element — lighter than
+   * the thing casting it, so the depth read backwards and a button looked
+   * pressed onto a plate rather than lifted off the page. Dark steps the block
+   * back exactly as it steps the rules back (`--color-border`, the ink at 45%):
+   * darker than the fills it backs, still a hard offset against the field. */
+  --nsg-block: 6px 6px 0 var(--color-border);
+  --nsg-block-float: 4px 4px 0 var(--color-border);
 }
 
 /* ============================================================================
@@ -700,7 +735,7 @@
 /* Every action is a mono, uppercase, tracked slab. The SIZE is not stated here
  * on purpose: it comes from `--nsg-font-size-action-*`, so `data-size` keeps its
  * three steps and this voice cannot flatten them. */
-[data-nsg-theme='modern-brut-violet'] :is(.nsg-button, .nsg-toggle-button) {
+[data-nsg-theme='modern-brut'] :is(.nsg-button, .nsg-toggle-button) {
   font-family: var(--font-mono);
   font-weight: 600;
   letter-spacing: 0.13em;
@@ -708,32 +743,142 @@
 }
 
 /* A part with no size to answer to still reads at the md step. */
-[data-nsg-theme='modern-brut-violet'] :is(.nsg-button, .nsg-toggle-button):not([data-size]) {
+[data-nsg-theme='modern-brut'] :is(.nsg-button, .nsg-toggle-button):not([data-size]) {
   font-size: var(--nsg-font-size-action-md);
 }
 
-/* The 6px block, owned by the primary action and a raised card's hover — the
- * biggest one in the system, so only the screen's action earns it. Hovering
- * collapses it: the block reads as the button coming down onto the sheet. */
-[data-nsg-theme='modern-brut-violet'] .nsg-button[data-kind='primary'] {
+/* The 6px block is the button's GEOMETRY, not a per-kind reward: primary,
+ * secondary, danger and toggle all sit on one, and only ghost and link are bare.
+ * A rule alone, at this weight, reads as a label on the field rather than
+ * something you press.
+ *
+ * Which colour a block takes is decided by the whole style, not by the button:
+ * the block is a DRAWING convention (this object has thickness) and it is
+ * always ink. Both reference neobrutalist button systems agree — neobrutalism.com
+ * gives `default`, `secondary`, `destructive` and `outline` one shared class
+ * (`border-2 border-black shadow-md`) and neobrutalism-ui gives all five of its
+ * variants the same `border-2 border-black shadow-brutal`; in both, the ONLY
+ * thing that varies per variant is the background.
+ *
+ * Colour on a filled button is doubly wasted: the fill already carries the hue,
+ * and a block in that same hue measures 1.2–1.7:1 against the fill it sits
+ * behind, where ink still holds 3.6:1. So the rule is one colour, one meaning.
+ *
+ * Hierarchy comes from the OFFSET alone — 6px for the primary, 4px for
+ * everything else that is a real object, and nothing at all for the two kinds
+ * that show their state on the sheet rather than sitting on it. */
+[data-nsg-theme='modern-brut'] :is(.nsg-button, .nsg-toggle-button) {
+  box-shadow: var(--nsg-block-float);
+}
+
+[data-nsg-theme='modern-brut'] .nsg-button[data-kind='primary'] {
   box-shadow: var(--nsg-block);
   transition: box-shadow 0.1s ease-out, background-color 0.1s ease-out;
 }
 
-[data-nsg-theme='modern-brut-violet'] .nsg-button[data-kind='primary']:hover {
+[data-nsg-theme='modern-brut'] .nsg-button[data-kind='primary']:hover {
   box-shadow: 2px 2px 0 var(--nsg-ink);
 }
 
-/* Only the primary action carries the block, so the rest of the actions are
- * drawn by a rule instead — otherwise "secondary" is a floating grey chip. */
-[data-nsg-theme='modern-brut-violet']
-  :is(.nsg-button[data-kind='secondary'], .nsg-toggle-button) {
+[data-nsg-theme='modern-brut']
+  :is(
+    .nsg-button[data-kind='secondary']:hover,
+    .nsg-button[data-kind='danger']:hover,
+    .nsg-toggle-button:hover
+  ) {
+  box-shadow: 2px 2px 0 var(--nsg-ink);
+}
+
+/* Ghost and link are actions that show their state on the sheet, not objects
+ * sitting on it, so they carry no rule and no block. Anything else would put a
+ * hard offset behind text that is meant to sit inline with the page. */
+[data-nsg-theme='modern-brut'] :is(.nsg-button[data-kind='ghost'], .nsg-button[data-kind='link']) {
+  box-shadow: none;
+}
+
+/* Secondary and danger are drawn with BOTH a rule and a block. The rule is the
+ * foundation's own, not the base token's: a filled button already has its fill
+ * to be read against, so a hairline there is just noise. */
+[data-nsg-theme='modern-brut']
+  :is(.nsg-button[data-kind='secondary'], .nsg-button[data-kind='danger'], .nsg-toggle-button) {
   border-width: var(--nsg-border-width);
   border-color: var(--nsg-ink);
 }
 
+/* --- the menus: a brutalist sheet holding quiet rows ------------------------ */
+
+/* The SHEET is what carries the style, and it already speaks for itself: the
+ * 1.5px ink rule, the 4px `--nsg-block-float`, radius 0. That is exactly the
+ * reference recipe — its menu content is `rounded border-2 … shadow-md p-1`,
+ * the same hard block every other surface gets, with a 4px `sideOffset` so the
+ * sheet visibly hangs off its trigger rather than touching it.
+ *
+ * The ROWS are deliberately NOT brutalist, and this is the part that looks like
+ * an oversight but is not. The reference leaves items as plain `text-sm` with
+ * `focus:bg-accent` — no mono, no uppercase, no rule, no per-row offset. A menu
+ * is a list of things you can *choose*, not a row of things you can *press*, so
+ * giving each row the button's mono-uppercase voice would make a menu read as a
+ * stack of buttons and destroy the scan: at a glance a menu is scanned by
+ * silhouette and word-shape, and uppercase mono flattens both.
+ *
+ * So the one rule this file enforces is a negative one — a menu speaks with ONE
+ * voice, and it is not the button's. What the foundation does own:
+ *
+ *   - the label is the sheet's only label, in the small-print voice above
+ *   - a row is flush: no rule, no radius, no offset of its own
+ *   - the selected/hover row is the accent wash, which is the established
+ *     "chosen" idiom in this foundation (see the highlight rule below)
+ *   - the separator is a full-bleed ink rule, since inside a sheet an inset
+ *     hairline would read as a stray margin
+ *
+ * Without this the menu mixed three voices at once — a mono label, sans rows,
+ * and a mono button that opened it — which is what made it read as offbeat.
+ */
+
+/* Rows are flush: the sheet's own rule is the container, so a rule per row
+ * would draw a grid the reference never draws. */
+[data-nsg-theme='modern-brut']
+  :is(
+    [data-nsg-dropdown-menu],
+    [data-nsg-context-menu]
+  ) {
+  border-radius: 0;
+}
+
+/* A group label is a caption for the rows under it, so it is set apart by space
+ * and by the muted ink rather than by a rule — a rule here would cut the sheet
+ * into stacked boxes and fight the block that already frames it. The base token
+ * contract has no spacing scale, so these are the same literal steps the rest of
+ * this foundation uses. */
+[data-nsg-theme='modern-brut']
+  :is([data-nsg-dropdown-menu='group-label'], [data-nsg-context-menu='group-label']) {
+  padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+/* The separator runs the full width of the sheet. An inset hairline inside a
+ * bordered container reads as a misplaced margin, not as a division. The base
+ * draws it as a bordered box, so the border has to go explicitly — leaving it
+ * would stack the 0.67px base stroke under this 1.5px bar and give a separator
+ * twice the weight of the sheet's own rule.
+ *
+ * It takes `--color-border`, NOT `--nsg-ink`, and that is the point: the sheet's
+ * own frame is the stepped-back ink, and a divider must be the same weight as
+ * the box that contains it. Raw ink inverts to near-white on the ink field,
+ * which would make the separator the brightest thing in a menu that is supposed
+ * to be sitting quietly on the page. */
+[data-nsg-theme='modern-brut']
+  :is(
+    [data-nsg-dropdown-menu='separator'],
+    [data-nsg-context-menu='separator']
+  ) {
+  height: var(--nsg-border-width);
+  border: 0;
+  background-color: var(--color-border);
+}
+
 /* Labels are the page's small print: mono, uppercase, quiet. */
-[data-nsg-theme='modern-brut-violet']
+[data-nsg-theme='modern-brut']
   :is(
     [data-nsg-text-input='label'],
     [data-nsg-number-input='label'],
@@ -749,7 +894,7 @@
   color: var(--color-text-muted);
 }
 
-[data-nsg-theme='modern-brut-violet'] .nsg-badge {
+[data-nsg-theme='modern-brut'] .nsg-badge {
   font-family: var(--font-mono);
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -759,12 +904,12 @@
   border-color: currentColor;
 }
 
-[data-nsg-theme='modern-brut-violet'] .nsg-badge:not([data-size]) {
+[data-nsg-theme='modern-brut'] .nsg-badge:not([data-size]) {
   font-size: var(--nsg-font-size-badge-md);
 }
 
 /* Meta text — timestamps, ids, counts — is mono and tabular, as on the board. */
-[data-nsg-theme='modern-brut-violet']
+[data-nsg-theme='modern-brut']
   :is([data-nsg-command-bar='shortcut'], [data-nsg-command-bar='footer'] kbd) {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -778,7 +923,7 @@
  *
  * Each rule below is a value, not a second palette: it stays inside the board's
  * vocabulary (ink rules, square corners, a block that is earned rather than
- * ambient, violet acts, orange conflicts, acid states, moss is ok).
+ * ambient, the accent acts, orange conflicts, acid states, moss is ok).
  *
  * One shape is NOT this file's to choose: the radio control stays a circle. Its
  * circle is meaning, not geometry — `theme.css` pins it, so this file only
@@ -798,7 +943,7 @@
  * DOWN from both the field and the raised sheet in both modes. It also matches
  * the board's only hover gesture — the primary action's block collapsing, i.e.
  * the control pressing into the sheet. */
-[data-nsg-theme='modern-brut-violet']
+[data-nsg-theme='modern-brut']
   :is(
     .nsg-accordion [data-nsg-accordion='trigger']:hover,
     .nsg-button[data-kind='ghost']:hover,
@@ -818,7 +963,7 @@
  * that is square everywhere else). Only the ink is ours. `neutral-300`
  * (paper-3) used to be the last soft grey rule in a design whose argument is
  * that rules are the ink. */
-[data-nsg-theme='modern-brut-violet']
+[data-nsg-theme='modern-brut']
   :is(
     .nsg-checkbox [data-nsg-checkbox='control'],
     .nsg-radio-group [data-nsg-radio-group='control']
@@ -827,8 +972,8 @@
   background-color: var(--nsg-raised);
 }
 
-/* About to change → violet. */
-[data-nsg-theme='modern-brut-violet']
+/* About to change → the accent. */
+[data-nsg-theme='modern-brut']
   :is(
     .nsg-checkbox:hover [data-nsg-checkbox='control'],
     .nsg-radio-group [data-nsg-radio-group='option']:hover [data-nsg-radio-group='control']
@@ -838,7 +983,7 @@
 
 /* Changed → a filled violet block, and the same event in both controls (the
  * radio used to answer with a tinted field while the checkbox filled). */
-[data-nsg-theme='modern-brut-violet']
+[data-nsg-theme='modern-brut']
   :is(
     .nsg-checkbox [data-nsg-checkbox='control'][data-checked],
     .nsg-checkbox [data-nsg-checkbox='control'][data-indeterminate],
@@ -849,15 +994,15 @@
 }
 
 /* Invalid is conflict-inked, hover included. */
-[data-nsg-theme='modern-brut-violet'] .nsg-checkbox[data-invalid] [data-nsg-checkbox='control'],
-[data-nsg-theme='modern-brut-violet'] .nsg-checkbox[data-invalid]:hover [data-nsg-checkbox='control'] {
+[data-nsg-theme='modern-brut'] .nsg-checkbox[data-invalid] [data-nsg-checkbox='control'],
+[data-nsg-theme='modern-brut'] .nsg-checkbox[data-invalid]:hover [data-nsg-checkbox='control'] {
   border-color: var(--color-danger-500);
 }
 
-/* Both ticks read as paper on that violet block. In dark the block is a LIGHT
- * violet (#a78bfa), so the component's `text-white` tick would be 2.2:1 — paper
- * is 6.9:1 there and 7.0:1 against the light-mode violet. */
-[data-nsg-theme='modern-brut-violet']
+/* Both ticks read as paper on that accent block. In dark the block is a LIGHT
+ * sky (#7dd3fc), so the component's `text-white` tick would fail outright — paper
+ * is the only value that clears text on it in either mode. */
+[data-nsg-theme='modern-brut']
   :is(
     .nsg-checkbox [data-nsg-checkbox='indicator'],
     .nsg-radio-group [data-nsg-radio-group='indicator']
@@ -865,126 +1010,473 @@
   color: var(--nsg-paper);
 }
 
-/* --- the segmented control selects by inversion ---------------------------- */
+/* --- the segmented control selects by accent, like everything else ---------- */
 
-/* The board's "chosen" is a filled block, not a raised one: an ink slice with
- * paper on it — the same idiom as a checked checkbox, so a segment and a
- * checkbox read as the same kind of event. */
-[data-nsg-theme='modern-brut-violet']
+/* This was the last control whose "chosen" state was not the accent, and it was
+ * inconsistent with ITSELF as well: an ink slice in light and a `primary-100`
+ * wash in dark, while the tab, the checked checkbox, the active nav row, the
+ * marked menu row and the combo tag all carried a solid accent. Two meanings for
+ * one state, and a per-mode branch that existed only because the earlier rule
+ * chose ink.
+ *
+ * Removing the branch is the point. The reason dark needed a special case was
+ * sound — an ink fill inverts to near-white on the ink field, and the label then
+ * resolved to dark-on-dark — but the fix was the wrong shape: it re-stated the
+ * same idea as a different colour rather than using the accent the rest of the
+ * foundation already uses for exactly this. The dark block lifts `--nsg-spot`
+ * for the ink field, so one rule serves both modes: an accent slice with the
+ * paper label, which is also what the ramp-step trap demands (a solid block
+ * wants the literal other end of the axis, not `primary-100`).
+ *
+ * So: the same two values as a selected tab, a marked menu row and a combo tag —
+ * `--nsg-spot` and `--nsg-paper` — and no `.dark` override at all. */
+[data-nsg-theme='modern-brut']
   .nsg-segmented-control [data-nsg-segmented-control='indicator'] {
-  background-color: var(--nsg-ink);
+  background-color: var(--nsg-spot);
 }
 
-[data-nsg-theme='modern-brut-violet']
+[data-nsg-theme='modern-brut']
   .nsg-segmented-control [data-nsg-segmented-control='item'][data-checked] {
   color: var(--nsg-paper);
 }
 
+/* The track is a real object too, and it was the only control in the foundation
+ * with no depth: it took the ink rule from the base but no block, so it read as a
+ * slot cut into the page rather than something sitting on it. In the header that
+ * was glaring — a bare outlined box next to two controls that both carried the
+ * 4px float block.
+ *
+ * It is a track rather than a floating sheet (a menu, a toast, a dialog), so it
+ * takes the same 4px `--nsg-block-float` they do and not the 6px, and the sheet
+ * is the raised paper rather than transparent, so the ink rule is framing a
+ * surface instead of enclosing a hole. The accent slice moves over it, so the
+ * block is what stays put while the selection travels.
+ *
+ * Its HEIGHT is pinned to the button's `sm` step (28px, the base's `h-7`). The
+ * track had no height of its own — it was whatever `p-1` plus its content came
+ * to, so an icon-only control rendered 36.67px while the button beside it was
+ * 28px and the picker 32px: three different heights in one row, which is what
+ * made the neighbours look wrong rather than the track. A control that sits
+ * beside other controls has to agree with them, so the value is stated here
+ * instead of being inherited from content height. */
+[data-nsg-theme='modern-brut'] .nsg-segmented-control [data-nsg-segmented-control='track'] {
+  height: 28px;
+  padding: 2px;
+  background-color: var(--nsg-raised);
+  box-shadow: var(--nsg-block-float);
+}
+
+/* The separator between items is a RULE, and a rule is a division of the
+ * surface it sits on — not a 1px stub hanging in mid-air. The base draws it as a
+ * 50%-height `::before` on every item, which left a short mark floating beside
+ * the final slot (and the suppression around the checked item depends on sibling
+ * order, so it also appeared after a selection changed). A full-height rule
+ * between the slices reads as one track divided into parts; a stub reads as a
+ * stray line. The indicator is child 1, so the first ITEM is child 2. */
+[data-nsg-theme='modern-brut']
+  .nsg-segmented-control
+  [data-nsg-segmented-control='item']::before {
+  top: 0;
+  height: 100%;
+}
+
+[data-nsg-theme='modern-brut']
+  .nsg-segmented-control
+  [data-nsg-segmented-control='track']
+  > *:nth-child(2)::before {
+  display: none;
+}
+
+/* The label above a track is a label, like every other caption in this
+ * foundation — it was the base's `text-sm font-medium` body sans. */
+[data-nsg-theme='modern-brut'] .nsg-segmented-control [data-nsg-segmented-control='label'] {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
 /* Its hairlines are rules, so they are the ink. */
-[data-nsg-theme='modern-brut-violet']
+[data-nsg-theme='modern-brut']
   .nsg-segmented-control [data-nsg-segmented-control='item']::before {
   background-color: var(--nsg-ink);
 }
 
 /* --- one highlight idiom for all four menus -------------------------------- */
 
-/* The combobox and the command bar already mark with violet; the two menus marked
- * with the sunken paper, which is a hover, not "the thing you are about to do".
- * Now all four speak once — and a danger row keeps the conflict ink on a
- * conflict field. */
-[data-nsg-theme='modern-brut-violet']
+/* The mark is a SOLID accent, not a tint, in all four. A 16% `primary-100`
+ * wash is the riso and base idiom — a soft field behind the label — and inside
+ * a brutalist sheet it read as a foreign object. Three components already say
+ * "chosen" with a solid fill (the active nav row, the checked checkbox, and the
+ * light-mode segmented slice), so the menus were the only ones speaking a
+ * different language. A wash is also the one cue in this system that cannot be
+ * drawn, and a brutalist "chosen" state should look stamped rather than tinted.
+ *
+ * All four are named here rather than only the two menus, because the base
+ * marks the combobox and the command bar with the same wash — leaving them out
+ * would have moved the inconsistency one component over rather than fixing it.
+ *
+ * The fill takes `--nsg-spot` directly rather than `primary-500`, so it is the
+ * same value the accent override writes and moves with it for free. The label
+ * is the field's own `--nsg-paper`, not a ramp step, so the pair is INVERTED
+ * rather than tinted — and it inherits the mode automatically, because the dark
+ * block already lifts `--nsg-spot` for the ink field.
+ *
+ * Paper rather than `--color-primary-50` is deliberate and was originally gotten
+ * wrong: that ramp step is derived by mixing toward the raised surface, so on the
+ * ink field it resolves to a DARK end. It still passed AA here (5.6:1) by luck,
+ * but it is the same trap that put a combobox tag at 2.4:1, and the ramp is for
+ * washes — a solid block wants the literal other end of the axis. Paper measures
+ * 6.9:1 here and 6.5:1 in light. */
+[data-nsg-theme='modern-brut']
   :is(
     .nsg-dropdown-menu [data-nsg-dropdown-menu='action'],
     .nsg-dropdown-menu [data-nsg-dropdown-menu='option'],
     .nsg-dropdown-menu [data-nsg-dropdown-menu='submenu-trigger'],
     .nsg-context-menu [data-nsg-context-menu='action'],
     .nsg-context-menu [data-nsg-context-menu='option'],
-    .nsg-context-menu [data-nsg-context-menu='submenu-trigger']
-  ):is([data-highlighted], [data-expanded]) {
-  background-color: var(--color-primary-100);
-  color: var(--color-primary-900);
+    .nsg-context-menu [data-nsg-context-menu='submenu-trigger'],
+    .nsg-combobox [data-nsg-combobox='item'],
+    .nsg-command-bar [data-nsg-command-bar='item']
+  ):is([data-highlighted], [data-expanded], [data-checked]) {
+  background-color: var(--nsg-spot);
+  color: var(--nsg-paper);
 }
 
-[data-nsg-theme='modern-brut-violet']
+/* Icons and the check/dot indicator inside a marked row follow the label, or the
+ * row would carry a dark glyph on a solid field. */
+[data-nsg-theme='modern-brut']
+  :is(
+    .nsg-dropdown-menu [data-nsg-dropdown-menu='action'],
+    .nsg-dropdown-menu [data-nsg-dropdown-menu='option'],
+    .nsg-dropdown-menu [data-nsg-dropdown-menu='submenu-trigger'],
+    .nsg-context-menu [data-nsg-context-menu='action'],
+    .nsg-context-menu [data-nsg-context-menu='option'],
+    .nsg-context-menu [data-nsg-context-menu='submenu-trigger'],
+    .nsg-combobox [data-nsg-combobox='item'],
+    .nsg-command-bar [data-nsg-command-bar='item']
+  ):is([data-highlighted], [data-expanded], [data-checked])
+  :is(svg, [data-nsg-dropdown-menu='option-indicator'], [data-nsg-context-menu='option-indicator']) {
+  color: var(--nsg-paper);
+}
+
+/* A danger row keeps the conflict ink, for the same reason everything else is a
+ * solid fill: a marked row is a stamped block, and `danger-100` would be the
+ * only wash left in the menu. It takes `--nsg-spot-2-deep` rather than
+ * `danger-500` so an accent override cannot drag it off the conflict hue, and
+ * paper for the label for the same reason as every other marked row. */
+[data-nsg-theme='modern-brut']
   :is(
     .nsg-dropdown-menu [data-nsg-dropdown-menu='action'][data-kind='danger'],
     .nsg-context-menu [data-nsg-context-menu='action'][data-kind='danger']
-  )[data-highlighted] {
-  background-color: var(--color-danger-100);
-  color: var(--color-danger-700);
+  ):is([data-highlighted], [data-expanded], [data-checked]) {
+  background-color: var(--nsg-spot-2-deep);
+  color: var(--nsg-paper);
+}
+
+[data-nsg-theme='modern-brut']
+  :is(
+    .nsg-dropdown-menu [data-nsg-dropdown-menu='action'][data-kind='danger'],
+    .nsg-context-menu [data-nsg-context-menu='action'][data-kind='danger']
+  ):is([data-highlighted], [data-expanded], [data-checked])
+  :is(svg, [data-nsg-dropdown-menu='option-indicator'], [data-nsg-context-menu='option-indicator']) {
+  color: var(--nsg-paper);
 }
 
 /* --- state components in the design's voice -------------------------------- */
 
-/* A toast is a drawn sheet: paper, an ink rule, and the kind carried by the icon
- * and a 4px bar. It used to be a pastel card (`*-50` fill, `*-200` rule) wearing
- * a hard ink block — a soft component with a brutalist shadow — and its warning
- * and danger icons read at 2.4:1 and 3.0:1. */
-[data-nsg-theme='modern-brut-violet'] .nsg-toast {
-  background-color: var(--color-surface-raised);
+/* A toast is a raised sheet wearing the kind twice: the sheet takes the kind's
+ * light end, and the block hanging off its corner takes the kind's saturated
+ * end. The kind is then legible on the surface itself and again in the shape
+ * behind it — while the words stay ordinary ink on a tint, asked to do nothing
+ * new.
+ *
+ * The sheet's step sits at the top of a narrow band. `-50` and `-100` measure
+ * 0.96–0.99 lightness and read as white — a tint that faint is decoration
+ * rather than a signal — while `-300` fails AA in dark, where a wash of that
+ * strength over near-black drops the description to 3.64:1. `-200` is the
+ * strongest wash whose dark text still clears AA: it holds 11.7–14.7:1 on the
+ * title and 7.1–9.0:1 on the description in light, 8.0–9.2:1 and 5.4–6.2:1 in
+ * dark.
+ *
+ * The block still states the kind at full strength, for reading shape before
+ * surface. An earlier pass — a `500` ink fill under the words — measured 4.7:1
+ * on its worst kind and forced every line to full paper. */
+[data-nsg-theme='modern-brut'] .nsg-toast {
+  background-color: var(--color-primary-200);
   border-color: var(--nsg-ink);
-  border-left-width: 4px;
+  box-shadow: 4px 4px 0 var(--nsg-spot);
 }
 
-[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='info'] { border-left-color: var(--nsg-spot); }
-[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='success'] { border-left-color: var(--nsg-ok); }
-[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='warning'] { border-left-color: var(--nsg-spot-3); }
-[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='danger'] { border-left-color: var(--nsg-spot-2); }
-
-[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='info'] [data-nsg-toast='icon'] { color: var(--nsg-spot); }
-[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='success'] [data-nsg-toast='icon'] { color: var(--color-success-500); }
-[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='warning'] [data-nsg-toast='icon'] { color: var(--color-warning-500); }
-[data-nsg-theme='modern-brut-violet'] .nsg-toast[data-kind='danger'] [data-nsg-toast='icon'] { color: var(--color-danger-500); }
+[data-nsg-theme='modern-brut'] .nsg-toast[data-kind='success'] { background-color: var(--color-success-200); box-shadow: 4px 4px 0 var(--nsg-ok); }
+[data-nsg-theme='modern-brut'] .nsg-toast[data-kind='warning'] { background-color: var(--color-warning-200); box-shadow: 4px 4px 0 var(--nsg-spot-3); }
+[data-nsg-theme='modern-brut'] .nsg-toast[data-kind='danger'] { background-color: var(--color-danger-200); box-shadow: 4px 4px 0 var(--nsg-spot-2); }
 
 /* The close button is a hit target on a raised sheet, so it uses the same
  * sunken-paper hover as everything else (see the hover block above). */
-[data-nsg-theme='modern-brut-violet'] .nsg-toast [data-nsg-toast='close-button']:hover {
+[data-nsg-theme='modern-brut'] .nsg-toast [data-nsg-toast='close-button']:hover {
   background-color: var(--color-surface-sunken);
 }
 
 /* The progress track is a groove: an ink rule around the sheet, so it reads as
- * structure instead of a grey smear. The fill stays a fill, vivid on purpose. */
-[data-nsg-theme='modern-brut-violet'] .nsg-progress [data-nsg-progress='track'] {
+ * structure instead of a grey smear. The fill stays a fill, vivid on purpose.
+ *
+ * The reference agrees on the shape — `h-4 … border-2 bg-background` with an
+ * `h-full bg-primary` indicator — but at a much larger size. Ours keeps the
+ * base's 4/8/12px steps because the size scale is the library's, not the
+ * foundation's; what the foundation owns is the ink rule around the groove, so
+ * the bar is a drawn channel with a solid fill sitting in it rather than a
+ * coloured smear on a grey one. */
+[data-nsg-theme='modern-brut'] .nsg-progress [data-nsg-progress='track'] {
   background-color: var(--nsg-raised);
   box-shadow: inset 0 0 0 var(--nsg-border-width) var(--nsg-ink);
+}
+
+/* The label and the value are the pair that sit above the bar, and they are a
+ * caption, not prose: the label takes the muted mono voice every other label in
+ * this foundation uses, and the value is the same voice with the ink, so the
+ * number reads as the figure the bar is drawing. */
+[data-nsg-theme='modern-brut']
+  :is(
+    .nsg-progress [data-nsg-progress='label'],
+    .nsg-progress [data-nsg-progress='value-label']
+  ) {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+[data-nsg-theme='modern-brut'] .nsg-progress [data-nsg-progress='value-label'] {
+  color: var(--nsg-ink);
 }
 
 /* --- overlays and the centred sheet ---------------------------------------- */
 
 /* Brut does not blur. The veil is flat, so the ink rule stays the edge of the
  * sheet rather than the blur doing it. */
-[data-nsg-theme='modern-brut-violet']
+[data-nsg-theme='modern-brut']
   :is(.nsg-dialog[data-nsg-dialog='overlay'], .nsg-command-bar-overlay) {
   backdrop-filter: none;
 }
 
-/* A centred sheet is not an offset one: the block belongs to the screen's action
- * and to things that hang off a corner, not to a panel centred in the viewport
- * (where a bottom-right offset reads as a mistake). */
-[data-nsg-theme='modern-brut-violet'] .nsg-dialog [data-nsg-dialog='content'] {
-  box-shadow: none;
+/* A centred sheet still gets the block. The earlier reasoning here was that a
+ * panel centred in the viewport should not carry a bottom-right offset, and
+ * that is true of an offset with nothing to point at — but it was applied to the
+ * dialog ALONE, and the result was that the largest, most important surface on
+ * the page was the only floating sheet in the system sitting flat. Measured
+ * across the sheets: menu 4px, toast 4px, dialog none, card none. A modal that
+ * is a flat rectangle with a hairline reads as a browser default, which is
+ * exactly the "off" note this was meant to remove.
+ *
+ * The reference agrees — its dialog content is `rounded border-2 … shadow-md`,
+ * the same hard block as its button and its menu. And the block also does real
+ * work here: it is what separates the panel from the dimmed page behind it, so
+ * the modal reads as lifted off the field rather than printed on it.
+ *
+ * 4px rather than 6px, for the same reason menus and toasts use 4px: the offset
+ * is the sheet's depth, and the 6px block is reserved for the screen's action. */
+[data-nsg-theme='modern-brut'] .nsg-dialog [data-nsg-dialog='content'] {
+  box-shadow: var(--nsg-block-float);
 }
+
+/* A selected value is a stamped block, not a tint.
+ *
+ * The base gives a multi-select tag `bg-primary-100 text-primary-800` — a soft
+ * violet wash, and this foundation had no rule for it, so the tags were the one
+ * control still speaking the riso voice. It is the same defect the menu rows had:
+ * a wash is the one cue in this language that cannot be drawn.
+ *
+ * A tag is a *value the user has committed to*, which is a stronger claim than a
+ * row they are about to choose, so it takes the full accent with the paper label
+ * — the checked checkbox and the active nav row, verbatim. It reads as a chip cut
+ * from the same sheet as the field it sits in.
+ *
+ * `--nsg-spot` again, so an accent override re-inks it for free, and the dark
+ * block's lifted value carries it onto the ink field. The remove glyph follows
+ * the label for the same reason the menu's checkmark does — a dark glyph on a
+ * solid field disappears.
+ *
+ * The label is the field's own `--nsg-paper`, NOT `--color-primary-50`. That ramp
+ * step is derived by mixing toward the raised surface, so on the ink field it
+ * resolves to a DARK end and lands at 2.43:1 on a solid accent — invisible. Paper
+ * is the one value that means "the other side of this block" in both modes
+ * without a second rule, and it measures 6.9:1 in dark and 6.5:1 in light. */
+[data-nsg-theme='modern-brut'] .nsg-combobox [data-nsg-combobox='tag'] {
+  background-color: var(--nsg-spot);
+  color: var(--nsg-paper);
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 0;
+}
+
+[data-nsg-theme='modern-brut'] .nsg-combobox [data-nsg-combobox='tag'] :is(svg, button) {
+  color: var(--nsg-paper);
+}
+
+/* The popup's listbox needed no rule here at all. It scrolls, and it is now
+ * named `data-nsg-combobox="listbox"` and carries the base's `nsg-scrollbar`
+ * class, so the designed bar applies with no foundation involvement: colour and
+ * radius come from tokens, and `--nsg-radius-full` is 0 in this plate, which is
+ * why the bar is square.
+ *
+ * The reason it was wrong is worth recording. The element that scrolls is a
+ * child of `content`, which only clips — so the popup was showing the browser's
+ * default scrollbar, track and arrows, inside an otherwise fully themed sheet.
+ * That was the one place on the page where the OS was allowed to speak. The fix
+ * was a missing part name and a missing class, not a missing style. */
+
+/* The accordion was the last component in the foundation speaking body sans,
+ * with no rule of its own and a soft `bg-muted/50` hover inherited from the base.
+ *
+ * The reference makes each item a real object — `border-2 bg-background shadow-md`
+ * that drops to `shadow-sm` when open — and a trigger in the display face. We
+ * take the object reading for the same reason the tabs took it: an accordion item
+ * is a thing that opens, so it is drawn like a thing, with the foundation's rule
+ * and the 4px float block.
+ *
+ * The label is the LABEL VOICE, not body text: a section heading is a label, and
+ * every other label in this foundation (field, group, menu) is mono uppercase. */
+[data-nsg-theme='modern-brut'] .nsg-accordion [data-nsg-accordion='trigger'] {
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: var(--nsg-border-width) solid var(--nsg-ink);
+  background-color: var(--nsg-raised);
+}
+
+/* Hover is the sunken paper — a step off the field, the same hover the sheet rows
+ * used before they became solid marks. Here the state is "this section is
+ * reachable", not "you have chosen it", so a wash is the right weight and a
+ * stamped block would be too loud. */
+[data-nsg-theme='modern-brut'] .nsg-accordion [data-nsg-accordion='trigger']:hover {
+  background-color: var(--nsg-paper-2);
+}
+
+/* The chevron is the only thing that says "this moves", so it takes the ink and
+ * nothing else. */
+[data-nsg-theme='modern-brut'] .nsg-accordion [data-nsg-accordion='trigger-icon'] {
+  color: var(--nsg-ink);
+}
+
+[data-nsg-theme='modern-brut'] .nsg-accordion [data-nsg-accordion='content'] {
+  background-color: var(--nsg-raised);
+  border-bottom: var(--nsg-border-width) solid var(--nsg-ink);
+}
+
+/* --- links: prose, so the affordance is a rule, not a soft underline -------- */
+
+/* The link was the one component this foundation had no rule for at all, which
+ * left it wearing the base's treatment in full: a `text-decoration` of `auto`
+ * thickness at `underline-offset-2`, and a soft `focus-visible` ring. Both are
+ * the pre-foundation idiom. A hairline underline is the one cue in the system
+ * that is neither a rule nor a block, so a link read as a word that happened to
+ * be violet — the "offbeat" note, and it is why links looked like they came
+ * from somewhere else entirely.
+ *
+ * The reference has no Link component at all, which is the real precedent: a
+ * link is prose. What it does do in its own body copy is deliberate about the
+ * two things that matter — `font-medium` and a real `underline-offset-4` — so a
+ * link there is a *heavier* word with a *set-off* rule rather than a light word
+ * with a hairline sitting under it.
+ *
+ * So: the underline becomes the foundation's own 1.5px rule, in the ink rather
+ * than the link's colour, and the word takes the label voice's weight. A link is
+ * a labelled destination, not a button and not a sentence, so it sits between
+ * the two — heavier than body copy, lighter than an action.
+ *
+ * It stays INLINE. No block, no fill, no radius: a link in a sentence must not
+ * become an object, or it would fight the buttons around it. The rule is the
+ * whole affordance. */
+[data-nsg-theme='modern-brut'] .nsg-link {
+  font-weight: 600;
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--nsg-border-width);
+  /* The rule is the INK, not the link's own colour. A violet underline under
+   * violet text is one mark doing two jobs, and it disappears at small sizes; a
+   * neutral rule is legible regardless of which kind the link is, which is what
+   * lets primary / danger / secondary all share one affordance. */
+  text-decoration-color: var(--nsg-ink);
+  text-underline-offset: 0.2em;
+}
+
+/* The no-underline modifier has to beat the base at REST, not only on hover. The
+ * base underlines every link twice over — `&:hover, &:focus-visible` — and a
+ * `&:not(.nsg-link-underline)` rule is not specific enough to stop the
+ * unconditional one, so the modifier silently did nothing until the pointer
+ * arrived. Scoping the foundation's own rule to the modifier's absence is the
+ * whole fix, and it is why the variant has to be tested at rest. */
+[data-nsg-theme='modern-brut'] .nsg-link:not(.nsg-link-underline) {
+  text-decoration-line: none;
+}
+
+/* The hover does not swap the colour for a lighter step of the same ramp — the
+ * same trap that put a combobox tag at 2.4:1. It thickens the rule instead, which
+ * is this foundation's own "you can act on this" gesture and needs no second
+ * colour to work. */
+[data-nsg-theme='modern-brut'] .nsg-link:hover {
+  text-decoration-color: var(--nsg-ink);
+  text-decoration-thickness: calc(var(--nsg-border-width) * 2);
+}
+
+/* Focus is a hard outline, not a soft ring. Every other control in this
+ * foundation draws focus as a rule (the field rules turn violet); a link was
+ * still on the base's `ring-2 ring-ring ring-offset-1`, which is the one
+ * remaining place the soft idiom survived. */
+[data-nsg-theme='modern-brut'] .nsg-link:focus-visible {
+  outline: var(--nsg-border-width) solid var(--nsg-ink);
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+/* The title is the one piece of display type inside a sheet, so it speaks in the
+ * display face rather than the body sans. The reference does the same
+ * (`font-head text-base font-medium`): a modal's title is a headline, and in
+ * this design language the headline voice is the heavy geometric one — the same
+ * face the page's section headings use. The description stays body sans, because
+ * a description is prose and prose does not get shouted at. */
+[data-nsg-theme='modern-brut'] .nsg-dialog [data-nsg-dialog='title'] {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+/* NOTE — no footer band. The reference separates a dialog's actions with a
+ * `border-t-2` band, and that is the right idea, but this component has no
+ * `data-nsg-dialog="footer"` part: the actions are simply the children the
+ * caller passed in. A rule for it would be dead code, and the honest version of
+ * this change is the block and the title. Giving the dialog a real footer part
+ * is a component API decision, not a foundation one — worth raising separately
+ * if the action row keeps reading as part of the content. */
 
 /* --- fields keep their rule while focused ---------------------------------- */
 
 /* The combobox drops its rule on focus (`border-transparent`) because the ring
  * takes over. Here the rule IS the field, so it turns violet instead — which is
  * also what the text input already does. */
-[data-nsg-theme='modern-brut-violet'] .nsg-combobox [data-nsg-combobox='control']:focus-within {
+[data-nsg-theme='modern-brut'] .nsg-combobox [data-nsg-combobox='control']:focus-within {
   border-color: var(--nsg-spot);
 }
 
 /* --- the last two grey surfaces -------------------------------------------- */
 
-[data-nsg-theme='modern-brut-violet'] .nsg-separator {
+[data-nsg-theme='modern-brut'] .nsg-separator {
   background-color: var(--color-border);
 }
 
-[data-nsg-theme='modern-brut-violet'] .nsg-image [data-nsg-image='default-fallback'] {
+[data-nsg-theme='modern-brut'] .nsg-image [data-nsg-image='default-fallback'] {
   background-color: var(--color-surface-sunken);
 }
 
-[data-nsg-theme='modern-brut-violet'] .nsg-image [data-nsg-image='default-fallback-icon'] {
+[data-nsg-theme='modern-brut'] .nsg-image [data-nsg-image='default-fallback-icon'] {
   color: var(--nsg-ink);
 }
 
@@ -992,7 +1484,7 @@
 
 /* Tabs and segmented-control items are actions like any other; they were the
  * only ones left speaking in the sans voice, next to mono buttons. */
-[data-nsg-theme='modern-brut-violet'] .nsg-tabs [data-nsg-tabs='trigger'] {
+[data-nsg-theme='modern-brut'] .nsg-tabs [data-nsg-tabs='trigger'] {
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
@@ -1000,7 +1492,41 @@
   text-transform: uppercase;
 }
 
-[data-nsg-theme='modern-brut-violet']
+/* The active tab is a SELECTED SURFACE, not an underline.
+ *
+ * It was `border-bottom: 2px` in the accent — a coloured hairline under a word,
+ * which is the same soft signal as the link's underline had been, and the last
+ * place a "chosen" state was carried by a mark rather than a drawn thing. The
+ * reference makes the active tab a real object: `data-active:border-border
+ * shadow-sm` over a `border-2` list, and the `line` variant is a 1px `after`
+ * rule rather than a border.
+ *
+ * We take the object reading, because the accent is the established "chosen"
+ * colour in this foundation (nav row, checkbox, marked menu row). So the active
+ * tab is the accent block with the paper label — the same stamp, the same
+ * values, so it re-inks with an accent override for free. The list's own rule
+ * becomes the foundation's ink at full weight, and the idle tabs sit quiet on it.
+ */
+[data-nsg-theme='modern-brut'] .nsg-tabs [data-nsg-tabs='list'] {
+  border-bottom: var(--nsg-border-width) solid var(--nsg-ink);
+}
+
+[data-nsg-theme='modern-brut']
+  .nsg-tabs
+  [data-nsg-tabs='trigger']:is([aria-selected='true'], [data-selected], [data-state='active']) {
+  background-color: var(--nsg-spot);
+  color: var(--nsg-paper);
+}
+
+/* An idle tab is a label waiting to be chosen, so it takes the muted ink — the
+ * same voice as a field label — rather than full body text. */
+[data-nsg-theme='modern-brut']
+  .nsg-tabs
+  [data-nsg-tabs='trigger']:not([aria-selected='true']):not([data-selected]):not([data-state='active']) {
+  color: var(--color-text-muted);
+}
+
+[data-nsg-theme='modern-brut']
   .nsg-segmented-control [data-nsg-segmented-control='item'] {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -1008,3 +1534,8 @@
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
+
+/* No scrollbar rule on purpose. A bar is chrome, not a drawn object: ruled at
+ * 10px it read as a track with a thumb inside it, and at 6px there is no room
+ * for a rule to be anything but a second edge. The base bar is thin, solid and
+ * un-ruled, and it takes the corner from `--nsg-radius-full` (0 here) for free. */

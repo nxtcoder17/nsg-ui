@@ -1,7 +1,6 @@
 import { RadioGroup as KobalteRadioGroup } from '@kobalte/core/radio-group'
 import { type JSX, splitProps, Show } from 'solid-js'
 import { cn } from '../../utils/cn'
-import { DotIcon } from '../../icons'
 
 export type RadioGroupProps = {
   value?: string
@@ -81,9 +80,7 @@ const Option = (props: RadioOptionProps) => {
     >
       <KobalteRadioGroup.ItemInput class="sr-only" />
       <KobalteRadioGroup.ItemControl data-nsg-radio-group="control">
-        <KobalteRadioGroup.ItemIndicator data-nsg-radio-group="indicator">
-          <DotIcon size="xs" />
-        </KobalteRadioGroup.ItemIndicator>
+        <KobalteRadioGroup.ItemIndicator data-nsg-radio-group="indicator" />
       </KobalteRadioGroup.ItemControl>
       <div data-nsg-radio-group="option-content">
         <KobalteRadioGroup.ItemLabel data-nsg-radio-group="label">
