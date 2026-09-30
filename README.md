@@ -102,6 +102,39 @@ Full contract, dark-mode rules and an authoring guide:
 implementations actually do — is in
 [docs/NEOBRUTALISM-design.md](./docs/NEOBRUTALISM-design.md).
 
+### Only CSS, no build step
+
+The components are CSS keyed on classes and data attributes, so a foundation can
+be used in a plain HTML page — no npm, no build, no framework. `dist/theme.css`
+is a Tailwind *input* file and cannot be linked, so the build also emits a
+compiled stylesheet per foundation: the component layer plus that one foundation.
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui/dist/standalone/modern-brut.min.css">
+
+<div data-nsg-theme="modern-brut">
+  <div class="nsg-card" data-kind="raised">
+    <h1 class="text-xl font-bold">Auth rewrite</h1>
+    <span class="nsg-badge" data-kind="warning" data-size="md">risk</span>
+  </div>
+</div>
+```
+
+Card, Badge, Button, Progress, Separator, Text, Link and Row/Column need no
+JavaScript; Accordion works as hand-written `<details>`/`<summary>`. The rest
+are behaviour rather than style and stay in the Solid components.
+
+Because there is no Tailwind pipeline, only a small fixed set of layout
+utilities ships — width, spacing, flow, alignment and type scale. `nsg-*`
+classes always work; an arbitrary utility emits no rule and silently does
+nothing. See [docs/themes.md](./docs/themes.md#only-css).
+
+A model can write in this system on its own: [`llm/only-css.txt`](./llm/only-css.txt)
+is a plain-text reference of every component, every valid layout class and the
+traps, served at `/only-css.txt` on the docs site. Hand it to an LLM with the
+prompt in the **Only CSS** section and it will author documents in the design
+language without guessing at a class that would render as nothing.
+
 ### Re-inking Modern Brut
 
 `modern-brut` ships in a deep blue, but the hue is not part of its identity —

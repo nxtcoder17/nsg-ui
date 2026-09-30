@@ -1,0 +1,40 @@
+/* FOUNDATION · standalone layout vocabulary
+ *
+ * The compiled standalone bundle scans the *built library* for class names, so
+ * `nsg-*` component classes are always present — but a hand-written artifact is
+ * not part of that scan, and arbitrary Tailwind utilities silently do nothing:
+ *
+ *   <div class="max-w-2xl space-y-6">   <!-- no rule is emitted: no effect -->
+ *
+ * This file is the layout vocabulary that IS shipped with the standalone bundle,
+ * covering the shapes a document or planning artifact actually needs. It is
+ * deliberately a small, fixed set: every entry is a real decision, not a
+ * wildcard, so an author can rely on what is here and can trust that anything
+ * missing is missing on purpose.
+ *
+ * Not used by the Solid components themselves — this exists only for the
+ * plain-HTML path, and is not part of `dist/theme.css`.
+ */
+
+@source inline("mx-auto");
+@source inline("max-w-2xs max-w-xs max-w-sm max-w-md max-w-lg max-w-xl max-w-2xl max-w-3xl max-w-4xl max-w-5xl max-w-6xl max-w-7xl max-w-none");
+@source inline("w-full w-fit");
+
+/* Vertical rhythm between siblings. */
+@source inline("space-y-1 space-y-2 space-y-3 space-y-4 space-y-6 space-y-8 space-y-10 space-y-12 space-y-16");
+
+/* Inline rhythm, most often for a row of badges or buttons. */
+@source inline("gap-1 gap-2 gap-3 gap-4 gap-6 gap-8");
+
+/* Flow and alignment inside a card. */
+@source inline("flex flex-col flex-row flex-wrap items-center items-start items-end justify-between justify-center text-left text-center text-right");
+
+/* Type scale for headings and body copy. */
+@source inline("text-xs text-sm text-base text-lg text-xl text-2xl text-3xl");
+@source inline("font-medium font-semibold font-bold");
+@source inline("uppercase tracking-wide tracking-widest");
+@source inline("opacity-60 opacity-70 opacity-80");
+
+/* Page frame. */
+@source inline("mx-auto p-4 p-6 p-8 p-10");
+@source inline("mt-2 mt-4 mt-6 mb-2 mb-4 mb-6");

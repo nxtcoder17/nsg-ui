@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "vite",
+    "predev": "node scripts/sync-llm-prompts.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/sync-llm-prompts.mjs",
     "build": "vite build",
     "serve": "vite preview",
     "lint": "biome",

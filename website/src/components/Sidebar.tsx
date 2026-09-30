@@ -27,6 +27,7 @@ import { ToggleButtonIcon } from "../sections/ToggleButtonSection";
 import { ContextMenuIcon } from "../sections/ContextMenuSection";
 import { TextIcon } from "../sections/TextSection";
 import { InstallationIcon } from "../sections/InstallationSection";
+import { OnlyCssIcon } from "../sections/OnlyCssSection";
 
 function CommandBarIcon(props: { class?: string }) {
 	return (
@@ -65,6 +66,7 @@ import { CardIcon } from "../sections/CardSection";
 
 const gettingStarted = [
 	{ id: "installation", label: "Installation", icon: InstallationIcon },
+	{ id: "only-css", label: "Only CSS", icon: OnlyCssIcon },
 ] as const;
 
 const components = [

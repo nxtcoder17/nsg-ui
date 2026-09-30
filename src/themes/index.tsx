@@ -17,6 +17,16 @@
  * Foundations are plain CSS (no Tailwind, no `@apply`) so they can be imported
  * into a build or linked at runtime. Writing one is a token list — the contract
  * is documented in `docs/themes.md`.
+ *
+ * The foundation file on its own only carries tokens. To use the *components*
+ * with a `<link>` there is nothing to compile, so a prebuilt stylesheet ships
+ * per foundation — the component layer plus that one foundation:
+ *
+ *   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui/dist/standalone/modern-brut.min.css" />
+ *
+ * `dist/standalone.min.css` is the component layer alone, and `dist/theme.css` is
+ * the uncompiled Tailwind input a bundler consumer imports. See "Only CSS" in
+ * `docs/themes.md` for what that path does and does not include.
  */
 
 /** Attribute a foundation is selected with, on any element that wraps the UI. */

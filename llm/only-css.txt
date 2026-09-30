@@ -1,0 +1,158 @@
+nsg-ui — Only CSS
+=================
+
+A stylesheet you link, and plain HTML you write by hand. No build step, no
+npm install, no framework, no JavaScript. Every component is a CSS class plus
+data attributes.
+
+Link this, once, in <head>:
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css">
+
+The version is pinned on purpose. Do not change it to @latest or to a bare
+package name. If the CDN cannot be reached at all — offline, sandboxed, or a
+locked-down viewer — the stylesheet is also on disk after installing the
+package, and this link is equivalent:
+
+    <link rel="stylesheet" href="./node_modules/nsg-ui/dist/standalone/modern-brut.min.css">
+
+Then mark the foundation on any wrapping element (usually <html>):
+
+    <html data-nsg-theme="modern-brut">
+
+Dark mode is a second, independent axis. Add the class to the same element:
+
+    <html data-nsg-theme="modern-brut" class="dark">
+
+What that gets you
+------------------
+Hard 0px corners. Ink rules on every surface. A solid offset block behind the
+primary action. Uppercase monospace labels. A 64px grid page texture. Deep
+blue accent (#005bac), orange conflict plate, acid-yellow state, green ok.
+
+Markup
+------
+Every component is a class plus data attributes. These are the exact same
+attributes the Solid components render, so they match the library.
+
+CARD — data-kind: raised | flat | sunken
+
+    <div class="nsg-card" data-kind="raised">
+      <h1 class="text-xl font-bold">Title</h1>
+      <p class="mt-2 text-sm opacity-80">Body copy.</p>
+    </div>
+
+BADGE — data-kind: neutral | info | success | warning | danger
+       add "nsg-badge-outline" for the outlined form
+       data-size: sm | md | lg
+
+    <span class="nsg-badge" data-kind="warning" data-size="md">risk</span>
+    <span class="nsg-badge nsg-badge-outline" data-kind="danger" data-size="md">blocked</span>
+
+BUTTON — data-kind: primary | secondary | ghost | danger | link
+        add the "nsg-button-outline" class for the outlined form
+        data-size: sm | md | lg | icon
+
+    <button type="button" class="nsg-button" data-kind="primary" data-size="md">Ship it</button>
+    <button type="button" class="nsg-button nsg-button-outline" data-kind="danger" data-size="md">Roll back</button>
+
+PROGRESS — the label lives in a "header" wrapper, not directly on the root.
+          Set the fill width with an inline style, and keep the aria values.
+
+    <div class="nsg-progress" data-size="md" role="progressbar"
+         aria-label="Adoption" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100">
+      <div data-nsg-progress="header">
+        <span data-nsg-progress="label">Adoption</span>
+        <span data-nsg-progress="value-label">62%</span>
+      </div>
+      <div data-nsg-progress="track">
+        <div data-nsg-progress="fill" data-kind="primary" style="width: 62%"></div>
+      </div>
+    </div>
+
+SEPARATOR
+
+    <div class="nsg-separator mt-4 mb-4" role="separator"></div>
+
+ACCORDION — use the native <details>/<summary>; no JavaScript needed. The parts
+          are data attributes on the children, not classes on their own.
+
+    <details class="nsg-accordion">
+      <summary data-nsg-accordion="trigger">
+        <span data-nsg-accordion="trigger-label">Phase 1 — discovery</span>
+      </summary>
+      <div data-nsg-accordion="content">
+        <p>…</p>
+      </div>
+    </details>
+
+          Note: the chevron rotation in the component is driven by an
+          [data-expanded] attribute that only the Solid component sets. Native
+          <details> will not rotate anything, so omit a trigger icon rather than
+          shipping one that never moves.
+
+Layout: a fixed vocabulary
+--------------------------
+There is no Tailwind pipeline here, so only the utilities below are compiled
+into the stylesheet. An nsg-* class always works. An arbitrary utility emits no
+rule and silently does nothing — so stay inside this list, and use a real class
+or a small <style> block for anything outside it.
+
+    max-w-2xs xs sm md lg xl 2xl 3xl 4xl 5xl 6xl 7xl none
+    mx-auto    w-full    w-fit
+    space-y-1 2 3 4 6 8 10 12 16
+    gap-1 2 3 4 6 8
+    flex    flex-col    flex-row    flex-wrap
+    items-center    items-start    items-end
+    justify-between    justify-center
+    text-left    text-center    text-right
+    text-xs sm base lg xl 2xl 3xl
+    font-medium    font-semibold    font-bold
+    uppercase    tracking-wide    tracking-widest
+    opacity-60 70 80
+    p-4 6 8 10    mt-2 4 6    mb-2 4 6
+
+Two things that bite
+--------------------
+1. Cards and other block components carry no default spacing between their
+   children. A heading, a paragraph and a button written as siblings will sit
+   flush against each other. Add mt-*/mb-* yourself.
+
+2. Prefer flex row with gap for a row of badges or buttons; margins on siblings
+   are what cause the uneven gaps.
+
+Out of scope
+------------
+Dialog, Popover, DropdownMenu, ContextMenu, Toast, Tabs, Checkbox, RadioGroup,
+ComboBox, TextInput, NumberInput, SegmentedControl, ToggleButton, CommandBar,
+ThemePicker. These are behaviour rather than style: they need SolidJS, which
+this path deliberately does not load. Express the same idea with plain HTML —
+a <details> for a disclosure, a bordered card for a callout, a list for a menu.
+
+Re-inking
+---------
+The accent is one declaration. Override after the stylesheet:
+
+    <style>
+      [data-nsg-theme='modern-brut']      { --nsg-spot: #a61e63; }
+      [data-nsg-theme='modern-brut'].dark { --nsg-spot: #fbcfe8; }
+    </style>
+
+Dark needs its own, lighter value — reusing the light one fails contrast
+(~2.8:1). Keep hue, change lightness.
+
+A complete starting point
+-------------------------
+
+    <!doctype html>
+    <html lang="en" data-nsg-theme="modern-brut">
+      <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Document title</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css">
+      </head>
+      <body class="p-10">
+        <div class="mx-auto max-w-2xl space-y-6"> … </div>
+      </body>
+    </html>
