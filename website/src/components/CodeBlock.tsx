@@ -12,6 +12,9 @@ interface CodeBlockProps {
   language?: string
   /** The gutter costs ~28px of inset per line, so it is opt-in per block. */
   lineNumbers?: boolean
+  /** Wrapping reflows indentation, so it is opt-in for the blocks whose lines
+   * are a command to copy rather than code to read. */
+  wrap?: boolean
 }
 
 export const CodeBlock: Component<CodeBlockProps> = (props) => {
@@ -24,7 +27,7 @@ export const CodeBlock: Component<CodeBlockProps> = (props) => {
   }
 
   return (
-    <div class="relative group">
+    <div class="relative group min-w-0">
       <div
         class="overflow-hidden [&_.prism-code-editor]:!text-sm [&_.prism-code-editor]:!p-0 [&_.prism-code-editor]:!pt-1.5 [&_.prism-code-editor]:!pb-1.5"
         data-line-numbers={props.lineNumbers ? '' : undefined}
@@ -34,6 +37,7 @@ export const CodeBlock: Component<CodeBlockProps> = (props) => {
           value={props.code}
           readOnly
           lineNumbers={props.lineNumbers ?? false}
+          wordWrap={props.wrap ?? false}
           tabSize={2}
           insertSpaces
           /* The editor renders a real (read-only) `<textarea>`, and a form control

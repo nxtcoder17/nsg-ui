@@ -11,6 +11,35 @@
   padding-left: 0;
 }
 
+/* The editor scrolls long lines, so it needs the same scrollbar as every other
+ * scroller on the page rather than the OS default. It cannot carry
+ * `nsg-scrollbar`: Prism rebuilds the container's class list whenever the
+ * selection state changes, which drops anything added to it. Same tokens, so a
+ * foundation still re-inks it. Mirrors the exclusive engine split in
+ * `theme.css` — Chromium ignores `::-webkit-scrollbar` as soon as
+ * `scrollbar-color` is set, so the two branches never overlap. */
+.prism-code-editor::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.prism-code-editor::-webkit-scrollbar-track,
+.prism-code-editor::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.prism-code-editor::-webkit-scrollbar-thumb {
+  background-color: var(--color-text-muted);
+  border-radius: var(--nsg-radius-full);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .prism-code-editor {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-text-muted) transparent;
+  }
+}
+
 /* Dark theme - scoped under .dark */
 .dark .prism-code-editor{--pce-cursor: #aeafad;--pce-bg: #1e1e1e;--pce-widget-border: #444;--pce-widget-bg: #1e1e1e;--pce-widget-color: #ccc;--pce-widget-color-active: #fff;--pce-widget-color-options: #aaa;--pce-widget-bg-input: #262626;--pce-widget-bg-hover: #2e2e2e;--pce-widget-bg-active: #336699;--pce-widget-focus: #5299e0;--pce-search-match: #eb5e0054;--pce-widget-bg-error: #4d1919;--pce-widget-error: #cc0000;--pce-border-highlight: 2px solid #282828;--pce-selection-match: #add6ff26;--pce-line-number: #888;--pce-scrollbar: 0, 0%, 50%;--pce-bg-fold: #c5c5c5;--pce-guide-indent: #9994;--pce-ac-icon-class: #ee9d28;--pce-ac-icon-enum: #ee9d28;--pce-ac-icon-event: #ee9d28;--pce-ac-icon-function: #b180d7;--pce-ac-icon-interface: #75beff;--pce-ac-icon-variable: #75beff;--pce-selection: #264f78;color-scheme:dark}
 .dark .match-highlight{--pce-bg-highlight: #282828}

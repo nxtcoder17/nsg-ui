@@ -60,15 +60,16 @@ export const SkillsSection: Component = () => {
 						<div class="p-6 grid gap-3">
 							<CodeBlock
 								language="bash"
-								code={`mkdir -p .agents/skills/${skill.id}
-curl -o .agents/skills/${skill.id}/SKILL.md ${url(skill.id)}`}
+								wrap
+								code={`skill_dir=$HOME/.agents/skills/${skill.id}
+mkdir -p $skill_dir && curl -o $skill_dir/SKILL.md ${url(skill.id)}`}
 							/>
 							<p class="text-text-muted text-sm">
 								Drop it in{" "}
-								<code class="text-text text-xs">.agents/skills/</code> or point your
-								agent at the URL. It is self-sufficient — the token values, markup
-								contract and utility whitelist are all inlined, so it needs no repo,
-								no npm and no network.
+								<code class="text-text text-xs">$HOME/.agents/skills/</code> or point
+								your agent at the URL. It is self-sufficient — the token values,
+								markup contract and utility whitelist are all inlined, so it needs
+								no repo, no npm and no network.
 							</p>
 						</div>
 					</Card>
