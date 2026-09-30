@@ -29,7 +29,7 @@ import { CommandBarSection } from "./sections/CommandBarSection";
 import { IconsSection } from "./sections/IconsSection";
 import { TextSection } from "./sections/TextSection";
 import { InstallationSection } from "./sections/InstallationSection";
-import { OnlyCssSection } from "./sections/OnlyCssSection";
+import { SkillsSection } from "./sections/SkillsSection";
 
 const App: Component = () => {
 	const [activeSection, setActiveSection] = createSignal<SectionId>("colors");
@@ -87,7 +87,7 @@ const App: Component = () => {
 
 				<div class="max-w-5xl mx-auto px-8">
 					<InstallationSection />
-					<OnlyCssSection />
+					<SkillsSection />
 					<TextSection />
 					<ButtonSection />
 					<DialogSection />

@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "predev": "node scripts/sync-llm-prompts.mjs",
+    "predev": "node scripts/sync-agent-skills.mjs",
     "dev": "vite",
-    "prebuild": "node scripts/sync-llm-prompts.mjs",
+    "prebuild": "node scripts/sync-agent-skills.mjs",
     "build": "vite build",
     "serve": "vite preview",
     "lint": "biome",
@@ -27,7 +27,7 @@
     "@kobalte/core": "^0.13.0",
     "clsx": "^2.1.1",
     "solid-js": "^1.9.9",
-    "solid-prism-editor": "^3.0.1",
+    "solid-prism-editor": "^3.4.0",
     "tailwind-merge": "^2.6.0"
   }
 }

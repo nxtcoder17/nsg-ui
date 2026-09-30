@@ -22,11 +22,12 @@
  * with a `<link>` there is nothing to compile, so a prebuilt stylesheet ships
  * per foundation — the component layer plus that one foundation:
  *
- *   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui/dist/standalone/modern-brut.min.css" />
+ *   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css" />
  *
  * `dist/standalone.min.css` is the component layer alone, and `dist/theme.css` is
- * the uncompiled Tailwind input a bundler consumer imports. See "Only CSS" in
- * `docs/themes.md` for what that path does and does not include.
+ * the uncompiled Tailwind input a bundler consumer imports. See "Plain HTML"
+ * in `docs/themes.md` for what that path does and does not include, and
+ * `skills/nsg-ui-modern-brut-mockup/` for teaching an agent the same contract.
  */
 
 /** Attribute a foundation is selected with, on any element that wraps the UI. */
