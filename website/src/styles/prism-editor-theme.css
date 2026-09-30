@@ -1,6 +1,16 @@
 /* Light theme (default) */
 @import 'solid-prism-editor/themes/vs-code-light.css';
 
+/* The editor indents both the visible text and its textarea by ~10.5px, so the
+ * two stay aligned: the textarea is what draws the selection highlight, and if
+ * only one moves the highlight detaches from the glyphs it is meant to cover.
+ * With line numbers off that gutter is unused, so both insets go to zero
+ * together and the sample lines up with whatever sits above it. */
+.prism-code-editor:not([data-line-numbers]) .pce-line,
+.prism-code-editor:not([data-line-numbers]) .pce-textarea {
+  padding-left: 0;
+}
+
 /* Dark theme - scoped under .dark */
 .dark .prism-code-editor{--pce-cursor: #aeafad;--pce-bg: #1e1e1e;--pce-widget-border: #444;--pce-widget-bg: #1e1e1e;--pce-widget-color: #ccc;--pce-widget-color-active: #fff;--pce-widget-color-options: #aaa;--pce-widget-bg-input: #262626;--pce-widget-bg-hover: #2e2e2e;--pce-widget-bg-active: #336699;--pce-widget-focus: #5299e0;--pce-search-match: #eb5e0054;--pce-widget-bg-error: #4d1919;--pce-widget-error: #cc0000;--pce-border-highlight: 2px solid #282828;--pce-selection-match: #add6ff26;--pce-line-number: #888;--pce-scrollbar: 0, 0%, 50%;--pce-bg-fold: #c5c5c5;--pce-guide-indent: #9994;--pce-ac-icon-class: #ee9d28;--pce-ac-icon-enum: #ee9d28;--pce-ac-icon-event: #ee9d28;--pce-ac-icon-function: #b180d7;--pce-ac-icon-interface: #75beff;--pce-ac-icon-variable: #75beff;--pce-selection: #264f78;color-scheme:dark}
 .dark .match-highlight{--pce-bg-highlight: #282828}

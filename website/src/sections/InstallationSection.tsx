@@ -1,5 +1,5 @@
-import type { Component } from "solid-js";
-import { Button, Card } from "nsg-ui";
+import { type Component, createSignal, For } from "solid-js";
+import { Button, Card, SegmentedControl } from "nsg-ui";
 import { CodeBlock, DemoWithCode } from "../components/CodeBlock";
 import { Section } from "../components/section";
 
@@ -19,9 +19,11 @@ export function InstallationIcon(props: { class?: string }) {
 	);
 }
 
-const installCode = `bun add nsg-ui @kobalte/core solid-js
-# npm install nsg-ui @kobalte/core solid-js
-# pnpm add nsg-ui @kobalte/core solid-js`;
+const packageManagers = [
+	{ id: "bun", build: "add" },
+	{ id: "npm", build: "install" },
+	{ id: "pnpm", build: "add" },
+] as const;
 
 const stylesCode = `/* app.css */
 @import 'tailwindcss';
@@ -48,11 +50,45 @@ const Step: Component<{
 			<h3 class="font-semibold text-text text-[15px]">{props.title}</h3>
 			<p class="text-text-muted text-sm mt-1">{props.description}</p>
 		</div>
-		<div class="p-6">
+		<div class="px-6 pb-5">
 			<CodeBlock code={props.code} language={props.language} />
 		</div>
 	</Card>
 );
+
+const InstallStep: Component = () => {
+	const [pm, setPm] = createSignal(packageManagers[0].id);
+	const verb = () => packageManagers.find((m) => m.id === pm())!.build;
+
+	return (
+		<Card class="p-0">
+			<div class="px-6 py-4 border-b border-border-subtle">
+				<h3 class="font-semibold text-text text-[15px]">1 · Install the package</h3>
+				<p class="text-text-muted text-sm mt-1">
+					SolidJS and Kobalte are peer dependencies, so they are installed alongside it.
+				</p>
+				<div class="mt-3">
+					<SegmentedControl
+						aria-label="Package manager"
+						value={pm()}
+						onChange={setPm}
+					>
+						<For each={packageManagers}>
+							{(option) => (
+								<SegmentedControl.Item value={option.id}>
+									{option.id}
+								</SegmentedControl.Item>
+							)}
+						</For>
+					</SegmentedControl>
+				</div>
+			</div>
+			<div class="px-6 pb-5">
+				<CodeBlock code={`${pm()} ${verb()} nsg-ui @kobalte/core solid-js`} language="bash" />
+			</div>
+		</Card>
+	);
+};
 
 export const InstallationSection: Component = () => {
 	return (
@@ -66,12 +102,7 @@ export const InstallationSection: Component = () => {
 			}}
 		>
 			<div class="grid gap-6">
-				<Step
-					title="1 · Install the package"
-					description="SolidJS and Kobalte are peer dependencies, so they are installed alongside it."
-					code={installCode}
-					language="bash"
-				/>
+				<InstallStep />
 
 				<Step
 					title="2 · Import the styles"

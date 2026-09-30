@@ -1,5 +1,5 @@
 import { type Component, createSignal, Show } from 'solid-js'
-import { Card } from 'nsg-ui'
+import { Button, Card } from 'nsg-ui'
 import { Editor } from 'solid-prism-editor'
 import 'solid-prism-editor/prism/languages/tsx'
 import 'solid-prism-editor/prism/languages/bash'
@@ -10,6 +10,8 @@ import '../styles/prism-editor-theme.css'
 interface CodeBlockProps {
   code: string
   language?: string
+  /** The gutter costs ~28px of inset per line, so it is opt-in per block. */
+  lineNumbers?: boolean
 }
 
 export const CodeBlock: Component<CodeBlockProps> = (props) => {
@@ -23,11 +25,15 @@ export const CodeBlock: Component<CodeBlockProps> = (props) => {
 
   return (
     <div class="relative group">
-      <div class="rounded-lg overflow-hidden [&_.prism-code-editor]:!text-sm [&_.prism-code-editor]:!p-4">
+      <div
+        class="overflow-hidden [&_.prism-code-editor]:!text-sm [&_.prism-code-editor]:!p-0 [&_.prism-code-editor]:!pt-1.5 [&_.prism-code-editor]:!pb-1.5"
+        data-line-numbers={props.lineNumbers ? '' : undefined}
+      >
         <Editor
           language={props.language ?? 'tsx'}
           value={props.code}
           readOnly
+          lineNumbers={props.lineNumbers ?? false}
           tabSize={2}
           insertSpaces
           /* The editor renders a real (read-only) `<textarea>`, and a form control
@@ -41,12 +47,14 @@ export const CodeBlock: Component<CodeBlockProps> = (props) => {
           }
         />
       </div>
-      <button
+      <Button
         onClick={copyToClipboard}
-        class="absolute top-2 right-2 px-2 py-1 rounded text-xs bg-neutral-700/80 text-neutral-300 hover:bg-neutral-600 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+        kind="secondary"
+        size="sm"
+        class="absolute top-1.5 right-1.5 z-10 opacity-0 transition-opacity focus-visible:opacity-100 group-hover:opacity-100"
       >
         {copied() ? 'Copied!' : 'Copy'}
-      </button>
+      </Button>
     </div>
   )
 }
@@ -70,15 +78,18 @@ export const DemoWithCode: Component<DemoWithCodeProps> = (props) => {
             <p class="text-text-muted text-sm mt-1">{props.description}</p>
           )}
         </div>
-        <button
+        <Button
           onClick={() => setShowCode(!showCode())}
-          class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-medium border border-border hover:bg-neutral-100 text-text-secondary transition-colors"
+          kind="secondary"
+          size="sm"
+          class="gap-1.5"
+          aria-expanded={showCode()}
         >
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
           </svg>
           {showCode() ? 'Hide' : 'Code'}
-        </button>
+        </Button>
       </div>
 
       <div class="p-6 demo-pattern">
@@ -86,7 +97,9 @@ export const DemoWithCode: Component<DemoWithCodeProps> = (props) => {
       </div>
 
       <Show when={showCode()}>
-        <div class="border-t border-border-subtle">
+        {/* Matches the card's own inset, so the revealed sample lines up with
+            the demo above it rather than running into the border. */}
+        <div class="border-t border-border-subtle px-6 py-4">
           <CodeBlock code={props.code} />
         </div>
       </Show>
