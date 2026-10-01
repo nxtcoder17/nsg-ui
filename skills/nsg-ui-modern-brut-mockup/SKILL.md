@@ -35,6 +35,13 @@ applies the actual foundation.
 ```
 
 - **Pin the version explicitly.** Never `@latest` or a bare package name.
+- **No separate font request.** The stylesheet ships the `@font-face` rules for
+  Inter Tight and IBM Plex Mono, so do **not** also add a Google Fonts `@import` —
+  a second request is pure waste and can flash the wrong face first. (The rules are
+  inlined, but their `src` urls point at `fonts.gstatic.com`, so the woff2 binaries
+  are still fetched over the network. Vendoring the CSS does **not** vendor the
+  fonts — for a fully offline page, self-host them by find-and-replacing the `src`
+  urls.)
 - **Vendor it when offline or sandboxed** — `curl` the file once into
   `design/vendor/` and link it relatively. This is how Path A works on a machine with
   no CDN access, and it is the recommended way to make a mockup portable.
@@ -63,11 +70,17 @@ block for the product layer. That is usually the best of both.
 
 Before designing, write these down from Appendix A:
 
+- **The page setup, which the foundation does NOT do for you.** The attribute
+  defines tokens and components only; there is no `body` rule. On `<html>` it wires
+  the fonts for free, but you still paint the field (`background-color:
+  var(--color-surface)`), the ink (`color: var(--color-text)`) and the opt-in grid
+  (`background-image: var(--nsg-page-backdrop)` + `background-size`).
 - **The five anchors**: `--nsg-ink`, `--nsg-paper`, `--nsg-raised`, `--nsg-spot` (the
   one swappable value), `--nsg-ok`.
-- **The tiered block**: `--nsg-block` (6px, the screen's primary action only),
-  `--nsg-block-float` (4px, anything that hangs off a corner), and *nothing* for
-  regions and centred sheets that aren't floating.
+- **The tiered block**: `--nsg-block` (6px, the screen's primary action **only**);
+  `--nsg-block-float` (4px, **every other real object** — secondary/danger/toggle
+  buttons, the segmented track, menus, popovers, toasts and the **centred dialog**);
+  and *nothing* for regions, resting cards, or the ghost/link button.
 - **Geometry**: every radius is `0`. `--nsg-border-width: 1.5px`.
 - **`--color-border` IS the ink.** Not a grey. This single choice is what makes panels
   read as *drawn* rather than *floated*.
@@ -89,10 +102,10 @@ because breaking it is the most common way a port goes wrong:
 **A. Faithful port** — reproduce the anchors as-is.
 
 **B. Tuned port** — take every *structural* value verbatim, then re-tune only the
-neutral axis to change the emotional temperature. The existing `design/kitchen.css`
-does this: `#111113` → `#131315` and `#f4f4f2` → `#f5f4f1` (warmer, "approachable
-rather than severe"), while `--nsg-spot: #005bac`, the dark `#7fb3de`, the 6px/4px
-block and radius-0 all survive untouched.
+neutral axis to change the emotional temperature. For example: `#111113` → `#131315`
+and `#f4f4f2` → `#f5f4f1` (warmer, "approachable rather than severe"), while
+`--nsg-spot: #005bac`, the dark `#7fb3de`, the 6px/4px block and radius-0 all survive
+untouched. Re-tune *values*, never structure.
 
 Rules for mode B:
 - **Never** re-tune the accent or the block. Those are the identity.
@@ -109,8 +122,11 @@ One shared `<project>.css` that every page links. Structure:
 ```
 1. Header comment: what this is, that it's a static port of Modern Brut, and
    every deliberate deviation listed explicitly.
-2. Fonts — @import Inter Tight + IBM Plex Mono (static mockups may use the
-   Google Fonts @import; the library itself uses @font-face).
+2. Fonts — **only if this sheet stands alone** (i.e. you are not linking the
+   standalone stylesheet). That stylesheet already ships the Inter Tight +
+   IBM Plex Mono `@font-face` rules, so a page that links it needs no Google
+   Fonts `@import` at all. Port the `@font-face` rules into `<project>.css` only
+   when the port replaces the library outright.
 3. :root tokens — flatten --nsg-* and --color-* into ONE namespace, since there
    is no Tailwind layer here.  (e.g. --surface, --border, --text, --primary)
 4. html.dark token block — a second, independent axis.
@@ -129,19 +145,31 @@ One shared `<project>.css` that every page links. Structure:
   circle is *meaning*, not geometry. A checkbox is square.
 - **Rules are the ink.** `border: 1.5px solid var(--border)` where `--border` maps to
   the ink, not a grey.
-- **The block is earned, never ambient.** Ask of every element: *is this a thing you
-  press (6px), a thing that hangs off a corner (4px), or neither?* Regions, panels and
-  content cards get **no** block. This restraint is why the page stays calm instead of
-  shouting — the most common porting error is putting a block on everything.
+- **The block is earned, never ambient, and its size is not a press test.** The
+  primary action gets `6px`. **Every other real object gets `4px`** — secondary,
+  danger and toggle buttons, the segmented track, menus, popovers, toasts and the
+  centred dialog. Ghost/link, regions, panels and resting cards get **none**. (Do
+  **not** reason "pressed ⇒ 6px": a secondary button is pressed and still gets 4px —
+  that heuristic strips the block from the most common control on the page.) This
+  restraint is why the page stays calm instead of shouting — the most common porting
+  error is putting a block on everything.
 - **Mono is for labels and actions only.** Buttons, badges, field labels, tickers and
-  meta get IBM Plex Mono, uppercase, `letter-spacing: 0.1em`+. **Body copy stays big
-  and sans.** If prose starts rendering in mono, the page reads like a terminal and
+  meta get IBM Plex Mono, uppercase, `letter-spacing` 0.08em–0.15em by role (buttons
+  0.13em, badges 0.12em, field/menu labels 0.15em, command-bar meta 0.08em). **Body
+  copy stays big and sans.** If prose starts rendering in mono, the page reads like a terminal and
   the warmth is gone.
-- **Hover = the block collapsing.** `box-shadow` shrinking to `2px 2px` with a
-  matching `transform: translate(...)` makes the control press into its own shadow.
-  That is the foundation's only press gesture; don't invent a colour-change hover.
+- **Hover = the block collapsing — and only that.** The offset shrinks from
+  `6px 6px` (or `4px 4px`) to `2px 2px 0 var(--color-border)`. **The control does
+  not move:** no button or toggle hover rule touches `transform`. (The compiled
+  sheet has `transform` elsewhere — accordion chevron rotation, toast slide-ins —
+  but never on a press gesture.) The "sink into your own shadow" `translate`
+  belongs to the *reference* systems and is deliberately not ours. This
+  block-collapse is the foundation's only press gesture; don't invent a
+  colour-change hover.
 - **Colour as function, never flavour.** Accent acts. Orange only ever conflicts.
-  Moss is only ever ok. Acid is only ever live.
+  Moss is only ever ok. Acid is only ever live. (A **link** is the one place the
+  accent does *not* act — a link is prose and its affordance is an ink rule; see
+  Appendix B.)
 
 ### Dark mode has two traps
 
@@ -238,14 +266,15 @@ Per page:
 - Link the shared stylesheet, then add **one `<style>` block of page-specific
   components** — keep page-local classes in the page, not in the shared file.
 - Every page gets a **light/dark toggle** wired to `app.js` (`data-theme-toggle`), and
-  the `--page-backdrop` grid.
+  the `--nsg-page-backdrop` grid.
 - Make at least the primary direction **interactive** — real channel switching, a real
   modal that opens — so the direction can actually be judged. A deep-linkable modal
   (`?modal=new-company`) is cheap and demos well.
 - **ASCII only in the mono voice.** IBM Plex Mono has no fullwidth forms and renders
   arrows/return symbols as tofu boxes. Use inline SVG for anything glyph-like.
-- Inline SVG icons throughout, `stroke="currentColor"`, ~1.5–1.7 stroke width. Never
-  emoji, never an icon font.
+- Inline SVG icons throughout, `stroke="currentColor"`, `stroke-width="2"` on a
+  `0 0 24 24` viewBox (`stroke-width` 2 is the set's standard; a couple of glyphs
+  differ). Never emoji, never an icon font.
 
 Write `README.md` as a real decision document: the chosen direction, a table of what
 each page covers against the brief, and an explicit **open items** list.
@@ -285,6 +314,12 @@ Then fix what the screenshots show, and say what you checked.
 - ❌ Prose in monospace. Mono is for labels and actions.
 - ❌ Accent-coloured underlines and hairlines as "selection" cues — a chosen state is a
   **stamped block** (accent fill + paper label), not a tint or a coloured hairline.
+- ❌ A link drawn with an accent rule or a soft underline. It is prose: an ink rule,
+  thicker on hover, inline, no block.
+- ❌ A **solid-fill badge**. The library has none — a badge is a tint inside a
+  1.5px rule in its own colour.
+- ❌ A hover that `translate`s the control. Ours only collapses the block to `2px 2px`;
+  `transform` is the reference systems' gesture, not this foundation's.
 - ❌ Soft or ambient `box-shadow` of any kind, and `backdrop-filter` blur. Brut does not blur.
 - ❌ Rounded badges, pills or progress bars — while a radio stays round.
 - ❌ Arbitrary inline utilities that emit no CSS because they're outside the whitelist.
@@ -292,6 +327,12 @@ Then fix what the screenshots show, and say what you checked.
   never be visibly speaking on the page.
 - ❌ Emoji as icons, and glyphs that render as tofu in the mono voice.
 - ❌ Light-mode-only styling on a component that also appears in dark.
+- ❌ Putting `data-nsg-theme` on a `<body>`/`<div>` wrapper — the base font rule
+  resolves on `<html>`, so the fonts silently fall back to the system stack.
+- ❌ A Google Fonts `@import` on a page that already links the standalone stylesheet —
+  the fonts ship inside it.
+- ❌ Leaving the page unpainted (no field, ink or grid) and reading the bare white
+  result as "the theme is broken".
 - ❌ Declaring it done without a screenshot in both modes.
 
 ---
@@ -322,9 +363,12 @@ the library has moved on, re-check these rather than trusting them blindly.
 --nsg-ok:         #127a45;  /* ok, and nothing else */
 ```
 
-`--nsg-spot` is the **single** value every accent surface derives from: the whole
-`--color-primary-*` ramp, the ring, an active nav row, a checked checkbox, a marked
-menu row, the primary and danger action inks. One declaration re-inks the language.
+`--nsg-spot` is the **single** value the *accent* surfaces derive from: the whole
+`--color-primary-*` and `--color-info-*` ramps, the ring, a checked checkbox, a marked
+list row, the combo tag, the active tab and the primary action ink. One declaration
+re-inks the language. (**Danger does not follow it** — `--color-danger` derives from the
+separate `--nsg-spot-2-deep` conflict anchor, so overriding `--nsg-spot` leaves a danger
+button orange. A "re-ink everything" claim that includes danger is wrong.)
 
 ## A.2 Semantic tokens
 
@@ -406,15 +450,15 @@ The neutral ramp is the paper/ink axis, so it inverts in dark on its own:
    A radio stays round: its circle is MEANING, not geometry, and theme.css pins it. */
 --nsg-radius-xs/sm/md/lg/xl/full: 0;
 
---nsg-block:       6px 6px 0 var(--nsg-ink);  /* the screen's action, and a card's hover */
---nsg-block-float: 4px 4px 0 var(--nsg-ink);  /* menus and the other floating sheets */
+--nsg-block:       6px 6px 0 var(--nsg-ink);  /* the screen's primary action ONLY */
+--nsg-block-float: 4px 4px 0 var(--nsg-ink);  /* every other real object, and floating sheets */
 
 --nsg-shadow-sm:   none;                       /* no rest shadows in this system */
 --nsg-shadow-lg:   var(--nsg-block-float);
 --nsg-shadow-xl:   var(--nsg-block-float);
 --nsg-shadow-menu: var(--nsg-block-float);
 --shadow-card:       none;
---shadow-card-hover: var(--nsg-block);
+--shadow-card-hover: var(--nsg-block);  /* DEFINED BUT UNWIRED — see note below */
 
 /* the action voice reads on the button's own size scale */
 --nsg-font-size-action-sm/md/lg: 10px / 11px / 12px;
@@ -422,8 +466,16 @@ The neutral ramp is the paper/ink axis, so it inverts in dark on its own:
 ```
 
 **The block is tiered on purpose.** "One hard shadow" is about how *often* it is earned,
-not about every surface getting the same one: the action gets 6px, things that hang off
-a corner get 4px, and a centred dialog gets none.
+not about every surface getting the same one: the screen's **primary** action gets 6px;
+**every other real object** gets 4px — secondary/danger/toggle buttons, the segmented
+track, menus, popovers, toasts and the **centred dialog**; and **nothing** for a region,
+a resting card, or the ghost/link button.
+
+> **One token is defined but never consumed.** `--shadow-card-hover` (6px) is declared
+> in the foundation, but no `.nsg-card` rule uses it — measured, a card is
+> `box-shadow: none` at rest **and on hover** (the design doc's "raised card hover" is
+> aspirational, not implemented). If your port wants a card to lift on hover, that is a
+> product-layer decision, not a library behaviour to mirror.
 
 ## A.5 The page backdrop (opt-in)
 
@@ -484,8 +536,8 @@ A stylesheet you link, and plain HTML you write by hand. No build step, no npm
 install, no framework, no JavaScript. Every component is a CSS class plus data
 attributes.
 
-Link it once in `<head>`, then mark the foundation on any wrapping element
-(usually `<html>`):
+Link it once in `<head>`, then put the foundation attribute on **`<html>`
+itself**:
 
 ```html
 <html lang="en" data-nsg-theme="modern-brut">
@@ -497,9 +549,44 @@ Dark mode is a **second, independent axis** — add the class to the same elemen
 <html lang="en" data-nsg-theme="modern-brut" class="dark">
 ```
 
-What that gets you: hard 0px corners, ink rules on every surface, a solid offset block
-behind the primary action, uppercase monospace labels, a 64px grid page texture, deep
-blue accent (`#005bac`), orange conflict plate, acid-yellow state, green ok.
+> **Put it on `<html>`, not on a `<body>` or `<div>` wrapper.** The compiled
+> stylesheet sets `html { font-family: var(--default-font-family) }` and the
+> foundation points that at Inter Tight — but the base rule resolves the variable
+> on `html`, so scoping the attribute to a lower element leaves the fonts on the
+> **system stack**. Measured on the shipped `modern-brut.min.css`: attribute on
+> `<html>` → `"Inter Tight"`; attribute on `<body>` → `ui-sans-serif`.
+
+What the attribute gives you: the tokens and every component rule — hard 0px
+corners, ink rules on every surface, the tiered block, uppercase monospace labels,
+the 64px grid *token*, deep blue accent (`#005bac`), orange conflict plate,
+acid-yellow state, green ok.
+
+**What it does NOT do: paint the page.** There is no `body` rule in the
+stylesheet — the attribute is tokens plus components, and the field, the body ink
+and the grid are yours to set once:
+
+```html
+<style>
+  body {
+    background-color: var(--color-surface);       /* the paper field */
+    color: var(--color-text);                     /* the ink */
+    background-image: var(--nsg-page-backdrop);   /* the 64px grid — opt-in */
+    background-size: var(--nsg-page-backdrop-size);
+  }
+</style>
+```
+
+Measured with the attribute on `<html>`: `font-family` resolves to `"Inter
+Tight"` for free, while `color` and `background-color` stay at the browser
+defaults (black on transparent) until you set them. Leave it unpainted and the
+theme looks broken when it is only unfinished.
+
+> **On border width.** The compiled stylesheet's *base* rules declare `1px` on
+> several parts — `.nsg-card`, `.nsg-badge`, the outline button — and the
+> foundation overrides them to `--nsg-border-width` (**1.5px**) in a later rule.
+> Don't read the first `.nsg-card { border-width: 1px }` and conclude the card is
+> 1px: measured in Chromium, `.nsg-card` resolves to 1.5px, like every other
+> ruled surface in the theme.
 
 **Every component is a class plus data attributes** — the exact same attributes the
 Solid components render.
@@ -521,8 +608,47 @@ Add `nsg-badge-outline` for the outlined form. `data-size`: `sm | md | lg`
 <span class="nsg-badge nsg-badge-outline" data-kind="danger" data-size="md">blocked</span>
 ```
 
+> **There is no solid-fill badge — do not invent one.** A badge is a *tint*
+> (`-100` background, `-700` text) inside a 1.5px rule in its own text colour
+> (`currentColor`), squared (radius 0), in the mono uppercase voice. The "a vivid
+> ink is a FILL" rule is about the `-50…-400` ramp positions on plates; it is not
+> a licence to give a badge a solid accent ground with a paper label. The
+> components that take a *solid* accent fill are a closed set — checked
+> checkbox/radio, a marked list row (dropdown/context menu, combobox item,
+> command-bar item), the combo tag, the active tab, the selected segment. A badge is
+> not one of them, and adding another would break the one meaning that set carries.
+> (The site's own active nav row uses the same idiom, but that is app chrome the
+> website draws — there is no `nsg-nav` component.)
+
+### LINK — prose, so its affordance is an **ink** rule
+
+`data-kind` is optional (`primary | secondary | success | warning | danger | info`).
+A bare `.nsg-link` has **no colour of its own**: it inherits the page ink. When it
+draws its rule, that rule is a 1.5px **ink** underline (`--color-border`), never an
+accent one — an accent rule under accent text is one mark doing two jobs and vanishes
+at small sizes. Only
+`data-kind="primary"` (the Solid component's default) paints the *text* in the
+accent; the rule stays ink either way.
+
+```html
+<!-- bare: ink text, and NO rule at all — not even on hover -->
+<a class="nsg-link" href="#">Plain link</a>
+<!-- add nsg-link-underline to draw the rule (the Solid Link does this by default) -->
+<a class="nsg-link nsg-link-underline" href="#">Underlined link</a>
+<!-- accent text, still an ink rule -->
+<a class="nsg-link nsg-link-underline" data-kind="primary" href="#">Accent link</a>
+```
+
+**A bare `.nsg-link` never draws the rule** — not at rest, and not on hover or focus
+either: the foundation's `:not(.nsg-link-underline)` suppression outranks the base's
+hover underline, so all three stay off. Always add `nsg-link-underline` (the Solid
+`Link` does this by default); the rule then shows and hover **thickens it to 3px** —
+it never swaps to a lighter accent step. Focus is a hard ink outline, not a soft ring.
+And it stays **inline — no block, no fill, no radius**, because a link inside a
+sentence must not become an object and fight the buttons around it.
+
 ### BUTTON — `data-kind`: `primary | secondary | ghost | danger | link`
-Add the `nsg-button-outline` class for the outlined form. `data-size`: `sm | md | lg | icon`
+Add the `nsg-button-outline` class for the outlined form. `data-size`: `sm | md | lg | icon | icon-sm`
 
 ```html
 <button type="button" class="nsg-button" data-kind="primary" data-size="md">Ship it</button>
@@ -549,8 +675,13 @@ Set the fill width with an inline style, and keep the aria values.
 ### SEPARATOR
 
 ```html
-<div class="nsg-separator mt-4 mb-4" role="separator"></div>
+<div class="nsg-separator mt-4 mb-4" data-orientation="horizontal" role="separator"></div>
 ```
+
+> **`data-orientation` is required.** All of the separator's geometry lives behind
+> `[data-orientation="horizontal"|"vertical"]`; without it the element is a 0-height
+> div and renders nothing. (The Solid `Separator` supplies it from its `orientation`
+> prop; hand-written markup must state it.)
 
 ### ACCORDION — use native `<details>`/`<summary>`; no JavaScript needed
 
@@ -574,7 +705,8 @@ The parts are data attributes on the children, not classes on their own.
 ## B.1 Layout: the fixed utility vocabulary
 
 There is no Tailwind pipeline here, so **only the utilities below are compiled** into
-the stylesheet. An `nsg-*` class always works. An arbitrary utility emits no rule and
+the stylesheet (plus the `.animate-*` entrance helpers, which are component
+internals). An `nsg-*` class always works. An arbitrary utility emits no rule and
 silently does nothing — so stay inside this list, and use a real class or a small
 `<style>` block for anything outside it.
 
@@ -602,16 +734,19 @@ p-4 6 8 10    mt-2 4 6    mb-2 4 6
 2. **Prefer flex row with `gap`** for a row of badges or buttons; margins on siblings
    are what cause the uneven gaps.
 
-## B.3 Out of scope for this path
+## B.3 Interaction states need JS — their *styles* do not
 
 Dialog, Popover, DropdownMenu, ContextMenu, Toast, Tabs, Checkbox, RadioGroup,
 ComboBox, TextInput, NumberInput, SegmentedControl, ToggleButton, CommandBar,
-ThemePicker. These are **behaviour rather than style** — they need SolidJS, which this
-path deliberately does not load. Express the same idea with plain HTML: a `<details>`
-for a disclosure, a bordered card for a callout, a list for a menu.
+ThemePicker. **Their resting CSS ships in the linked stylesheet** — most carry full
+`modern-brut` rules, so the markup is styled. What is missing is the **behaviour**:
+open/close, focus management, roving selection. Without SolidJS you can render the
+closed state but not drive the interaction, so express the idea with plain HTML where
+you can: a `<details>` for a disclosure, a bordered card for a callout, a list for a
+menu. `ThemePicker` is the one exception — it has **no compiled CSS at all**.
 
-*(If a mockup needs one of these, that is exactly the case for **Path B** — port the
-tokens and build it in your own stylesheet.)*
+*(If a mockup genuinely needs the interaction, that is the case for **Path B** — port
+the tokens and build it in your own stylesheet.)*
 
 ## B.4 Re-inking
 
@@ -638,6 +773,16 @@ Keep hue, change lightness.
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Document title</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css">
+    <style>
+      /* The stylesheet ships the fonts but paints nothing. Restate the field,
+         the ink and the opt-in grid — this is the whole of the page setup. */
+      body {
+        background-color: var(--color-surface);
+        color: var(--color-text);
+        background-image: var(--nsg-page-backdrop);
+        background-size: var(--nsg-page-backdrop-size);
+      }
+    </style>
   </head>
   <body class="p-10">
     <div class="mx-auto max-w-2xl space-y-6"> … </div>
@@ -653,9 +798,9 @@ Inlined from **`nsg-ui@0.1.0`**:
 
 | Section | Source |
 |---|---|
-| Appendix A | `src/styles/themes/modern-brut.css`, token blocks (source lines 480–741) |
+| Appendix A | `src/styles/themes/modern-brut.css`, token blocks (source lines 480–740) |
 | Appendix A.3 ramp recipe | the same file — stated as the formula the declarations follow rather than as 60 generated lines |
-| Appendix B | the compiled selectors in `dist/standalone/modern-brut.css` |
+| Appendix B | the compiled selectors in `dist/standalone/modern-brut.css` plus the component props in `src/components/*/index.tsx`. The compiled file is **nested** CSS — read it, do not copy it verbatim into a page. |
 
 Both are verbatim in substance. If the library has moved on, re-check the anchors in
 A.1 and A.6 first — those are the ones that would silently change the whole look.

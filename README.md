@@ -119,14 +119,29 @@ is a Tailwind *input* file and cannot be linked, so the build also emits a
 compiled stylesheet per foundation: the component layer plus that one foundation.
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css">
-
-<div data-nsg-theme="modern-brut">
-  <div class="nsg-card" data-kind="raised">
-    <h1 class="text-xl font-bold">Auth rewrite</h1>
-    <span class="nsg-badge" data-kind="warning" data-size="md">risk</span>
-  </div>
-</div>
+<!doctype html>
+<!-- Put the attribute on <html>: the base font rule resolves --font-sans here,
+     so scoping it to a <div> leaves the fonts on the system stack. -->
+<html lang="en" data-nsg-theme="modern-brut">
+  <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css">
+    <style>
+      /* The stylesheet defines tokens and components but paints no page. */
+      body {
+        background-color: var(--color-surface);
+        color: var(--color-text);
+        background-image: var(--nsg-page-backdrop);
+        background-size: var(--nsg-page-backdrop-size);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nsg-card" data-kind="raised">
+      <h1 class="text-xl font-bold">Auth rewrite</h1>
+      <span class="nsg-badge" data-kind="warning" data-size="md">risk</span>
+    </div>
+  </body>
+</html>
 ```
 
 Card, Badge, Button, Progress, Separator, Text, Link and Row/Column need no
