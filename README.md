@@ -107,16 +107,17 @@ implementations actually do — is in
 [`skills/nsg-ui-modern-brut-mockup/`](./skills/nsg-ui-modern-brut-mockup)
 teaches an agent this design system so it can produce static mockups that
 rebuild 1:1 with the real components. The token values, the markup contract and
-the utility whitelist are inlined, so it needs no repo, no npm and no network —
+the utility whitelist are inlined, so it needs no repo and no npm —
 drop it in `.agents/skills/` or point your agent at
-`/nsg-ui-modern-brut-mockup/SKILL.md` on the docs site.
+`/skills/nsg-ui-modern-brut-mockup/SKILL.md` on the docs site.
 
 ### Plain HTML, no build step
 
 The components are CSS keyed on classes and data attributes, so a foundation can
 be used in a plain HTML page — no npm, no build, no framework. `dist/theme.css`
 is a Tailwind *input* file and cannot be linked, so the build also emits a
-compiled stylesheet per foundation: the component layer plus that one foundation.
+compiled stylesheet per foundation — the component layer plus that one foundation —
+and the docs site serves it at a stable path, `/assets/<id>.min.css`:
 
 ```html
 <!doctype html>
@@ -124,7 +125,7 @@ compiled stylesheet per foundation: the component layer plus that one foundation
      so scoping it to a <div> leaves the fonts on the system stack. -->
 <html lang="en" data-nsg-theme="modern-brut">
   <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css">
+    <link rel="stylesheet" href="https://nsg-ui.pages.dev/assets/modern-brut.min.css">
     <style>
       /* The stylesheet defines tokens and components but paints no page. */
       body {

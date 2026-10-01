@@ -22,7 +22,7 @@
  * with a `<link>` there is nothing to compile, so a prebuilt stylesheet ships
  * per foundation — the component layer plus that one foundation:
  *
- *   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css" />
+ *   <link rel="stylesheet" href="https://nsg-ui.pages.dev/assets/modern-brut.min.css" />
  *
  * `dist/standalone.min.css` is the component layer alone, and `dist/theme.css` is
  * the uncompiled Tailwind input a bundler consumer imports. See "Plain HTML"

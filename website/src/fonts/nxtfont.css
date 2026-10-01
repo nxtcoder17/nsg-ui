@@ -13,7 +13,7 @@
 /* Regular normal — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Regular.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Regular.latin.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -23,7 +23,7 @@
 /* Regular normal — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Regular.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Regular.latin-ext.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -33,7 +33,7 @@
 /* Regular normal — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Regular.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Regular.symbols.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -43,7 +43,7 @@
 /* Regular italic — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Italic.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Italic.latin.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -53,7 +53,7 @@
 /* Regular italic — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Italic.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Italic.latin-ext.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -63,7 +63,7 @@
 /* Regular italic — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Italic.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Italic.symbols.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
   font-display: swap;
@@ -73,7 +73,7 @@
 /* Medium normal — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Medium.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Medium.latin.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -83,7 +83,7 @@
 /* Medium normal — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Medium.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Medium.latin-ext.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -93,7 +93,7 @@
 /* Medium normal — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Medium.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Medium.symbols.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -103,7 +103,7 @@
 /* Medium italic — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-MediumItalic.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-MediumItalic.latin.woff2") format("woff2");
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -113,7 +113,7 @@
 /* Medium italic — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-MediumItalic.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-MediumItalic.latin-ext.woff2") format("woff2");
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -123,7 +123,7 @@
 /* Medium italic — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-MediumItalic.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-MediumItalic.symbols.woff2") format("woff2");
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -133,7 +133,7 @@
 /* SemiBold normal — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBold.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-SemiBold.latin.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -143,7 +143,7 @@
 /* SemiBold normal — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBold.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-SemiBold.latin-ext.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -153,7 +153,7 @@
 /* SemiBold normal — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBold.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-SemiBold.symbols.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -163,7 +163,7 @@
 /* SemiBold italic — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBoldItalic.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-SemiBoldItalic.latin.woff2") format("woff2");
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -173,7 +173,7 @@
 /* SemiBold italic — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBoldItalic.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-SemiBoldItalic.latin-ext.woff2") format("woff2");
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -183,7 +183,7 @@
 /* SemiBold italic — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-SemiBoldItalic.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-SemiBoldItalic.symbols.woff2") format("woff2");
   font-weight: 600;
   font-style: italic;
   font-display: swap;
@@ -193,7 +193,7 @@
 /* Bold normal — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Bold.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Bold.latin.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -203,7 +203,7 @@
 /* Bold normal — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Bold.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Bold.latin-ext.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -213,7 +213,7 @@
 /* Bold normal — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-Bold.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-Bold.symbols.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -223,7 +223,7 @@
 /* Bold italic — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-BoldItalic.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-BoldItalic.latin.woff2") format("woff2");
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -233,7 +233,7 @@
 /* Bold italic — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-BoldItalic.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-BoldItalic.latin-ext.woff2") format("woff2");
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -243,7 +243,7 @@
 /* Bold italic — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-BoldItalic.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-BoldItalic.symbols.woff2") format("woff2");
   font-weight: 700;
   font-style: italic;
   font-display: swap;
@@ -253,7 +253,7 @@
 /* ExtraBold normal — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBold.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-ExtraBold.latin.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -263,7 +263,7 @@
 /* ExtraBold normal — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBold.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-ExtraBold.latin-ext.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -273,7 +273,7 @@
 /* ExtraBold normal — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBold.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-ExtraBold.symbols.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -283,7 +283,7 @@
 /* ExtraBold italic — latin */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBoldItalic.latin.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-ExtraBoldItalic.latin.woff2") format("woff2");
   font-weight: 800;
   font-style: italic;
   font-display: swap;
@@ -293,7 +293,7 @@
 /* ExtraBold italic — latin-ext */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBoldItalic.latin-ext.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-ExtraBoldItalic.latin-ext.woff2") format("woff2");
   font-weight: 800;
   font-style: italic;
   font-display: swap;
@@ -303,7 +303,7 @@
 /* ExtraBold italic — symbols */
 @font-face {
   font-family: "NxtFont";
-  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.2/WOFF2/NxtFont-ExtraBoldItalic.symbols.woff2") format("woff2");
+  src: url("https://cdn.jsdelivr.net/npm/@nxtcoder17/nxtfont@1.0.3/WOFF2/NxtFont-ExtraBoldItalic.symbols.woff2") format("woff2");
   font-weight: 800;
   font-style: italic;
   font-display: swap;

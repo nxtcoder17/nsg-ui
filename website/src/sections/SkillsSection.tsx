@@ -30,7 +30,7 @@ const skills = [
 ];
 
 /** Where the site serves it, so the command and the link cannot disagree. */
-const url = (id: string) => `https://nsg-ui.pages.dev/${id}/SKILL.md`;
+const url = (id: string) => `https://nsg-ui.pages.dev/skills/${id}/SKILL.md`;
 
 export const SkillsSection: Component = () => {
 	return (
@@ -51,8 +51,8 @@ export const SkillsSection: Component = () => {
 								<h3 class="font-semibold text-text text-[15px] font-mono">
 									{skill.name}
 								</h3>
-								<a href={`/${skill.id}/SKILL.md`} class="nsg-link text-sm whitespace-nowrap">
-									/{skill.id}/SKILL.md
+								<a href={`/skills/${skill.id}/SKILL.md`} class="nsg-link text-sm whitespace-nowrap">
+									/skills/{skill.id}/SKILL.md
 								</a>
 							</div>
 							<p class="text-text-muted text-sm mt-1">{skill.summary}</p>
@@ -69,7 +69,7 @@ mkdir -p $skill_dir && curl -o $skill_dir/SKILL.md ${url(skill.id)}`}
 								<code class="text-text text-xs">$HOME/.agents/skills/</code> or point
 								your agent at the URL. It is self-sufficient — the token values,
 								markup contract and utility whitelist are all inlined, so it needs
-								no repo, no npm and no network.
+								no repo and no npm.
 							</p>
 						</div>
 					</Card>

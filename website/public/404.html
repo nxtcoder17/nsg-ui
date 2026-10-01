@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" data-nsg-theme="modern-brut">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <title>Not found — NSG UI</title>
+    <!-- The compiled foundation this site already serves at /assets/, so the page
+         is styled by the real design system and needs no app bundle. -->
+    <link rel="stylesheet" href="/assets/modern-brut.min.css" />
+    <style>
+      /* The stylesheet defines tokens and components but paints no page. */
+      body {
+        background-color: var(--color-surface);
+        color: var(--color-text);
+        background-image: var(--nsg-page-backdrop);
+        background-size: var(--nsg-page-backdrop-size);
+      }
+    </style>
+  </head>
+  <body class="p-10">
+    <main class="nsg-card mx-auto max-w-2xl" data-kind="raised">
+      <p class="nsg-badge" data-kind="danger" data-size="md">404</p>
+      <h1 class="mt-4 text-3xl font-bold">This page does not exist.</h1>
+      <p class="mt-2 text-sm opacity-80">
+        The URL you asked for is not a file on this site. That includes everything
+        under <code>/assets/</code> — if you were fetching a stylesheet and got this
+        page instead, the path is wrong.
+      </p>
+      <p class="mt-6">
+        <a class="nsg-link nsg-link-underline" href="/">Back to the kitchen sink</a>
+      </p>
+    </main>
+  </body>
+</html>

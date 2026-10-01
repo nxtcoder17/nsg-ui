@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "predev": "node scripts/sync-agent-skills.mjs",
+    "predev": "node scripts/sync-public.mjs",
     "dev": "vite",
-    "prebuild": "node scripts/sync-agent-skills.mjs",
+    "prebuild": "node scripts/sync-public.mjs",
     "build": "vite build",
     "serve": "vite preview",
     "lint": "biome",

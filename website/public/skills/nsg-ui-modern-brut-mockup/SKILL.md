@@ -10,8 +10,10 @@ foundation closely enough that a later rebuild with the real components is a
 mechanical port, not a redesign.
 
 **This file is self-sufficient.** The token values, the markup contract and the
-utility whitelist are all inlined below (Appendices A and B). No repo checkout, no
-network, no npm install. Copy this one file to any machine and it works.
+utility whitelist are all inlined below (Appendices A and B) — no repo checkout and no
+npm install. Path A fetches the compiled stylesheet once, and the fonts it declares
+load from their hosts at view time; everything else here works offline, from this one
+file.
 
 The failure mode this skill exists to prevent: an agent "does neobrutalism" from
 memory, produces rounded corners, grey borders, ambient shadows and a violet-blue
@@ -24,27 +26,40 @@ Use Appendix A, don't recall.**
 
 Two legitimate paths. **Pick deliberately and tell the user which.**
 
-### Path A — Link the stylesheet, write real markup *(highest fidelity, least work)*
+### Path A — Fetch the stylesheet, inline it, write real markup *(highest fidelity)*
 
-Use the published standalone stylesheet and write **real `.nsg-*` classes with real
-data attributes** (Appendix B). Nothing is ported, so nothing can drift: the browser
-applies the actual foundation.
+**Fetch the compiled foundation once and paste it into the page's `<style>`:**
 
-```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css">
+```sh
+curl -s https://nsg-ui.pages.dev/assets/modern-brut.css
 ```
 
-- **Pin the version explicitly.** Never `@latest` or a bare package name.
-- **No separate font request.** The stylesheet ships the `@font-face` rules for
-  Inter Tight and IBM Plex Mono, so do **not** also add a Google Fonts `@import` —
-  a second request is pure waste and can flash the wrong face first. (The rules are
-  inlined, but their `src` urls point at `fonts.gstatic.com`, so the woff2 binaries
-  are still fetched over the network. Vendoring the CSS does **not** vendor the
-  fonts — for a fully offline page, self-host them by find-and-replacing the `src`
-  urls.)
-- **Vendor it when offline or sandboxed** — `curl` the file once into
-  `design/vendor/` and link it relatively. This is how Path A works on a machine with
-  no CDN access, and it is the recommended way to make a mockup portable.
+Then write **real `.nsg-*` classes with real data attributes** (Appendix B). Nothing is
+ported, so nothing can drift — the browser applies the actual foundation — and because
+the CSS is in the page you read its real rules (and the comments that explain them) as
+you write the markup. `modern-brut.min.css` is the same sheet with the comments and
+whitespace stripped, if you would rather inline the smaller of the two.
+
+```html
+<head>
+  <style>
+    /* …the fetched modern-brut.css goes here, verbatim… */
+  </style>
+</head>
+```
+
+- **Check you actually got CSS, not HTML.** The docs site answers *any* unknown path
+  with its own app shell and a `200`, so a typo looks like success. If the fetched text
+  starts `<!DOCTYPE html>`, the path is wrong — fetch again rather than pasting it.
+- **Served by the design system's own site**, so there is no npm version to publish
+  or pin before a page can use it.
+- **Inlining makes the mockup self-contained** — one file, no extra request when the
+  page is opened.
+- **No separate font request.** The inlined `@font-face` rules already cover Inter
+  Tight and NxtFont, so do **not** also add a Google Fonts `@import`. (Their `src`
+  urls still point at `fonts.gstatic.com` and `cdn.jsdelivr.net`, so the woff2
+  binaries are fetched at view time — inlining the CSS does **not** inline the fonts.
+  For a fully offline page, self-host them by find-and-replacing the `src` urls.)
 - Best when the mockup should be indistinguishable from the library and the screen
   fits inside the library's class vocabulary.
 
@@ -56,8 +71,8 @@ own component classes (`.panel`, `.btn`, `.msg`, …). This is the common case.
 Use Path B when you want **re-tuned neutrals** (Step 2) or when the product needs
 components the library has no equivalent for (Step 4) — which is most real screens.
 
-**You can mix:** link the stylesheet for the primitives, then add your own `<style>`
-block for the product layer. That is usually the best of both.
+**You can mix:** inline the fetched stylesheet for the primitives, then add your own
+`<style>` block for the product layer. That is usually the best of both.
 
 > If an `nsg-ui` **source checkout** happens to be present, skimming its
 > `src/styles/theme.css` and `docs/NEOBRUTALISM-design.md` is a nice-to-have — the
@@ -80,7 +95,8 @@ Before designing, write these down from Appendix A:
 - **The tiered block**: `--nsg-block` (6px, the screen's primary action **only**);
   `--nsg-block-float` (4px, **every other real object** — secondary/danger/toggle
   buttons, the segmented track, menus, popovers, toasts and the **centred dialog**);
-  and *nothing* for regions, resting cards, or the ghost/link button.
+  and *nothing* for regions, resting cards, or the ghost/link button. (Every 4px block
+  is the ink **except a toast's**, which takes its *kind* colour — see Step 4.)
 - **Geometry**: every radius is `0`. `--nsg-border-width: 1.5px`.
 - **`--color-border` IS the ink.** Not a grey. This single choice is what makes panels
   read as *drawn* rather than *floated*.
@@ -117,14 +133,14 @@ Rules for mode B:
 
 ## Step 3 — Build the stylesheet
 
-One shared `<project>.css` that every page links. Structure:
+One shared `<project>.css` that every page uses. Structure:
 
 ```
 1. Header comment: what this is, that it's a static port of Modern Brut, and
    every deliberate deviation listed explicitly.
-2. Fonts — **only if this sheet stands alone** (i.e. you are not linking the
-   standalone stylesheet). That stylesheet already ships the Inter Tight +
-   IBM Plex Mono `@font-face` rules, so a page that links it needs no Google
+2. Fonts — **only if this sheet stands alone** (i.e. you are not using the
+   fetched stylesheet). That stylesheet already ships the Inter Tight +
+   NxtFont `@font-face` rules, so a page that inlines it needs no Google
    Fonts `@import` at all. Port the `@font-face` rules into `<project>.css` only
    when the port replaces the library outright.
 3. :root tokens — flatten --nsg-* and --color-* into ONE namespace, since there
@@ -154,7 +170,7 @@ One shared `<project>.css` that every page links. Structure:
   restraint is why the page stays calm instead of shouting — the most common porting
   error is putting a block on everything.
 - **Mono is for labels and actions only.** Buttons, badges, field labels, tickers and
-  meta get IBM Plex Mono, uppercase, `letter-spacing` 0.08em–0.15em by role (buttons
+  meta get NxtFont, uppercase, `letter-spacing` 0.08em–0.15em by role (buttons
   0.13em, badges 0.12em, field/menu labels 0.15em, command-bar meta 0.08em). **Body
   copy stays big and sans.** If prose starts rendering in mono, the page reads like a terminal and
   the warmth is gone.
@@ -263,15 +279,17 @@ design/
 ```
 
 Per page:
-- Link the shared stylesheet, then add **one `<style>` block of page-specific
+- Inline the fetched stylesheet, then add **one `<style>` block of page-specific
   components** — keep page-local classes in the page, not in the shared file.
 - Every page gets a **light/dark toggle** wired to `app.js` (`data-theme-toggle`), and
   the `--nsg-page-backdrop` grid.
 - Make at least the primary direction **interactive** — real channel switching, a real
   modal that opens — so the direction can actually be judged. A deep-linkable modal
   (`?modal=new-company`) is cheap and demos well.
-- **ASCII only in the mono voice.** IBM Plex Mono has no fullwidth forms and renders
-  arrows/return symbols as tofu boxes. Use inline SVG for anything glyph-like.
+- **Keep the mono voice ASCII.** NxtFont ships latin, latin-ext and a symbols subset
+  (punctuation, arrows U+2190–21FF, math, box-drawing U+2500–257F, misc symbols) but
+  **no fullwidth forms**, so stay on ASCII and prefer inline SVG over a glyph-like
+  character that may not resolve.
 - Inline SVG icons throughout, `stroke="currentColor"`, `stroke-width="2"` on a
   `0 0 24 24` viewBox (`stroke-width` 2 is the set's standard; a couple of glyphs
   differ). Never emoji, never an icon font.
@@ -329,7 +347,7 @@ Then fix what the screenshots show, and say what you checked.
 - ❌ Light-mode-only styling on a component that also appears in dark.
 - ❌ Putting `data-nsg-theme` on a `<body>`/`<div>` wrapper — the base font rule
   resolves on `<html>`, so the fonts silently fall back to the system stack.
-- ❌ A Google Fonts `@import` on a page that already links the standalone stylesheet —
+- ❌ A Google Fonts `@import` on a page that already inlines the stylesheet —
   the fonts ship inside it.
 - ❌ Leaving the page unpainted (no field, ink or grid) and reading the bare white
   result as "the theme is broken".
@@ -339,7 +357,7 @@ Then fix what the screenshots show, and say what you checked.
 
 # Appendix A — The token contract
 
-Verbatim from `nsg-ui@0.1.0`, `src/styles/themes/modern-brut.css` (token blocks). If
+Verbatim from `nsg-ui@0.1.1`, `src/styles/themes/modern-brut.css` (token blocks). If
 the library has moved on, re-check these rather than trusting them blindly.
 
 ## A.1 Anchors (light)
@@ -443,7 +461,7 @@ The neutral ramp is the paper/ink axis, so it inverts in dark on its own:
 ```css
 --font-sans:    'Inter Tight', system-ui, -apple-system, sans-serif;
 --font-display: 'Inter Tight', system-ui, -apple-system, sans-serif;
---font-mono:    'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+--font-mono:    'NxtFont', ui-monospace, SFMono-Regular, monospace;
 
 --nsg-border-width: 1.5px;
 /* radius 0 at EVERY step, including full — squares badges and progress bars.
@@ -469,7 +487,8 @@ The neutral ramp is the paper/ink axis, so it inverts in dark on its own:
 not about every surface getting the same one: the screen's **primary** action gets 6px;
 **every other real object** gets 4px — secondary/danger/toggle buttons, the segmented
 track, menus, popovers, toasts and the **centred dialog**; and **nothing** for a region,
-a resting card, or the ghost/link button.
+a resting card, or the ghost/link button. (A toast is the one exception on colour: its
+4px block takes the kind's hue, not the ink.)
 
 > **One token is defined but never consumed.** `--shadow-card-hover` (6px) is declared
 > in the foundation, but no `.nsg-card` rule uses it — measured, a card is
@@ -532,11 +551,11 @@ the anchors above, so they are **not** restated in dark.
 
 The markup contract, quoted from the compiled library's own selectors.
 
-A stylesheet you link, and plain HTML you write by hand. No build step, no npm
+A stylesheet you fetch and inline, and plain HTML you write by hand. No build step, no npm
 install, no framework, no JavaScript. Every component is a CSS class plus data
 attributes.
 
-Link it once in `<head>`, then put the foundation attribute on **`<html>`
+Inline it once in `<head>`, then put the foundation attribute on **`<html>`
 itself**:
 
 ```html
@@ -643,9 +662,10 @@ accent; the rule stays ink either way.
 either: the foundation's `:not(.nsg-link-underline)` suppression outranks the base's
 hover underline, so all three stay off. Always add `nsg-link-underline` (the Solid
 `Link` does this by default); the rule then shows and hover **thickens it to 3px** —
-it never swaps to a lighter accent step. Focus is a hard ink outline, not a soft ring.
-And it stays **inline — no block, no fill, no radius**, because a link inside a
-sentence must not become an object and fight the buttons around it.
+it never swaps to a lighter accent step. Focus draws a hard ink outline — the base's
+accent ring is *not* cleared, so both paint together. And it stays **inline — no block,
+no fill, no radius**, because a link inside a sentence must not become an object and
+fight the buttons around it.
 
 ### BUTTON — `data-kind`: `primary | secondary | ghost | danger | link`
 Add the `nsg-button-outline` class for the outlined form. `data-size`: `sm | md | lg | icon | icon-sm`
@@ -738,7 +758,7 @@ p-4 6 8 10    mt-2 4 6    mb-2 4 6
 
 Dialog, Popover, DropdownMenu, ContextMenu, Toast, Tabs, Checkbox, RadioGroup,
 ComboBox, TextInput, NumberInput, SegmentedControl, ToggleButton, CommandBar,
-ThemePicker. **Their resting CSS ships in the linked stylesheet** — most carry full
+ThemePicker. **Their resting CSS ships in the inlined stylesheet** — most carry full
 `modern-brut` rules, so the markup is styled. What is missing is the **behaviour**:
 open/close, focus management, roving selection. Without SolidJS you can render the
 closed state but not drive the interaction, so express the idea with plain HTML where
@@ -772,10 +792,10 @@ Keep hue, change lightness.
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Document title</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nsg-ui@0.1.0/dist/standalone/modern-brut.min.css">
     <style>
-      /* The stylesheet ships the fonts but paints nothing. Restate the field,
-         the ink and the opt-in grid — this is the whole of the page setup. */
+      /* 1. Paste the fetched modern-brut.css here, verbatim (Step 0, Path A). */
+      /* 2. Then the page setup: the stylesheet ships the fonts but paints
+            nothing. Restate the field, the ink and the opt-in grid. */
       body {
         background-color: var(--color-surface);
         color: var(--color-text);
@@ -794,13 +814,13 @@ Keep hue, change lightness.
 
 # Provenance
 
-Inlined from **`nsg-ui@0.1.0`**:
+Inlined from **`nsg-ui@0.1.1`**:
 
 | Section | Source |
 |---|---|
-| Appendix A | `src/styles/themes/modern-brut.css`, token blocks (source lines 480–740) |
+| Appendix A | `src/styles/themes/modern-brut.css`, token blocks (source lines 410–670) |
 | Appendix A.3 ramp recipe | the same file — stated as the formula the declarations follow rather than as 60 generated lines |
-| Appendix B | the compiled selectors in `dist/standalone/modern-brut.css` plus the component props in `src/components/*/index.tsx`. The compiled file is **nested** CSS — read it, do not copy it verbatim into a page. |
+| Appendix B | the compiled selectors in `dist/standalone/modern-brut.css` plus the component props in `src/components/*/index.tsx`. That file keeps its CSS **nesting** (`&[data-kind="primary"]`, inside `@layer`) — paste the whole sheet as Path A says; don't lift fragments out of it. |
 
 Both are verbatim in substance. If the library has moved on, re-check the anchors in
 A.1 and A.6 first — those are the ones that would silently change the whole look.

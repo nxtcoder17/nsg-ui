@@ -28,3 +28,6 @@ gitignore
 Thumbs.db
 .secrets
 src/styles/overrides.css
+
+# Generated at build time by scripts/sync-public.mjs, from ../dist/standalone/
+/public/assets/
