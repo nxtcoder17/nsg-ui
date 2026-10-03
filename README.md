@@ -31,6 +31,40 @@ That's it. The theme's own `@source` directives register the library's compiled 
 > @source "node_modules/nsg-ui/dist/**/*.{js,jsx}";
 > ```
 
+### Theme foundation (optional)
+
+The block above is the built-in `default` look. A **theme foundation** is a whole
+design language — colour, type and geometry — for every component at once, shipped
+as its own stylesheet. Importing that stylesheet ships its rules but **matches
+nothing on its own**: a foundation is scoped to `data-nsg-theme`, so you also have
+to select it. Put the attribute on `<html>`, where the base font rule resolves:
+
+```css
+/* app.css */
+@import 'tailwindcss';
+@import 'nsg-ui/theme.css';
+@import 'nsg-ui/themes/modern-brut.css';
+```
+
+```html
+<html lang="en" data-nsg-theme="modern-brut">
+```
+
+A foundation defines tokens and component rules but paints no page. Set the field
+on `body` so its surface, text and backdrop tokens are actually visible:
+
+```css
+body {
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  background-image: var(--nsg-page-backdrop);
+  background-size: var(--nsg-page-backdrop-size);
+}
+```
+
+Switch it at runtime with `<ThemePicker />`, or call
+`applyThemeFoundation('modern-brut')`. See [Theme Foundations](#theme-foundations).
+
 ### Custom Colors
 
 Override colors after importing the theme:

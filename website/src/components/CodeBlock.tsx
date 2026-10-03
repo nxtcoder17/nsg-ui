@@ -4,6 +4,7 @@ import { Editor } from 'solid-prism-editor'
 import 'solid-prism-editor/prism/languages/tsx'
 import 'solid-prism-editor/prism/languages/bash'
 import 'solid-prism-editor/prism/languages/css'
+import 'solid-prism-editor/prism/languages/markup'
 import 'solid-prism-editor/layout.css'
 import '../styles/prism-editor-theme.css'
 
