@@ -2,32 +2,29 @@
  * Theme foundations
  *
  * A *foundation* is a whole design language — colour, type and geometry — for
- * every nsg-ui component at once. Choosing one is a single attribute on the
- * document element, so a project can offer a selector for it (see
- * `ThemePicker`) without touching component markup or rebuilding.
+ * every nsg-ui component at once. A theme owns its styling end to end: the
+ * shipped entry `nsg-ui/themes/<id>.css` is the shared component layer plus that
+ * design, so a bundler consumer writes one import and selects it with one
+ * attribute:
  *
- *   <link rel="stylesheet" href="node_modules/nsg-ui/dist/themes/modern-brut.css" />
+ *   @import 'nsg-ui/themes/modern-brut.css';
  *   document.documentElement.dataset.nsgTheme = 'modern-brut'
  *
- * or, in a Tailwind CSS entry file:
+ * The import is a Tailwind input (it re-imports `theme.css` for the component
+ * layer), so the consumer's own pipeline compiles it. The per-theme design layer
+ * — `src/styles/themes/<id>.css` — is plain CSS (no Tailwind, no `@apply`), so
+ * the build can also compile it into a `<link>`-able bundle. Writing one is a
+ * token list; the contract is documented in `docs/themes.md`.
  *
- *   @import 'nsg-ui/theme.css';
- *   @import 'nsg-ui/themes/modern-brut.css';
- *
- * Foundations are plain CSS (no Tailwind, no `@apply`) so they can be imported
- * into a build or linked at runtime. Writing one is a token list — the contract
- * is documented in `docs/themes.md`.
- *
- * The foundation file on its own only carries tokens. To use the *components*
- * with a `<link>` there is nothing to compile, so a prebuilt stylesheet ships
- * per foundation — the component layer plus that one foundation:
+ * A page with no build step links the compiled build instead:
  *
  *   <link rel="stylesheet" href="https://nsg-ui.pages.dev/assets/modern-brut.min.css" />
  *
- * `dist/standalone.min.css` is the component layer alone, and `dist/theme.css` is
- * the uncompiled Tailwind input a bundler consumer imports. See "Plain HTML"
- * in `docs/themes.md` for what that path does and does not include, and
- * `skills/nsg-ui-modern-brut-mockup/` for teaching an agent the same contract.
+ * `dist/theme.css` remains the shared base, `dist/standalone.min.css` is the
+ * component layer alone, and each `dist/standalone/<id>.css` is the component
+ * layer with one design appended. See "Plain HTML" in `docs/themes.md` for what
+ * that path does and does not include, and `skills/nsg-ui-modern-brut-mockup/`
+ * for teaching an agent the same contract.
  */
 
 /** Attribute a foundation is selected with, on any element that wraps the UI. */
@@ -36,7 +33,12 @@ export const THEME_FOUNDATION_ATTRIBUTE = 'data-nsg-theme'
 /** localStorage key the helpers persist the choice under. */
 export const THEME_FOUNDATION_STORAGE_KEY = 'nsg-ui-foundation'
 
-/** The unthemed nsg-ui look: no stylesheet, nothing to switch to. */
+/**
+ * The unthemed state: the shared base with no design applied. It is not a
+ * selectable theme — the base is the substrate every theme's design layer
+ * overrides — so it never appears in `THEME_FOUNDATIONS` or a picker; it exists
+ * so the helpers can name (and clear the attribute back to) "no design".
+ */
 export const DEFAULT_THEME_FOUNDATION_ID = 'default'
 
 export interface ThemeFoundation {
@@ -45,8 +47,9 @@ export interface ThemeFoundation {
   label: string
   description: string
   /**
-   * Stylesheet that defines the foundation, or `null` for the built-in look.
-   * Resolvable as `nsg-ui/themes/<stylesheet>`.
+   * This theme's design layer under `src/styles/themes/`, inlined into its entry
+   * `nsg-ui/themes/<id>.css`. `null` when a theme *is* the shared base with no
+   * override layer of its own.
    */
   stylesheet: string | null
   /** Pickers and docs show these four: [ink, paper, action ink, second ink]. */
@@ -54,13 +57,6 @@ export interface ThemeFoundation {
 }
 
 export const THEME_FOUNDATIONS: ThemeFoundation[] = [
-  {
-    id: DEFAULT_THEME_FOUNDATION_ID,
-    label: 'Default',
-    description: 'The shipped nsg-ui look: soft geometry, neutral surfaces, one accent.',
-    stylesheet: null,
-    swatch: ['#0f0e0c', '#ffffff', '#333333', '#1a1a1a'],
-  },
   {
     id: 'modern-brut',
     label: 'Modern Brut',
@@ -76,7 +72,8 @@ export const THEME_FOUNDATIONS: ThemeFoundation[] = [
 
 export type ThemeFoundationId = (typeof THEME_FOUNDATIONS)[number]['id']
 
-/** Every stylesheet that ships in `dist/themes/` — one per selectable foundation. */
+/** Every selectable theme's design layer file — what the build compiles into a
+ *  `<link>`-able per-theme bundle for the no-build path. */
 export function themeStylesheets(): string[] {
   return THEME_FOUNDATIONS.map((foundation) => foundation.stylesheet).filter(
     (file): file is string => file !== null,
@@ -130,7 +127,7 @@ export function getStoredThemeFoundation(storageKey = THEME_FOUNDATION_STORAGE_K
  * `modern-brut-violet` became `modern-brut` when the foundation stopped shipping
  * a fixed palette: its action ink is now a one-line override, so the hue is no
  * longer part of the foundation's identity. `riso-aqua` and `riso-press` were
- * retired outright, so they fall back to the built-in default.
+ * retired outright, so they fall back to the unthemed sentinel.
  */
 const RENAMED_FOUNDATION_IDS: Record<string, string> = {
   'modern-brut-violet': 'modern-brut',

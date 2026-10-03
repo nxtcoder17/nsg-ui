@@ -6,9 +6,9 @@
 @import 'tailwindcss';
 @import '../../src/styles/theme.css';
 
-/* Theme foundation — one stylesheet, so a project ships only what it offers.
-   The kitchensink imports it and switches with <ThemePicker /> (aliased to
-   ../src in vite.config.ts). */
+/* The site is itself a picker, so it needs the shared base plus the design
+   layer side by side — the split form. A consumer who picks one theme imports
+   only `nsg-ui/themes/<id>.css`. Aliased to ../src in vite.config.ts. */
 @import '../../src/styles/themes/modern-brut.css';
 
 @custom-variant dark (&:where(.dark, .dark *));

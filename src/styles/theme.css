@@ -1,6 +1,7 @@
-/* Register built JS/JSX as Tailwind sources so consumers only need:
- *   @import 'tailwindcss';
- *   @import 'nsg-ui/theme.css';
+/* The shared base: the component layer every theme entry re-imports. It also
+ * registers the built JS/JSX as Tailwind sources, so a consumer who imports a
+ * theme entry — `@import 'nsg-ui/themes/<id>.css'` — gets the utilities used
+ * inside the components for free.
  * The @source paths below are relative to this file (dist/theme.css). */
 @source "./index/**/*.{js,jsx}";
 @source "./icons/**/*.{js,jsx}";

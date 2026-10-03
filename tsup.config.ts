@@ -1,8 +1,8 @@
 import { defineConfig } from 'tsup'
 import * as preset from 'tsup-preset-solid'
-import { copyFileSync, mkdirSync, writeFileSync } from 'fs'
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'fs'
 import { dirname, join, resolve } from 'path'
-import { themeStylesheets } from './src/themes'
+import { THEME_FOUNDATIONS, themeStylesheets } from './src/themes'
 
 const presetOptions: preset.PresetOptions = {
   entries: [
@@ -26,14 +26,17 @@ const presetOptions: preset.PresetOptions = {
 }
 
 /**
- * Ships each theme foundation as its own stylesheet, so a consumer that imports
- * one foundation pays for one foundation and nothing else:
+ * Ships each theme as its own self-contained stylesheet, so a consumer writes a
+ * single import and gets the whole component layer plus that one design:
  *
  *   @import 'nsg-ui/themes/modern-brut.css';
  *
- * The file list comes from the registry in `src/themes`, so adding a foundation
- * never touches this config, and a stray file in the themes directory is never
- * shipped by accident.
+ * `dist/theme.css` stays the shared base (Tailwind input) and `src/styles/themes/
+ * <id>.css` stays the plain-CSS design layer, but neither is a consumer entry
+ * point on its own any more — each theme entry re-imports the base and inlines
+ * its own design here, so the theme owns its styling end to end. The file list
+ * comes from the registry in `src/themes`, so adding a theme never touches this
+ * config, and a stray file in the themes directory is never shipped by accident.
  */
 const copyThemes = () => {
   mkdirSync('dist', { recursive: true })
@@ -41,8 +44,21 @@ const copyThemes = () => {
 
   const themesDir = join('dist', 'themes')
   mkdirSync(themesDir, { recursive: true })
-  for (const file of themeStylesheets()) {
-    copyFileSync(join('src', 'styles', 'themes', file), join(themesDir, file))
+  for (const foundation of THEME_FOUNDATIONS) {
+    const parts = [
+      `/* nsg-ui theme · ${foundation.label}`,
+      ' *',
+      ' * One import: the shared component layer plus this design. `@source`',
+      ' * directives live in the imported base, so utilities used inside the',
+      ' * components are generated for you. Selected with',
+      ` * data-nsg-theme="${foundation.id}" on <html> — or applyThemeFoundation('${foundation.id}').`,
+      ' */',
+      "@import '../theme.css';",
+    ]
+    if (foundation.stylesheet) {
+      parts.push(readFileSync(join('src', 'styles', 'themes', foundation.stylesheet), 'utf8'))
+    }
+    writeFileSync(join(themesDir, `${foundation.id}.css`), parts.join('\n') + '\n')
   }
 }
 

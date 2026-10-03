@@ -32,20 +32,13 @@ const pickerCode = `import { ThemePicker } from 'nsg-ui'
 <ThemePicker />                      // every shipped foundation, with its swatch
 <ThemePicker withSwatches={false} /> // labels only`;
 
-const subtreeCode = `// any element can carry its own foundation — scope it to compare designs
-<div>
-  <Button>Ship it</Button>        // the built-in default look
-</div>
-
+const subtreeCode = `// the attribute is not root-only: scope a theme to one region
 <div data-nsg-theme="modern-brut">
   <Button>Ship it</Button>
 </div>`;
 
-const importCode = `/* app.css */
+const importCode = `/* app.css — one import per theme: component layer + that design */
 @import 'tailwindcss';
-@import 'nsg-ui/theme.css';
-
-/* one stylesheet per foundation: ship only the ones you offer */
 @import 'nsg-ui/themes/modern-brut.css';`;
 
 const attributeCode = `<!-- light/dark is one axis, the foundation is another -->
@@ -67,7 +60,7 @@ export const ThemeFoundationsSection: Component = () => {
 				title: "Theme Foundations",
 				icon: ThemeFoundationsIcon,
 				description:
-					"A whole design language — colour, type and geometry — for every component at once, switched with one attribute. Nothing in your markup changes; each foundation is a separate stylesheet, so you only ship the ones you offer.",
+					"A whole design language — colour, type and geometry — for every component at once, switched with one attribute. Nothing in your markup changes; each theme is one self-contained import, so the choice reads the same for every design.",
 			}}
 		>
 			<DemoWithCode
@@ -83,16 +76,14 @@ export const ThemeFoundationsSection: Component = () => {
 
 			<DemoWithCode
 				title="One design per subtree"
-				description="The attribute is not root-only: scope it to compare designs, or to keep one region on the default look."
+				description="The attribute is not root-only: scope the theme to a region instead of the whole document."
 				code={subtreeCode}
 			>
 				<div class="grid gap-5 [grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">
 					<For each={THEME_FOUNDATIONS}>
 						{(foundation) => (
 							<div
-								data-nsg-theme={
-									foundation.id === "default" ? undefined : foundation.id
-								}
+								data-nsg-theme={foundation.id}
 								class="rounded-lg border border-border overflow-hidden"
 							>
 								<div class="px-4 py-2.5 border-b border-border-subtle bg-surface-sunken">
@@ -123,7 +114,7 @@ export const ThemeFoundationsSection: Component = () => {
 									<Card kind="raised" class="flex flex-col gap-2">
 										<p class="text-text text-sm font-medium">Sheet 41</p>
 										<p class="text-text-secondary text-xs">
-											A card, a field-below it, and a toggle — the same components, four designs.
+											A card, a field below it, and a toggle — the same components as everywhere else.
 										</p>
 										{/* A bar with no name is an unnamed widget; the preview
 										    has no visible caption, so it is named for what
@@ -152,21 +143,22 @@ export const ThemeFoundationsSection: Component = () => {
 			</DemoWithCode>
 
 			<DemoWithCode
-				title="Importing a foundation"
-				description="Foundations are plain CSS: no Tailwind, no @apply, no build step. Import them after nsg-ui/theme.css, or link them directly."
+				title="Importing a theme"
+				description="A theme owns its styling end to end: one import is the whole component layer plus that design. For a no-build page, link the compiled build instead."
 				code={importCode}
 			>
 				<div class="flex flex-col gap-3">
 					<p class="text-text-secondary text-sm">
-						Each foundation lives in its own file —{" "}
-						<code class="text-text text-xs">nsg-ui/themes/&lt;id&gt;.css</code> — so a project
-						that offers two foundations ships two stylesheets and pays nothing for{" "}
-						<code class="text-text text-xs">default</code>, which is the built-in look and has
-						no file at all.
+						Each theme has its own entry —{" "}
+						<code class="text-text text-xs">nsg-ui/themes/&lt;id&gt;.css</code> — carrying
+						the whole component layer plus its design. Importing two repeats the shared
+						component layer once per theme.
 					</p>
 					<div class="flex flex-wrap gap-2">
-						<For each={THEME_FOUNDATIONS.filter((f) => f.stylesheet)}>
-							{(foundation) => <Badge kind="neutral">{foundation.stylesheet}</Badge>}
+						<For each={THEME_FOUNDATIONS}>
+							{(foundation) => (
+								<Badge kind="neutral">{`nsg-ui/themes/${foundation.id}.css`}</Badge>
+							)}
 						</For>
 					</div>
 				</div>

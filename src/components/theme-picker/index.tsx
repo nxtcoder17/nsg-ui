@@ -60,8 +60,16 @@ export const ThemePicker = (props: ThemePickerProps) => {
   const storageKey = () => props.storageKey ?? THEME_FOUNDATION_STORAGE_KEY
   const size = () => props.size ?? 'md'
 
-  const fallback = () =>
-    props.defaultValue ?? getStoredThemeFoundation(storageKey()) ?? DEFAULT_THEME_FOUNDATION_ID
+  const fallback = () => {
+    const wanted = props.defaultValue ?? getStoredThemeFoundation(storageKey())
+    const available = foundations()
+    /* A stored id may name a theme that no longer ships — `default` was removed,
+     * and `riso-*` before it. Show the first offered theme instead of an id that
+     * is not in the menu. */
+    return available.some((foundation) => foundation.id === wanted)
+      ? wanted
+      : (available[0]?.id ?? DEFAULT_THEME_FOUNDATION_ID)
+  }
 
   const [current, setCurrent] = createSignal(fallback())
 

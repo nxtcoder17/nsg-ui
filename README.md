@@ -12,14 +12,18 @@ bun add nsg-ui @kobalte/core solid-js
 
 ### Tailwind CSS 4
 
-In your main CSS file:
+Pick a theme and import its entry — one import, and it is the whole component
+layer plus that design:
 
 ```css
 @import 'tailwindcss';
-@import 'nsg-ui/theme.css';
+@import 'nsg-ui/themes/modern-brut.css';
 ```
 
-That's it. The theme's own `@source` directives register the library's compiled components and icons (in `dist/`) as Tailwind sources, so all utility classes used internally — like `w-3.5 h-3.5` for the `sm` icon size — are generated for you. The theme includes:
+That's it. The entry re-imports the library's compiled components and icons (in
+`dist/`) as Tailwind sources via its own `@source` directives, so all utility
+classes used internally — like `w-3.5 h-3.5` for the `sm` icon size — are
+generated for you. The theme includes:
 - All color scales (neutral, primary, danger, success, warning)
 - Light mode colors in `@theme`
 - Dark mode overrides in `.dark`
@@ -31,27 +35,18 @@ That's it. The theme's own `@source` directives register the library's compiled 
 > @source "node_modules/nsg-ui/dist/**/*.{js,jsx}";
 > ```
 
-### Theme foundation (optional)
+### Selecting a theme
 
-The block above is the built-in `default` look. A **theme foundation** is a whole
-design language — colour, type and geometry — for every component at once, shipped
-as its own stylesheet. Importing that stylesheet ships its rules but **matches
-nothing on its own**: a foundation is scoped to `data-nsg-theme`, so you also have
-to select it. Put the attribute on `<html>`, where the base font rule resolves:
-
-```css
-/* app.css */
-@import 'tailwindcss';
-@import 'nsg-ui/theme.css';
-@import 'nsg-ui/themes/modern-brut.css';
-```
+A theme's design rules are scoped to `data-nsg-theme`, so importing its
+stylesheet is not enough on its own — you also have to select it, or its rules
+match nothing. Put the attribute on `<html>`, where the base font rule resolves:
 
 ```html
 <html lang="en" data-nsg-theme="modern-brut">
 ```
 
-A foundation defines tokens and component rules but paints no page. Set the field
-on `body` so its surface, text and backdrop tokens are actually visible:
+A theme defines tokens and component rules but paints no page. Set the field on
+`body` so its surface, text and backdrop tokens are actually visible:
 
 ```css
 body {
@@ -62,7 +57,7 @@ body {
 }
 ```
 
-Switch it at runtime with `<ThemePicker />`, or call
+Switch at runtime with `<ThemePicker />`, or call
 `applyThemeFoundation('modern-brut')`. See [Theme Foundations](#theme-foundations).
 
 ### Custom Colors
@@ -71,7 +66,7 @@ Override colors after importing the theme:
 
 ```css
 @import 'tailwindcss';
-@import 'nsg-ui/theme.css';
+@import 'nsg-ui/themes/modern-brut.css';
 
 :root {
   --color-primary-500: oklch(55% 0.25 200);
@@ -108,13 +103,13 @@ function App() {
 
 ## Theme Foundations
 
-Whole design languages for every component at once, switched with one attribute:
+Whole design languages for every component at once — one stylesheet each, one
+import, switched with one attribute:
 
 ```css
 @import 'tailwindcss';
-@import 'nsg-ui/theme.css';
 
-/* only the foundations you offer get shipped */
+/* each theme is the whole component layer plus its own design */
 @import 'nsg-ui/themes/modern-brut.css';
 ```
 
@@ -128,9 +123,10 @@ import { ThemePicker } from 'nsg-ui'
 <html data-nsg-theme="modern-brut">   <!-- or applyThemeFoundation('modern-brut') -->
 ```
 
-Shipped: `default` (the built-in look) and `modern-brut`. Each is a separate
-stylesheet, so a project pays for the foundations it imports and nothing else.
-Full contract, dark-mode rules and an authoring guide:
+Shipped: `modern-brut` is the one theme today. Each theme entry is
+self-contained, so importing two of them repeats the shared component layer once
+per theme — the trade-off for every theme owning its styling end to end. Full
+contract, dark-mode rules and an authoring guide:
 [docs/themes.md](./docs/themes.md). The reasoning behind
 `modern-brut`'s rules — what the style is, and what the reference
 implementations actually do — is in
@@ -147,11 +143,11 @@ drop it in `.agents/skills/` or point your agent at
 
 ### Plain HTML, no build step
 
-The components are CSS keyed on classes and data attributes, so a foundation can
-be used in a plain HTML page — no npm, no build, no framework. `dist/theme.css`
-is a Tailwind *input* file and cannot be linked, so the build also emits a
-compiled stylesheet per foundation — the component layer plus that one foundation —
-and the docs site serves it at a stable path, `/assets/<id>.min.css`:
+The components are CSS keyed on classes and data attributes, so a theme can
+be used in a plain HTML page — no npm, no build, no framework. The theme entries
+are Tailwind *input* files and cannot be linked, so the build also emits a
+compiled stylesheet per theme — the component layer plus that one design — and
+the docs site serves it at a stable path, `/assets/<id>.min.css`:
 
 ```html
 <!doctype html>
@@ -202,7 +198,7 @@ is lifted until its own label clears text on it. An override is therefore a
 **pair**:
 
 ```css
-/* after importing the foundation */
+/* after importing the theme */
 [data-nsg-theme='modern-brut']      { --nsg-spot: #a61e63; }  /* light, 6.4:1 */
 [data-nsg-theme='modern-brut'].dark { --nsg-spot: #fbcfe8; }  /* dark, 13.6:1 */
 ```

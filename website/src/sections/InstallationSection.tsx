@@ -25,16 +25,11 @@ const packageManagers = [
 	{ id: "pnpm", build: "add" },
 ] as const;
 
-const stylesCode = `/* app.css */
+const stylesCode = `/* app.css — one import: the whole component layer plus the design */
 @import 'tailwindcss';
-@import 'nsg-ui/theme.css';
-
-/* optional: a whole design language — importing the stylesheet ships the
-   rules, but they are scoped to data-nsg-theme and match nothing until
-   you select it on <html> (see step 2's note) */
 @import 'nsg-ui/themes/modern-brut.css';`;
 
-const foundationCode = `<!-- the import alone is inert: select the foundation -->
+const foundationCode = `<!-- the design is scoped to the attribute: select it -->
 <html lang="en" data-nsg-theme="modern-brut">`;
 
 const usageCode = `import { Button } from 'nsg-ui'
@@ -118,7 +113,7 @@ export const InstallationSection: Component = () => {
 
 				<Step
 					title="2 · Import the styles"
-					description="The theme registers the library's own components as Tailwind sources, so this one line is the whole setup. Theme foundations are separate stylesheets you only ship if you offer them — but a foundation is scoped to data-nsg-theme, so the import alone matches nothing. Select it on <html>, where the base font rule resolves."
+					description="One import is the whole component layer plus the design. The design is scoped to data-nsg-theme, so select it on <html> — the import alone matches nothing."
 					code={stylesCode}
 					language="css"
 					secondaryCode={foundationCode}
