@@ -1422,13 +1422,16 @@
   font-weight: 700;
 }
 
-/* NOTE — no footer band. The reference separates a dialog's actions with a
- * `border-t-2` band, and that is the right idea, but this component has no
- * `data-nsg-dialog="footer"` part: the actions are simply the children the
- * caller passed in. A rule for it would be dead code, and the honest version of
- * this change is the block and the title. Giving the dialog a real footer part
- * is a component API decision, not a foundation one — worth raising separately
- * if the action row keeps reading as part of the content. */
+/* The action band. The reference separates a dialog's actions with a `border-t-2`
+ * band, and this component now has a real `data-nsg-dialog="footer"` part for
+ * exactly that — so the band is no longer the dead rule it was when the actions
+ * were simply the caller's children. The rule is the foundation's own: the ink
+ * stepped back for the field (`--color-border`), at the foundation's stroke
+ * weight, the same line the sheet's frame and every other division draw. */
+[data-nsg-theme='modern-brut'] .nsg-dialog [data-nsg-dialog='footer'] {
+  border-top-width: var(--nsg-border-width);
+  border-top-color: var(--color-border);
+}
 
 /* --- fields keep their rule while focused ---------------------------------- */
 

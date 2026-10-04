@@ -85,16 +85,19 @@ import { Button, Dialog, Toast, toast } from 'nsg-ui';
 function App() {
   return (
     <>
-      <Button variant="default" onClick={() => toast.success({ title: 'Saved!' })}>
+      <Button kind="primary" onClick={() => toast.success({ title: 'Saved!' })}>
         Save
       </Button>
 
-      <Dialog
-        trigger={<Button variant="outline">Open Dialog</Button>}
-        title="Confirm"
-        description="Are you sure?"
-      >
-        <Button variant="danger">Delete</Button>
+      <Dialog trigger={<Button kind="secondary" outline>Open Dialog</Button>}>
+        <Dialog.Header title="Confirm" description="Are you sure?" />
+        <Dialog.Body>
+          <p>This action cannot be undone.</p>
+        </Dialog.Body>
+        <Dialog.Footer>
+          <Dialog.CloseButton>Cancel</Dialog.CloseButton>
+          <Button kind="danger">Delete</Button>
+        </Dialog.Footer>
       </Dialog>
     </>
   );

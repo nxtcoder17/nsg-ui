@@ -5,7 +5,15 @@ export { cn } from './utils/cn'
 export { Button, type ButtonProps } from './components/button'
 export { Card, type CardProps, type CardKind } from './components/card'
 export { Row, type RowProps, Column, type ColumnProps } from './components/layout'
-export { Dialog, type DialogProps } from './components/dialog'
+export {
+  Dialog,
+  type DialogProps,
+  type DialogHeaderProps,
+  type DialogBodyProps,
+  type DialogFooterProps,
+  type DialogRenderApi,
+  type DialogRenderProp,
+} from './components/dialog'
 export { Popover, type PopoverProps } from './components/popover'
 export { DropdownMenu, type DropdownMenuProps } from './components/dropdown-menu'
 export { ContextMenu, type ContextMenuProps } from './components/context-menu'

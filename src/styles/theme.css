@@ -648,13 +648,13 @@
 
     [data-nsg-dialog="content"] {
       @apply pointer-events-auto w-full max-w-lg mx-4 focus:outline-none bg-surface-raised text-text border border-border rounded-lg shadow-lg;
-      @apply px-4 py-2;
-      @apply flex flex-col gap-2;
+      @apply flex flex-col;
       &[data-expanded] { animation: nsg-scale-in 0.2s ease-out; }
     }
 
     [data-nsg-dialog="header"] {
-      @apply flex flex-row justify-between items-start;
+      @apply flex flex-row justify-between items-start gap-2;
+      @apply px-4 pt-4 pb-2;
     }
 
     [data-nsg-dialog="header-info"] {
@@ -663,6 +663,14 @@
 
     [data-nsg-dialog="title"] { @apply text-lg font-semibold text-text; }
     [data-nsg-dialog="description"] { @apply text-sm text-text-secondary; }
+
+    [data-nsg-dialog="body"] { @apply px-4 py-2; }
+
+    [data-nsg-dialog="footer"] {
+      @apply flex flex-row justify-end items-center gap-2;
+      @apply px-4 pt-2 pb-4;
+      @apply border-t border-border;
+    }
   }
 }
 

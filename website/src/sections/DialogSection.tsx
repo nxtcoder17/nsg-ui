@@ -8,17 +8,17 @@ import { Section } from "../components/section";
 function DeleteItemDialog() {
 	return (
 		<Dialog
-			header={{
-				title: "Delete Item?",
-				description: "This action cannot be undone.",
-				withCloseIcon: true,
-			}}
 			trigger={<Dialog.TriggerButton kind="danger">Delete Item</Dialog.TriggerButton>}
 		>
-			<div class="flex justify-end gap-2 pt-2 border-t border-border">
+			<Dialog.Header
+				title="Delete Item?"
+				description="This action cannot be undone."
+				withCloseIcon
+			/>
+			<Dialog.Footer>
 				<Dialog.CloseButton>Cancel</Dialog.CloseButton>
 				<Button kind="danger">Delete</Button>
-			</div>
+			</Dialog.Footer>
 		</Dialog>
 	);
 }
@@ -27,16 +27,15 @@ function ConfirmationDialogDemo() {
 	return (
 		<Dialog
 			trigger={<Dialog.TriggerButton>Save Changes</Dialog.TriggerButton>}
-			header={{
-				title: "Save changes?",
-				description:
-					"Your changes will be permanently saved. This action cannot be undone.",
-			}}
 		>
-			<div class="flex justify-end gap-2 pt-2 border-t border-border">
+			<Dialog.Header
+				title="Save changes?"
+				description="Your changes will be permanently saved. This action cannot be undone."
+			/>
+			<Dialog.Footer>
 				<Dialog.CloseButton kind="ghost">Cancel</Dialog.CloseButton>
 				<Dialog.CloseButton>Save</Dialog.CloseButton>
-			</div>
+			</Dialog.Footer>
 		</Dialog>
 	);
 }
@@ -57,29 +56,31 @@ function FormDialogDemo() {
 					Edit Profile
 				</Dialog.TriggerButton>
 			}
-			header={{ title: "Edit Profile" }}
 			closeOnClickOutside={false}
 		>
-			<div class="pt-0 space-y-4">
-				<TextInput
-					label="Name"
-					placeholder="John Doe"
-					value={name()}
-					onChange={setName}
-				/>
-				<TextInput
-					label="Email"
-					type="email"
-					placeholder="john@example.com"
-					value={email()}
-					onChange={setEmail}
-				/>
-			</div>
+			<Dialog.Header title="Edit Profile" />
+			<Dialog.Body>
+				<div class="space-y-4">
+					<TextInput
+						label="Name"
+						placeholder="John Doe"
+						value={name()}
+						onChange={setName}
+					/>
+					<TextInput
+						label="Email"
+						type="email"
+						placeholder="john@example.com"
+						value={email()}
+						onChange={setEmail}
+					/>
+				</div>
+			</Dialog.Body>
 
-			<div class="flex justify-end gap-2 pt-2">
+			<Dialog.Footer>
 				<Dialog.CloseButton kind="ghost">Cancel</Dialog.CloseButton>
 				<Dialog.CloseButton>Save Changes</Dialog.CloseButton>
-			</div>
+			</Dialog.Footer>
 		</Dialog>
 	);
 }
@@ -89,17 +90,19 @@ function AsyncSaveDialogDemo() {
 	return (
 		<Dialog
 			trigger={<Dialog.TriggerButton>Save with API</Dialog.TriggerButton>}
-			header={{
-				title: "Save changes?",
-				description: "Closes only after API succeeds — no open prop needed.",
-			}}
 		>
 			{({ close }) => (
-				<div class="flex flex-col gap-4">
-					<p class="text-sm text-text-secondary">
-						Simulates an async save. Dialog stays open until success.
-					</p>
-					<div class="flex justify-end gap-2 pt-2 border-t border-border">
+				<>
+					<Dialog.Header
+						title="Save changes?"
+						description="Closes only after API succeeds — no open prop needed."
+					/>
+					<Dialog.Body>
+						<p class="text-sm text-text-secondary">
+							Simulates an async save. Dialog stays open until success.
+						</p>
+					</Dialog.Body>
+					<Dialog.Footer>
 						<Dialog.CloseButton kind="ghost" disabled={saving()}>
 							Cancel
 						</Dialog.CloseButton>
@@ -114,8 +117,8 @@ function AsyncSaveDialogDemo() {
 						>
 							{saving() ? "Saving..." : "Save"}
 						</Button>
-					</div>
-				</div>
+					</Dialog.Footer>
+				</>
 			)}
 		</Dialog>
 	);
